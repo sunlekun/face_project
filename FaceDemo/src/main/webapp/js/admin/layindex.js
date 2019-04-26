@@ -94,8 +94,7 @@ function loadMenuTree(_islink) {
     $.ajax({
         type: "post",
        /* url: "../tools/admin_ajax.ashx?action=get_navigation_list&time=" + Math.random(),*/
-        url: "http://localhost:8080/FaceDemo/role/findNavigationTreeByRoleId?time=" + Math.random(),
-       // url: "http://localhost:8080/FaceDemo/role/roleList",
+        url: "role/findNavigationTreeByRoleId?time=" + Math.random(),
         dataType: "html",
         success: function (data, textStatus) {
             //将得到的数据插件到页面中

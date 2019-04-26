@@ -4,15 +4,9 @@ package com.demo.controller;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;  
@@ -22,7 +16,6 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,26 +23,15 @@ import org.springframework.web.servlet.ModelAndView;
  
 
 
-
-
-
-
-
-
-
-
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
 import com.demo.model.Role;
 import com.demo.model.Navigation; 
 import com.demo.model.RoleNavigation;
-import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.NavigationService;
 import com.demo.service.RoleNavigationService;
-import com.demo.service.RoleService;  
-import com.demo.service.XzbService;
-import com.demo.util.PasswordEncoder;
+import com.demo.service.RoleService; 
 
 
 /**
@@ -191,7 +173,7 @@ public class RoleController {
 	public ModelAndView  roleAdd(Role role ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
 		
-		String[] actList=request.getParameterValues("actList"); 
+		
 		
 		ModelAndView modelAndView = new ModelAndView();
 		 
@@ -203,20 +185,40 @@ public class RoleController {
 
 		roleService.insertRole(role);
 		
-		
-		//${nav.id },${nav.name },${act }
 		List<RoleNavigation> rns=new ArrayList<RoleNavigation>();
-		for(int i=0;i<actList.length;i++)
-		{   
-			RoleNavigation rn=new RoleNavigation();
-			rn.setRole_id(role.getId());
-			rn.setNavigation_id(Integer.parseInt(actList[i].split(",")[0]));
-			rn.setNav_name(actList[i].split(",")[1]);
-			rn.setAction_type(actList[i].split(",")[2]); 
-			rn.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
-			rns.add(rn) ;
+		if(role.getRole_type()==1)
+		{
+			List<Navigation> all=navigationService.findAllNavigation();
+			for(Navigation n:all){
+			   
+				String[] acts=n.getAction_type().split(",");
+				for(String s:acts)
+				{
+				RoleNavigation rn=new RoleNavigation();
+				rn.setRole_id(role.getId());
+				rn.setNavigation_id(n.getId());
+				rn.setNav_name(n.getName());
+				rn.setAction_type(s); 
+				rn.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
+				rns.add(rn) ;
+				}
+			}
 		}
-		
+		else{
+			//${nav.id },${nav.name },${act }
+			String[] actList=request.getParameterValues("actList"); 
+			
+			for(int i=0;i<actList.length;i++)
+			{   
+				RoleNavigation rn=new RoleNavigation();
+				rn.setRole_id(role.getId());
+				rn.setNavigation_id(Integer.parseInt(actList[i].split(",")[0]));
+				rn.setNav_name(actList[i].split(",")[1]);
+				rn.setAction_type(actList[i].split(",")[2]); 
+				rn.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
+				rns.add(rn) ;
+			}
+		}
 		roleNavigationService.insertRoleNavigationBatch(rns);
 
 		modelAndView.setViewName("redirect:/role/toRoleList");
@@ -315,7 +317,7 @@ public class RoleController {
 	@RequestMapping(value = "/findNavigationTreeByRoleId")
 	 public void findNavigationTreeByRoleId(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		 
-		  /* Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		   Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		
 		    // 查询所有菜单 
 			List<Navigation> allNavigation =navigationService.findNavigationByRoleId(manager.getRole_id());
@@ -326,21 +328,50 @@ public class RoleController {
 					rootNav.add(nav);
 				}
 			}
-			Collections.sort(rootNav); 根据Menu类的order排序 
+			Collections.sort(rootNav); //根据Menu类的order排序 
 			
 		 
-		 
+		 StringBuffer html=new StringBuffer();
 		
 		// 为根菜单设置子菜单，getClild是递归调用的
 		for (Navigation nav : rootNav) {
-			 获取根节点下的所有子节点 使用getChild方法  
+			 //获取根节点下的所有子节点 使用getChild方法  
 			//System.out.println(nav.getTitle());
 			List<Navigation> childList = getChild(nav.getId(),allNavigation);
-			nav.setChildren(childList);// 给根节点设置子节点 
-		}*/
+			nav.setChildren(childList);// 给根节点设置子节点
+			
+			
+		}
 		 
-		String s=
-   " <div class='list-group'>"+
+		
+		for(int i=0;i<rootNav.size();i++)
+		{
+			html.append("<div class='list-group'>");
+			html.append("<h1 title='"+rootNav.get(i).getTitle()+"'><i class='iconfont "+rootNav.get(i).getIcon_url()+"'></i></h1>");
+			html.append("<div class='list-wrap'>");
+				html.append("<h2>"+rootNav.get(i).getTitle()+"<i class='iconfont icon-arrow-down'></i></h2>");
+				html.append("<ul style='display: block;'>");
+							List<Navigation> one=rootNav.get(i).getChildren();
+							for(int j=0;j<one.size();j++)
+							{
+								html.append("<li>");
+										html.append("<a navid='"+one.get(j).getName()+"' target='mainframe'><i></i><span>"+one.get(j).getTitle()+"</span><b class=''></b></a>");
+										//html.append("<a navid='"+one.get(j).getName()+"' target='mainframe'><i></i><span>"+one.get(j).getTitle()+"</span><b class='expandable iconfont icon-open'></b></a>");
+										html.append(  "<ul style='display: block;'>");
+															List<Navigation>  two=one.get(j).getChildren();
+															for(int h=0;h<two.size();h++)
+															{
+																html.append("<li><a href='"+two.get(h).getLink_url()+"' navid='"+two.get(h).getName()+"' target='mainframe'><span>"+two.get(h).getTitle()+"</span></a></li>");
+													        }
+										html.append("</ul>");
+								html.append("</li>");
+							}       
+	             
+				html.append("</ul>");
+			html.append("</div>");
+			html.append("</div>");
+		}
+	/*String s= " <div class='list-group'>"+
        " <h1 title='内容管理'><i class='iconfont icon-home-full'></i></h1>"+
         "<div class='list-wrap'>"+
             "<h2>内容管理<i class='iconfont icon-arrow-down'></i></h2>"+
@@ -383,9 +414,9 @@ public class RoleController {
                 "</li>"+
            " </ul>"+
       "  </div>"+
-    "</div>";
+    "</div>";*/
 		response.setContentType("text/html;charset=utf-8");
-		response.getWriter().write(s);  
+		response.getWriter().write(html.toString());  
 		    
 		  }
 	 

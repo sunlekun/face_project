@@ -21,10 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/artdialog/dialog-plus-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/layindex.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/common.js"></script>
-
-<link rel="stylesheet" type="text/css" href="css/admin/nav.css"> 
-<script type="text/javascript" src="js/admin/jquery.min.js"></script>
-<script type="text/javascript" src="js/admin/nav.js"></script>
+ 
 <script type="text/javascript">
     //页面加载完成时
     $(function () {
@@ -65,7 +62,8 @@ function __doPostBack(eventTarget, eventArgument) {
 	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="1B9537F6" />
 	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAJs59KIdbzbsfIHT/BsCBaz5cAl+B8NpP7aYmtMOUT8hcnyr+h1lpSI4imZBvDBiRymLPbITG/fKcw5nIHmZT7O" />
 </div>
-  <!--全局菜单-->
+
+<!--全局菜单-->
   <a class="btn-paograms" href="javascript:;" onclick="togglePopMenu();">
     <i class="iconfont icon-list-fill"></i>
   </a>
@@ -73,31 +71,48 @@ function __doPostBack(eventTarget, eventArgument) {
     <div class="pop-box">
       <h1 class="title"><i class="iconfont icon-setting"></i>导航菜单</h1>
       <i class="close iconfont icon-remove" onclick="togglePopMenu();"></i>
-      <div class="list-box"></div>
+      <div class="list-box">
+      
+    <%--   <c:forEach items="${allNav }" var="nav1" varStatus="status" >
+<div class="list-group">
+	<h1 title="${nav1.title }"><i class="iconfont ${nav1.icon_url }"></i></h1>
+	<div class="list-wrap">
+		<h2>${nav1.title }<i></i></h2>
+		<ul>
+		   <c:forEach items="${nav1.children }" var="nav2">
+				<li>
+					<a navid="${nav2.name }" target="mainframe">
+					<span>${nav2.title }</span>
+					</a>
+					<ul>
+						<c:forEach items="${nav2.children }" var="nav3" >
+							<li>
+							<a navid="${nav3.name }" target="mainframe"  href="${nav3.link_url }">
+							<span>${nav3.title }</span>
+							</a>
+							</li>
+ 						</c:forEach>
+					</ul>
+				</li>
+		  </c:forEach>
+	</ul>
+	</div>
+</div>
+</c:forEach> --%>
+      </div>
     </div>
   </div>
   <!--/全局菜单-->
 
+
   <div class="main-top">
     <a class="icon-menu"><i class="iconfont icon-nav"></i></a>
-   <!--  <div id="main-nav" class="main-nav">
-    </div> -->
-    
-       <div id="main-nav" class="main-nav"> 
+    <div id="main-nav" class="main-nav">    </div>
+   
       
-         <c:forEach items="${allNav }" var="nav1" varStatus="status" >
-             <a class="selected" id="a_${status.index}" >${nav1.title}</a>
-           
-		  </c:forEach>
-        
-       
-    </div>
     <div class="nav-right">
       <div class="info">
-         <i></i>
-        <span>
-          
-        </span>
+         
       </div>
       
       <div class="option">
@@ -125,91 +140,58 @@ function __doPostBack(eventTarget, eventArgument) {
       </div>
     </div>
   </div>
-  <!-- <div class="main-left">
-    <a href="center.jsp" target="mainframe"><h1 class="logo"></h1></a>
-    <div id="sidebar-nav" class="sidebar-nav"></div>
-    
-  </div> -->
   
   
   <div class="main-left">
     <a href="center.aspx" target="mainframe"><h1 class="logo"></h1></a>
-    <div id="sidebar-nav" class="sidebar-nav">
- 
-
-
-<c:forEach items="${allNav }" var="nav1" varStatus="status" >
-<div class="list-group selected" style="display: block;">
-		<h1 title="${nav1.title }"><i class="iconfont icon-setting-full"></i></h1>
-		<div class="list-wrap">
-		<h2>${nav1.title }<i></i></h2>
-		<ul style="display: block;">
-		<c:forEach items="${nav1.children }" var="nav2">
-		<li>
-			
-				<a navid="${nav2.name }" target="mainframe">
-				    <i class="icon iconfont icon-folder"></i><span>${nav2.title }</span><b class="expandable iconfont icon-open"></b>
-				</a>
-			<ul style="display: block;">
-
-		    	<c:forEach items="${nav2.children }" var="nav3" >
-				<li>
-					<a navid="manager_list" href="${nav3.link_url }" target="mainframe" class="selected">
-				    	<i class="icon"></i><i class="icon iconfont icon-file"></i><span>${nav3.title }</span>
-					</a>
-				</li>
-			    </c:forEach>
-
-			</ul>
-			
-
-		</li>
-		</c:forEach>
-		</ul>
-	</div>
-</div>
-
-</c:forEach>  
-
-
- 
-</div>
-    
+    <div id="sidebar-nav" class="sidebar-nav"></div>
+    <%--<div id="sidebar-nav" class="sidebar-nav">
+    <div class="list-group">
+        <h1 title="内容管理"><i class="iconfont icon-home-full"></i></h1>
+        <div class="list-wrap">
+            <h2>内容管理<i class="iconfont icon-arrow-down"></i></h2>
+            <ul style="display: block;">
+                <li>
+                    <a navid="channel_main" target="mainframe">
+                        <i></i><span>用户管理</span>
+                        <b class="expandable iconfont icon-open"></b></a>
+                    <ul style="display: block;">
+                        <li><a href="users/user_list.aspx" navid="user_list" target="mainframe"><span>用户信息管理</span></a></li>
+                        <li><a href="users/video_list.aspx" navid="video_list" target="mainframe"><span>采集信息审核</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a navid="channel_main" target="mainframe">
+                        <i></i><span>认证抽查</span>
+                        <b class="expandable iconfont icon-open"></b></a>
+                    <ul style="display: block;">
+                        <li><a href="#" target="mainframe"><span>今日抽查</span></a></li>
+                        <li><a href="#" target="mainframe"><span>随机分配</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="list-group">
+        <h1 title="控制面板"><i class="iconfont icon-home-full"></i></h1>
+        <div class="list-wrap">
+            <h2>控制面板<i class="iconfont icon-arrow-down"></i></h2>
+            <ul style="display: block;">
+                <li>
+                    <a navid="channel_main" target="mainframe">
+                        <i></i><span>系统用户</span>
+                        <b class="expandable iconfont icon-open"></b></a>
+                    <ul style="display: block;">
+                        <li><a href="manager/manager_list.aspx" target="mainframe"><span>管理员管理</span></a></li>
+                        <li><a href="manager/township_list.aspx" target="mainframe"><span>乡镇办管理</span></a></li>
+                        <li><a href="manager/manager_log.aspx" target="mainframe"><span>管理日志</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>--%>
   </div>
-  
-  
-<%--     <div class="main-left">
-      
-     
-   <div class="nav">
-	<div class="nav-top">
-	     <a  class="logo" href="javascript:;" target="mainframe"></a>
-		<div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
-		    <img src="<%=path%>/images/mini.png"  style="width: 40px;height:40px;"> 
-		</div>
-	</div>
-	 <a href="center.aspx" target="mainframe"><h1 class="logo"></h1></a>
-    <div id="sidebar-nav" class="sidebar-nav">
- 
-	<ul> 
-		 
-          <c:forEach items="${allNav}" var="nav1"  varStatus="status"> 
-          
-           <li class="nav-item">
-			<a href="javascript:;" id="b_$${status.index} "><i class="my-icon nav-icon icon_${status.index}"></i><span> ${nav1.title }</span><i class="my-icon nav-more"></i></a>
-			<ul>
-				<c:forEach items="${nav1.children }" var="nav2"> 
-			      <li><a href="${nav2.link_url}"  target="mainframe"><span>${nav2.title}</span></a></li>
-		        </c:forEach>
-			</ul>
-		  </li>
-          
-		  </c:forEach>
-         
-	
-	</ul>
-</div>
-  </div> --%>
   
   <div class="main-container">
     <iframe id="mainframe" name="mainframe" frameborder="0"  allowfullscreen="true" src="center.jsp"></iframe>

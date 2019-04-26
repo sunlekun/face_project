@@ -3,14 +3,8 @@ package com.demo.controller;
  
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;  
@@ -30,23 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 
-
-
-
-
-
-
-
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
-import com.demo.model.Navigation;
 import com.demo.model.Role;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.ManagerService; 
 import com.demo.service.RoleService;
 import com.demo.service.XzbService;
-import com.demo.util.PasswordEncoder;
 
 
 /**

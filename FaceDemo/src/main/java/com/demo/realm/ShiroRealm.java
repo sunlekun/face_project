@@ -11,21 +11,16 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
- 
 
-
-
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import com.demo.dao.ManagerDao;
 import com.demo.model.Manager; 
 import com.demo.service.ManagerService; 
+import com.demo.service.RoleNavigationService;
+import com.demo.service.RoleService;
 
 public class ShiroRealm  extends AuthorizingRealm{
     
@@ -33,10 +28,12 @@ public class ShiroRealm  extends AuthorizingRealm{
 	@Autowired
 	private ManagerService managerService;
 	
-	/*@Autowired
-	private RoleService roleService;
 	@Autowired
-	private PermissionService permissionService;*/
+	private RoleService roleService;
+
+	
+	@Autowired
+	private RoleNavigationService roleNavigationService;
 
 	public  String getName(){
     	return "ShiroRealm";
@@ -48,8 +45,6 @@ public class ShiroRealm  extends AuthorizingRealm{
 		//User  user=(User) principals.getPrimaryPrincipal();
 		List<String> permissions=new ArrayList<String>();
 		List<String> roles=new ArrayList<String>();
-		permissions.add("*:*");
-		roles.add("系统管理员");
 		/* if("admin".equals(user.getUsername()))
 		{
 			 //拥有所有权限
@@ -64,6 +59,23 @@ public class ShiroRealm  extends AuthorizingRealm{
 			//根据用户id查询用户拥有的角色
 			roles=roleService.findAllRolesByUserId(user.getId());
 		}*/
+		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		 
+			
+		
+		 if(manager.getRole_type()==1) //超级管理员拥有所有权限
+		{
+			permissions.add("*:*");
+			 //查询所有角色
+			roles.add(roleService.findRoleById(manager.getRole_id()).getRole_name());
+		}
+		 else  
+		{   
+			//根据用户id查询用户拥有的权限
+			permissions=roleNavigationService.findRoleNavigationNameByRoleId(manager.getRole_id());
+			//根据用户id查询用户拥有的角色
+			roles.add(roleService.findRoleById(manager.getRole_id()).getRole_name());
+		}
 		SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
 		info.addStringPermissions(permissions);
 		info.addRoles(roles);

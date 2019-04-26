@@ -8,6 +8,10 @@
 	<select id="findRoleNavigationByRoleId" resultType="String"> 
 		select CONCAT(navigation_id,',',nav_name,',',action_type) from manager_role_navigation where is_delete=0 and  role_id=#{0} 
 	</select>
+	
+	<select id="findRoleNavigationNameByRoleId" resultType="String"> 
+		select nav_name from manager_role_navigation where is_delete=0 and  role_id=#{0} 
+	</select>
 	   
 	<insert id="insertRoleNavigationBatch"  useGeneratedKeys="true" >
          insert into  manager_role_navigation (role_id, navigation_id,nav_name,action_type, add_time) values 

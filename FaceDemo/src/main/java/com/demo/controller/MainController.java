@@ -2,17 +2,13 @@ package com.demo.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +46,7 @@ public class MainController {
 	 	modelAndView.addObject("allNav", allNav);  
 		
 		}
-		modelAndView.setViewName("admin/main2");
+		modelAndView.setViewName("admin/main");
 		return modelAndView;
 
 	} 
