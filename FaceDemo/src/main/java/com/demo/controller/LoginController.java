@@ -10,7 +10,11 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
+/**
+ * 
+ * @author lekun.sun
+ *
+ */
 @Controller
 public class LoginController { 
 	public static Logger log= Logger.getLogger(LoginController.class);
