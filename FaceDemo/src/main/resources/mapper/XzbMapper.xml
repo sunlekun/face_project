@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.XzbDao">
+    
+	<select id="findAllXzb"  resultType="Xzb">
+		select l.*  from xzb l  where   l.is_delete=0  order by add_time desc
+	</select>
+	  
+	<select id="findXzbById" parameterType="int"  resultType="Xzb" >
+		select l.* from xzb l where  l.is_delete=0  and l.id=#{0}
+	</select>
+
+	<insert id="insertXzb" parameterType="Xzb" useGeneratedKeys="true" keyProperty="id">
+		insert into xzb(title,sort,add_time) values (#{title} ,#{sort},#{add_time})
+	</insert>
+	
+	
+	<update id="updateXzb" parameterType="Xzb">
+		update xzb set title=#{title}, sort=#{sort} where id=#{id}
+	</update>
+	
+	<delete id="deleteXzbBatch" parameterType="int">
+        update xzb set is_delete=1  where id  in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

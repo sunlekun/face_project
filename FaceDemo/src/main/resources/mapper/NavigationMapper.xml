@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.NavigationDao">
+
+	   
+	<select id="findAllNavigation" resultType="Navigation">
+		select * from manager_navigation  where  is_delete=0   order by   sort_id asc
+	</select>
+	  
+	 <select id="findNavigationByRoleIdOrParentId" resultType="Navigation"> 
+		
+		select distinct n.* from manager_navigation n  left join manager_role_navigation rn on  rn.navigation_id=n.id where  n.is_delete=0 and rn.is_delete=0 
+
+		<if test="role_id!=-1">  
+         and    rn.role_id=#{role_id}  
+        </if>  
+		<if test="parent_id!=-1">  
+         and    n.parent_id=#{parent_id}   
+         </if> 
+         order by  n.sort_id asc
+	 </select>
+	 
+	 
+	 
+	 <select id="findNavigationByRoleId" resultType="Navigation"> 
+	    select distinct n.* from manager_navigation n  left join manager_role_navigation rn on  rn.navigation_id=n.id where  n.is_delete=0 and rn.is_delete=0  
+	   <if test="role_id!=-1">  
+         and    rn.role_id=#{role_id}
+        </if>  
+        order by   n.sort_id asc
+	 </select>
+	 
+	 <select id="findNavigationByParentId" resultType="Navigation">
+		select * from manager_navigation  where  parent_id=#{0} and is_delete=0    order by  sort_id asc
+	</select>
+	
+	<select id="findParentIDNavigationByIds"  resultType="String">
+		select  distinct  parent_id  from manager_navigation   where  is_delete=0 and parent_id!=0  and   id in  
+		 <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>  
+	</select>
+</mapper>

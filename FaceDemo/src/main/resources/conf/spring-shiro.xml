@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+ 
+   <!-- ================ Shiro start ================ -->
+       
+       <!-- 配置自定义的Realm -->
+	    <bean id="shiroRealm" class="com.demo.realm.ShiroRealm" >
+	        <!-- 密码需要加密：加密器 -->
+	        <property name="credentialsMatcher" ref="credentialsMatcher"></property>
+	   
+	    </bean>
+	    
+	    
+	   
+		
+       <!-- 配置安全管理器securityManager -->
+		<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+			<property name="realm" ref="shiroRealm" />
+			<!-- 给shiroRealm添加缓存机制 -->
+			<property name="cacheManager" ref="cacheManager"></property> 
+		</bean>
+		
+		
+		
+		<!-- Shiro Filter  id必须与web.xml配置代理filter的filtername一致-->
+		<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+			<!-- 配置安全管理器 -->
+			<property name="securityManager" ref="securityManager" />
+			
+			<!-- 登录失败之后的跳转路径的配置  如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面 --> 
+			<property name="loginUrl" value="/login" />
+			
+			<!-- 登录成功之后的跳转访问路径 --> 
+			<property name="successUrl" value="/main" /> 
+			
+			<!-- 认证失败之后的跳转路径页面 -->
+			<property name="unauthorizedUrl" value="/login_toLogin" />
+			
+			<!-- shiro里面需要针对于所有的路径进行配置，所有的配置需要通过文本的形式设置 -->
+			<property name="filterChainDefinitions">
+				<value>
+				<!-- /static/login/** 			= anon
+				/static/js/myjs/** 			= authc
+				/static/js/** 				= anon
+				/uploadFiles/uploadImgs/** 	= anon
+	           	/code.do 					= anon
+	           	/login_login	 			= anon
+	           	/app**/** 					= anon
+	           	/weixin/** 					= anon -->
+	           	
+	           	/js/** 			        	= anon
+	           	/css/** 			    	= anon
+	           	/logout                     = logout
+	           	/**							= authc
+	           <!--    过滤链定义，从上向下顺序执行，一般将 /**放在最为下边  :这是一个坑呢，一不小心代码就不好使了;  
+	           authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问   -->
+				</value>
+			</property>
+		</bean>
+	<!-- ================ Shiro end ================ -->
+ 
+     <bean id="logout" class="org.apache.shiro.web.filter.authc.LogoutFilter"> 
+        <property name="redirectUrl" value="/login" /> 
+    </bean> 
+     
+     <!-- 开启shiro注解支持 -->
+     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+          <property name="securityManager" ref="securityManager" />
+     </bean>
+     
+     <!-- 定义需要特殊处理的异常 ，用类名或完全路径作为key，异常页面作为值 -->
+     <!-- shiro权限异常处理 -->
+     <bean  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+          <property name="exceptionMappings">
+               <props>
+                  <prop key="org.apache.shiro.authz.UnauthorizedException">redirect:/nopermission.jsp</prop>
+               </props>
+          </property>
+     </bean>
+     
+      <!-- 缓存管理器开始 -->
+	    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		    <property name="configLocation" value="classpath:conf/shiro-ehcache.xml" />
+		    <property name="shared" value="true"></property>
+	    </bean> 
+  
+	    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+	    	<property name="cacheManager" ref="ehCacheManager" />
+	    </bean>
+	    <!-- 缓存管理器结束 -->
+    
+	
+	  <!-- j -->
+	  <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher"> 
+	  <!-- 加密算法以及散列次数hashIterations -->
+	      <property name="hashAlgorithmName" value="md5"></property>
+	      <property name="hashIterations" value="3"></property>
+	  </bean>
+ 
+  
+ 
+</beans>

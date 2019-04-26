@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.RoleDao">
+    
+     <insert id="insertRole" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+		insert into manager_role (role_name, role_type,is_sys,add_time)   values(#{role_name},#{role_type}, #{is_sys},#{add_time})
+	</insert>
+	
+	<insert id="insertNavigationRoleBatch"  useGeneratedKeys="true" >
+         insert into  manager_role_navigation (role_id, nav_id, add_time) values 
+         <foreach collection="nav_ids" item="nav_id" separator=",">  
+                (#{role_id},#{nav_id},#{add_time})  
+         </foreach>
+    </insert>
+    
+	<select id="findAllRole" resultType="Role">
+		select * from manager_role where is_delete=0
+	</select>
+	
+	
+	<select id="findRoleByKeyword" resultType="Role"> 
+		select * from manager_role where is_delete=0 and  role_name like CONCAT('%',#{0},'%')  
+	</select>
+	
+	  <select id="findRoleByRoleName" resultType="Role">
+		select * from manager_role  where  role_name=#{0} and  is_delete=0;
+	 </select>
+	 <select id="findRoleById" resultType="Role">
+	     select * from manager_role r  where id=#{0} and is_delete=0 
+	 </select>
+ 
+	 <update id="updateRole" parameterType="Role">
+		update manager_role set role_name=#{role_name},  role_type=#{role_type},is_sys=#{is_sys} where id=#{id} 
+	</update>
+	
+	
+	
+	<delete id="deleteRoleBatch" parameterType="int">
+        update manager_role set is_delete=1  where id  in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+   
+    <delete id="deleteNavigationByRoleId" parameterType="int">
+        update manager_role_navigation  set is_delete=1  where   role_id=#{0}
+    </delete>
+   
+    
+    
+</mapper>

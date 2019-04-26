@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--
+	如果有很多种类型的话，每次都得把类型的全路径写上，感觉就很费事。
+	所以就可以用mybatis提供的typeAliases来进行别名配置。
+	这样再mapper中直接用命名的
+	-->
+	<!-- 命名空间 -->
+	<typeAliases>	
+		<typeAlias alias="Manager" type="com.demo.model.Manager" /> 
+		<typeAlias alias="Role" type="com.demo.model.Role" /> 
+		<typeAlias alias="Xzb" type="com.demo.model.Xzb" /> 
+		<typeAlias alias="Navigation" type="com.demo.model.Navigation" /> 
+		<typeAlias alias="RoleNavigation" type="com.demo.model.RoleNavigation" /> 
+	</typeAliases>
+</configuration>

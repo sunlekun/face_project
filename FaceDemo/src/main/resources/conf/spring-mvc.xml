@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    
+<!--     <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">   -->
+<!--     <property name="concurrentConsumers" value="2" />   -->
+<!--     <property name="connectionFactory" ref="connectionFactory" />     -->
+<!--     <property name="destination" ref="destination" /> -->
+<!--     <property name="messageListener" ref="messageReceiver" /> -->
+<!--     <property name="pubSubNoLocal" value="false"></property> -->
+<!-- 	</bean> -->
+ 
+    <!-- 扫描文件（自动注入）,包括DAO层注入Service层，Service层注入Controller层 -->
+    <context:component-scan base-package="com.demo"/>
+    <!-- MVC的注解映射的支持 -->  
+    <mvc:annotation-driven />
+    <!-- 配置DI注解解析器 -->  
+    <context:annotation-config/>   
+    
+    <!-- 开启aop注解方式，此步骤不能少，这样java类中的aop注解才会生效 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/> 
+    <!-- 开启aop,对类代理 --> 
+    <aop:config proxy-target-class="true"></aop:config> 
+    
+    
+   <!-- 避免IE在ajax请求时，返回json出现下载 -->
+   <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">     
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    
+    
+    <!-- 静态资源(js/image)的访问 -->
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/images/**" location="/images/" /> 
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/Ext/**" location="/Ext/" />
+	<mvc:resources mapping="/temp/**" location="/temp//" />
+
+	<!-- <mvc:interceptors>
+		多个拦截器，顺序执行
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />		
+			<mvc:exclude-mapping path="/user/forgetPwd" />  		
+			<bean class="com.demo.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>   -->
+     
+   <!-- 对模型视图添加前后缀 -->
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+      p:prefix="/WEB-INF/view/" p:suffix=".jsp"/>
+   
+   
+ 
+</beans>

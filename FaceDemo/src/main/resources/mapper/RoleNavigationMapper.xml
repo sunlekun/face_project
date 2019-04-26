@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.RoleNavigationDao">
+
+	   
+	<select id="findRoleNavigationByRoleId" resultType="String"> 
+		select CONCAT(navigation_id,',',nav_name,',',action_type) from manager_role_navigation where is_delete=0 and  role_id=#{0} 
+	</select>
+	   
+	<insert id="insertRoleNavigationBatch"  useGeneratedKeys="true" >
+         insert into  manager_role_navigation (role_id, navigation_id,nav_name,action_type, add_time) values 
+         <foreach collection="list" item="rn" separator=",">   
+                (#{rn.role_id},#{rn.navigation_id},#{rn.nav_name},#{rn.action_type},#{rn.add_time})  
+         </foreach>
+    </insert>
+    
+    <delete id="deleteRoleNavigationByRoleId" parameterType="int">
+        update manager_role_navigation  set is_delete=1  where   role_id=#{0}
+    </delete>
+</mapper>
