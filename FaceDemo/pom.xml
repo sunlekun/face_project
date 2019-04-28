@@ -17,6 +17,12 @@
            <artifactId>javax.servlet-api</artifactId>
            <version>3.0.1</version> 
         </dependency>
+        <!-- 腾讯云人脸识别API -->
+        <dependency>
+			<groupId>com.tencentcloudapi</groupId>
+			<artifactId>tencentcloud-sdk-java</artifactId>
+			<version>3.0.65</version>
+		</dependency>
     
 		<!-- 巴巴数据源 -->
 		<dependency>
