@@ -5,6 +5,7 @@
   xmlns:context="http://www.springframework.org/schema/context"
   xmlns:mvc="http://www.springframework.org/schema/mvc"
   xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:util="http://www.springframework.org/schema/util"
   xsi:schemaLocation="
     http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
@@ -23,7 +24,7 @@
 <!--     <property name="messageListener" ref="messageReceiver" /> -->
 <!--     <property name="pubSubNoLocal" value="false"></property> -->
 <!-- 	</bean> -->
- 
+ 	
     <!-- 扫描文件（自动注入）,包括DAO层注入Service层，Service层注入Controller层 -->
     <context:component-scan base-package="com.demo"/>
     <!-- MVC的注解映射的支持 -->  
@@ -67,6 +68,7 @@
      <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
       p:prefix="/WEB-INF/view/" p:suffix=".jsp"/>
    
-   
+   <!--注入配置文件 -->
+	<util:properties id="sysConfig" location="classpath:sysConfig.properties" />
  
 </beans>
