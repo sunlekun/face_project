@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="utf-8" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -182,7 +183,7 @@ return fmt;
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="xzb:Add">
-         	 <li><a class="add" href="<%=path %>/xzb/toXzbAdd"><i></i><span>新增</span></a></li>
+         	 <li><a class="add" href="xzb/toXzbAdd"><i></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="xzb:Delete">
          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
