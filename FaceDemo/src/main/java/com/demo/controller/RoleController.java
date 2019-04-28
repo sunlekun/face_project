@@ -60,7 +60,7 @@ public class RoleController {
 	private RoleNavigationService roleNavigationService;
 	
 	@RequestMapping(value = "/toRoleList")
-	@RequiresPermissions("role:toRoleList")
+	@RequiresPermissions("role:Show")
 	@PermissionName("角色管理")
 	public ModelAndView toRoleList(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -84,7 +84,7 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/roleDetial")
-	@RequiresPermissions("role:roleDetial")
+	@RequiresPermissions("role:View")
 	@PermissionName("角色详情") 
 	public ModelAndView roleDetial(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -105,7 +105,7 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/toRoleEdit")
-	@RequiresPermissions("role:toRoleEdit")
+	@RequiresPermissions("role:Edit")
 	@PermissionName("角色修改")
 	public ModelAndView toRoleEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -157,7 +157,7 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/toRoleAdd")
-	@RequiresPermissions("role:toRoleAdd")
+	@RequiresPermissions("role:Add")
 	@PermissionName("角色新增")
 	public ModelAndView toRoleAdd(HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -227,8 +227,7 @@ public class RoleController {
 	}
 	 
 	 
-	@RequiresPermissions("role:isExistRoleName")
-	@PermissionName("角色是否存在")
+	@RequiresPermissions("role:isExistRoleName") 
 	@RequestMapping(value = "/isExistRoleName")
 	public  void isExistRoleName(String role_name,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		  
@@ -247,7 +246,7 @@ public class RoleController {
 		} 
 	
 	@RequestMapping(value = "/roleDelete")
-	@RequiresPermissions("role:roleDelete")
+	@RequiresPermissions("role:Delete")
 	@PermissionName("角色删除")
 	public ModelAndView roleDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();

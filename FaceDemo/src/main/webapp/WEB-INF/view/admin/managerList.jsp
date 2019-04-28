@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="utf-8" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -51,7 +52,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "<%=path%>/manager/managerDetial?id="+$element.id;                  
+                  
+                       window.location.href = "<%=path%>/manager/managerDetial?id="+$element.id;       
+                               
                      
                    });
                    
@@ -96,9 +99,19 @@ return fmt;
          
 	}
 	function actionFormatter(value, row, index) { 
- <%--  return "<a class='update'  href = '<%=path%>/manager/toManagerEdit?id="+value+"'>修改</a><br>" ; --%>
-      return "<a class='update'  href = '<%=path%>/manager/toManagerEdit?id="+value+"'>修改</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class='detial'  href = '<%=path%>/manager/managerDetial?id="+value+"'>详情</a>" ;
+	/*  var arr = new Array();
+	 arr='${permissions}';
+	 alert(arr);
+	  alert(arr.indexOf('manager:toManagerEdit'));
+	 if(arr.indexOf('manager:toManagerEdit') > -1)
+	 alert(123); */
+	 var str="<shiro:hasPermission name='manager:Edit'><a class='update'  href = '<%=path%>/manager/toManagerEdit?id="+value+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='manager:View'><a class='detial'  href = '<%=path%>/manager/managerDetial?id="+value+"'>详情</a></shiro:hasPermission>"; 
+ 
+      return str;
     } 
+    
+    
+ 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
@@ -107,7 +120,8 @@ return fmt;
       } 
      } 
      
-      function Search(){
+     function Search(){
+     
      document.getElementById("form1").action="<%=path%>/manager/toManagerList"; 
      document.getElementById("form1").submit();
  }
@@ -176,8 +190,15 @@ return fmt;
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          <li><a class="add" href="<%=path %>/manager/toManagerAdd"><i></i><span>新增</span></a></li>
-          <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+        <shiro:hasPermission name="manager:Add">
+           <li><a class="add" href="<%=path %>/manager/toManagerAdd"><i></i><span>新增</span></a></li>
+        </shiro:hasPermission>
+       
+        <shiro:hasPermission name="manager:Delete">
+            <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li> 
+        </shiro:hasPermission>
+         
+          
         </ul>
       </div>
        
@@ -222,9 +243,9 @@ return fmt;
             <th data-sortable="true"  data-field="add_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">创建时间
             </th>
-             <th data-field="id" data-formatter="actionFormatter" data-align="center"
-                        data-events="actionEvents">操作
-             </th>
+            <th data-field="id" data-formatter="actionFormatter" data-align="center"
+                data-events="actionEvents">操作
+            </th>
         </tr>
         </thead>
     

@@ -11,6 +11,7 @@ import com.demo.model.RoleNavigation;
 public interface RoleNavigationDao {
 	public List<String>  findRoleNavigationByRoleId( int role_id);
 	public List<String>  findRoleNavigationNameByRoleId( int role_id);
+	public List<String>  findRolePermissionByRoleId( int role_id);
 	public void  insertRoleNavigationBatch(List<RoleNavigation> rns);
 	public void  deleteRoleNavigationByRoleId( int role_id);
 }

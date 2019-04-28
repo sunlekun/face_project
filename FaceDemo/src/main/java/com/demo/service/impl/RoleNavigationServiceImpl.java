@@ -26,6 +26,9 @@ public class RoleNavigationServiceImpl implements RoleNavigationService{
 	public List<String>  findRoleNavigationNameByRoleId( int role_id){
 		return roleNavigationDao.findRoleNavigationNameByRoleId(role_id);
 	}
+	public List<String>  findRolePermissionByRoleId( int role_id){
+		return roleNavigationDao.findRolePermissionByRoleId(role_id);
+	}
 	public void  insertRoleNavigationBatch(List<RoleNavigation> rns){
 		roleNavigationDao.insertRoleNavigationBatch(rns);
 	}

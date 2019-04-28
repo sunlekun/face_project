@@ -82,7 +82,7 @@ public class XzbController {
 			
 	}
 	@RequestMapping(value = "/toXzbList")
-	@RequiresPermissions("xzb:toXzbList")
+	@RequiresPermissions("xzb:Show")
 	@PermissionName("乡镇办管理")
 	public ModelAndView toXzbList(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -91,7 +91,7 @@ public class XzbController {
 	}
 	 
 	@RequestMapping(value = "/xzbDetial")
-	@RequiresPermissions("xzb:xzbDetial")
+	@RequiresPermissions("xzb:View")
 	@PermissionName("乡镇办详情")
 	public ModelAndView xzbDetial(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -103,7 +103,7 @@ public class XzbController {
 	}
 	
 	@RequestMapping(value = "/toXzbEdit")
-	@RequiresPermissions("xzb:toXzbEdit")
+	@RequiresPermissions("xzb:Edit")
 	@PermissionName("乡镇办修改")
 	public ModelAndView toXzbEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -124,7 +124,7 @@ public class XzbController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/toXzbAdd")
-	@RequiresPermissions("xzb:toXzbAdd")
+	@RequiresPermissions("xzb:Add")
 	@PermissionName("乡镇办增加")
 	public ModelAndView toXzbAdd(HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -143,7 +143,7 @@ public class XzbController {
 	}
 	
 	@RequestMapping(value = "/xzbDelete")
-	@RequiresPermissions("xzb:xzbDelete")
+	@RequiresPermissions("xzb:Delete")
 	@PermissionName("乡镇办删除")
 	public ModelAndView xzbDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new  ModelAndView();

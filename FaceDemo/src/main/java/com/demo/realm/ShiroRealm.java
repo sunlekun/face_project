@@ -61,24 +61,25 @@ public class ShiroRealm  extends AuthorizingRealm{
 		}*/
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		 
-			
 		
-		 if(manager.getRole_type()==1) //超级管理员拥有所有权限
+		
+		/* if(manager.getRole_type()==1) //超级管理员拥有所有权限
 		{
 			permissions.add("*:*");
 			 //查询所有角色
 			roles.add(roleService.findRoleById(manager.getRole_id()).getRole_name());
 		}
 		 else  
-		{   
+		{   */
 			//根据用户id查询用户拥有的权限
-			permissions=roleNavigationService.findRoleNavigationNameByRoleId(manager.getRole_id());
+			permissions=roleNavigationService.findRolePermissionByRoleId(manager.getRole_id());
 			//根据用户id查询用户拥有的角色
 			roles.add(roleService.findRoleById(manager.getRole_id()).getRole_name());
-		}
+		//}
 		SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
 		info.addStringPermissions(permissions);
 		info.addRoles(roles);
+		/*SecurityUtils.getSubject().getSession().setAttribute("permissions", permissions);*/
 		return info;
 	}
 

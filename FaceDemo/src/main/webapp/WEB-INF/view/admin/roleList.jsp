@@ -1,4 +1,5 @@
 <%@ page language="java" pageEncoding="utf-8" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -95,9 +96,9 @@ return fmt;
            return "系统用户";
          
 	}
-	function actionFormatter(value, row, index) { 
- <%--  return "<a class='update'  href = '<%=path%>/role/toRoleEdit?id="+value+"'>修改</a><br>" ; --%>
-      return "<a class='update'  href = '<%=path%>/role/toRoleEdit?id="+value+"'>修改</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class='detial'  href = '<%=path%>/role/roleDetial?id="+value+"'>详情</a>" ;
+	function actionFormatter(value, row, index) {  
+      return "<shiro:hasPermission name='role:Edit'><a class='update'  href = 'role/toRoleEdit?id="+value+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='role:View'><a class='detial'  href = 'role/roleDetial?id="+value+"'>详情</a></shiro:hasPermission>" ;
+  
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
@@ -176,8 +177,12 @@ return fmt;
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          <li><a class="add" href="<%=path %>/role/toRoleAdd"><i></i><span>新增</span></a></li>
-          <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          <shiro:hasPermission name="role:Add">
+               <li><a class="add" href="role/toRoleAdd"><i></i><span>新增</span></a></li>
+          </shiro:hasPermission>
+          <shiro:hasPermission name="role:Delete">
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          </shiro:hasPermission>
         </ul>
       </div>
        

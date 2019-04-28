@@ -59,7 +59,7 @@ public class ManagerController {
 	private XzbService xzbService;
 	
 	@RequestMapping(value = "/toManagerList")
-	@RequiresPermissions("manager:toManagerList")
+	@RequiresPermissions("manager:Show")
 	@PermissionName("管理员管理")
 	public ModelAndView toManagerList(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -83,7 +83,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/managerDetial")
-	@RequiresPermissions("manager:managerDetial")
+	@RequiresPermissions("manager:View")
 	@PermissionName("管理员详情")
 	public ModelAndView managerDetial(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -95,7 +95,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/toManagerEdit")
-	@RequiresPermissions("manager:toManagerEdit")
+	@RequiresPermissions("manager:Edit")
 	@PermissionName("管理员修改")
 	public ModelAndView toManagerEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -143,7 +143,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping(value = "/toManagerAdd")
-	@RequiresPermissions("manager:toManagerAdd")
+	@RequiresPermissions("manager:Add")
 	@PermissionName("管理员新增")
 	public ModelAndView toManagerAdd(HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -206,7 +206,7 @@ public class ManagerController {
 		} 
 	
 	@RequestMapping(value = "/managerDelete")
-	@RequiresPermissions("manager:managerDelete")
+	@RequiresPermissions("manager:Delete")
 	@PermissionName("管理员删除")
 	public ModelAndView managerDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -223,7 +223,7 @@ public class ManagerController {
 	
 	
 	@RequestMapping(value = "/toSetPwd")
-	@RequiresPermissions("manager:toSetPwd")
+	//@RequiresPermissions("manager:toSetPwd")
 	@PermissionName("管理员修改密码")
 	public ModelAndView toSetPwd() {
 		ModelAndView modelAndView = new ModelAndView();
