@@ -53,10 +53,10 @@
     
     <!-- 引入 shiro配置文件-->
     <import resource="classpath:conf/spring-shiro.xml"/> 
-   
- 	<bean id="managerService" 	class="com.demo.service.impl.ManagerServiceImpl"></bean>
+    	<bean id="managerService" 	class="com.demo.service.impl.ManagerServiceImpl"></bean>
  	<bean id="roleService" 	class="com.demo.service.impl.RoleServiceImpl"></bean>
  	<bean id="xzbService" 	class="com.demo.service.impl.XzbServiceImpl"></bean>
  	<bean id="navigationService" 	class="com.demo.service.impl.NavigationServiceImpl"></bean>
 	<bean id="roleNavigationService" 	class="com.demo.service.impl.RoleNavigationServiceImpl"></bean>
+   
 </beans>
