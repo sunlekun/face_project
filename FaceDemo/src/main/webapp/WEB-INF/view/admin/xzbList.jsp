@@ -102,7 +102,7 @@ return fmt;
 
 	function actionFormatter(value, row, index) { 
  <%--  return "<a class='update'  href = '<%=path%>/xzb/toXzbEdit?id="+value+"'>修改</a><br>" ; --%>
-      return "<a class='update'  href = '<%=path%>/xzb/toXzbEdit?id="+value+"'>修改</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class='detial'  href = '<%=path%>/xzb/xzbDetial?id="+value+"'>详情</a>" ;
+      return "<shiro:hasPermission name='xzb:Edit'><a class='update'  href = '<%=path%>/xzb/toXzbEdit?id="+value+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='xzb:View'> <a class='detial'  href = '<%=path%>/xzb/xzbDetial?id="+value+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
@@ -181,8 +181,12 @@ return fmt;
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          <li><a class="add" href="<%=path %>/xzb/toXzbAdd"><i></i><span>新增</span></a></li>
-          <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          <shiro:hasPermission name="xzb:Add">
+         	 <li><a class="add" href="<%=path %>/xzb/toXzbAdd"><i></i><span>新增</span></a></li>
+          </shiro:hasPermission>
+          <shiro:hasPermission name="xzb:Delete">
+         	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          </shiro:hasPermission>
         </ul>
       </div>
        
