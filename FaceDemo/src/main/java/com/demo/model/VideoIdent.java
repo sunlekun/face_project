@@ -1,0 +1,139 @@
+package com.demo.model;
+
+import java.sql.Timestamp;
+
+public class VideoIdent {
+	private static final long serialVersionUID = 1L;
+	private int id;
+	private String  year;
+	private int user_id;
+	private String video_url;
+	private String video_code;
+	private String img_url;
+	private String audio_url;
+	private String audio_txt;
+	private int video_num;
+	private int face_score;
+	private int video_status;
+	private int audio_status;
+	private String auditors_txt;
+	private String auditors_reason;
+	private String txt_remarks;
+	private String txt_img;
+	 
+	private  Timestamp add_time;
+	private int is_delete;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+ 
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	public String getVideo_url() {
+		return video_url;
+	}
+	public void setVideo_url(String video_url) {
+		this.video_url = video_url;
+	}
+	public String getVideo_code() {
+		return video_code;
+	}
+	public void setVideo_code(String video_code) {
+		this.video_code = video_code;
+	}
+	public String getImg_url() {
+		return img_url;
+	}
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+	public String getAudio_url() {
+		return audio_url;
+	}
+	public void setAudio_url(String audio_url) {
+		this.audio_url = audio_url;
+	}
+	public String getAudio_txt() {
+		return audio_txt;
+	}
+	public void setAudio_txt(String audio_txt) {
+		this.audio_txt = audio_txt;
+	}
+	public int getVideo_num() {
+		return video_num;
+	}
+	public void setVideo_num(int video_num) {
+		this.video_num = video_num;
+	}
+	public int getFace_score() {
+		return face_score;
+	}
+	public void setFace_score(int face_score) {
+		this.face_score = face_score;
+	}
+	public int getVideo_status() {
+		return video_status;
+	}
+	public void setVideo_status(int video_status) {
+		this.video_status = video_status;
+	}
+	public int getAudio_status() {
+		return audio_status;
+	}
+	public void setAudio_status(int audio_status) {
+		this.audio_status = audio_status;
+	}
+	public String getAuditors_txt() {
+		return auditors_txt;
+	}
+	public void setAuditors_txt(String auditors_txt) {
+		this.auditors_txt = auditors_txt;
+	}
+	public String getAuditors_reason() {
+		return auditors_reason;
+	}
+	public void setAuditors_reason(String auditors_reason) {
+		this.auditors_reason = auditors_reason;
+	}
+	public String getTxt_remarks() {
+		return txt_remarks;
+	}
+	public void setTxt_remarks(String txt_remarks) {
+		this.txt_remarks = txt_remarks;
+	}
+	public String getTxt_img() {
+		return txt_img;
+	}
+	public void setTxt_img(String txt_img) {
+		this.txt_img = txt_img;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public Timestamp getAdd_time() {
+		return add_time;
+	}
+	public void setAdd_time(Timestamp add_time) {
+		this.add_time = add_time;
+	}
+	public int getIs_delete() {
+		return is_delete;
+	}
+	public void setIs_delete(int is_delete) {
+		this.is_delete = is_delete;
+	}
+
+}
