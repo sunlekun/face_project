@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.demo.dao.RoleNavigationDao;
 import com.demo.model.RoleNavigation; 
@@ -16,6 +17,7 @@ import com.demo.service.RoleNavigationService;
  * @Function_Description 业务层接口，处理具体的业务方面的逻辑
  *
  */
+@Service
 public class RoleNavigationServiceImpl implements RoleNavigationService{
 	@Autowired
     @Qualifier("roleNavigationDao")

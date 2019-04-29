@@ -15,5 +15,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="Xzb" type="com.demo.model.Xzb" /> 
 		<typeAlias alias="Navigation" type="com.demo.model.Navigation" /> 
 		<typeAlias alias="RoleNavigation" type="com.demo.model.RoleNavigation" /> 
+		<typeAlias alias="RandomCheck" type="com.demo.model.RandomCheck" />
+		<typeAlias alias="User" type="com.demo.model.User" />
+		<typeAlias alias="VideoIdent" type="com.demo.model.VideoIdent" />
 	</typeAliases>
 </configuration>

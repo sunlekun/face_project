@@ -58,5 +58,6 @@
  	<bean id="xzbService" 	class="com.demo.service.impl.XzbServiceImpl"></bean>
  	<bean id="navigationService" 	class="com.demo.service.impl.NavigationServiceImpl"></bean>
 	<bean id="roleNavigationService" 	class="com.demo.service.impl.RoleNavigationServiceImpl"></bean>
+	<bean id="randomCheckService" 	class="com.demo.service.impl.RandomCheckServiceImpl"></bean>
    
 </beans>

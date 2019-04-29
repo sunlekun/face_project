@@ -33,20 +33,23 @@ public class MainController {
 	@RequestMapping(value = "/main")
 	public ModelAndView main(HttpServletRequest request, HttpServletResponse response) { 
 	 
-		ModelAndView modelAndView=new ModelAndView ();
-		
-		 
- 		
-
-		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
-		if(manager!=null)
-		{
-		List<Navigation> allNav=findNavigationTreeByRoleId(manager.getRole_id());
-		
-	 	modelAndView.addObject("allNav", allNav);  
-		
-		}
-		modelAndView.setViewName("admin/main");
+		ModelAndView modelAndView=new ModelAndView (); 
+		/*if(SecurityUtils.getSubject().getPrincipals()!=null)
+		{*/
+			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+			if(manager!=null)
+			{
+			List<Navigation> allNav=findNavigationTreeByRoleId(manager.getRole_id());
+			
+		 	modelAndView.addObject("allNav", allNav);  
+			
+			}
+			modelAndView.setViewName("admin/main");
+		/*}
+		else
+			modelAndView.setViewName("redirect:/login");*/
+				
+				
 		return modelAndView;
 
 	} 
