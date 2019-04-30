@@ -4,6 +4,7 @@ import java.util.List;
  
 
 
+
 import org.apache.ibatis.annotations.Param;
 
 import com.demo.model.RandomCheck; 
@@ -18,6 +19,7 @@ import com.demo.model.RandomCheck;
  */
 public interface RandomCheckService {
 	public List<RandomCheck>  findRandomCheckByStatus(String status);
-	public List<RandomCheck>  findRandomCheckByVideoStatus(String video_status);
-	 
+	public List<RandomCheck>  findRandomCheckByVideoStatusAndStatus(String video_status,String status);
+	public int  creatRandomCheckByNumberAndYear( int number, String year);
+	public int insertRandomCheckBatch(List<RandomCheck> randomChecks); 
 }

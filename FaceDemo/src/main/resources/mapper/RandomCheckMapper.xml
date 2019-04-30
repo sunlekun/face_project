@@ -53,7 +53,7 @@
         </if> 
 	</select>
 	
-	   <select id="findRandomCheckByVideoStatus" resultType="RandomCheck"> 
+	   <select id="findRandomCheckByVideoStatusAndStatus" resultType="RandomCheck"> 
 		   
 	select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard,v.img_url as img_url , v.add_time as vadd_time ,v.year as year  from random_check r 
 	   LEFT JOIN users u on u.id=r.user_id
@@ -62,5 +62,48 @@
 		<if test="video_status != null and  video_status !='' ">  
         and v.video_status= #{video_status}   
         </if> 
+        <if test="status != null and  status !='' ">  
+       and r.status= #{status}   
+        </if>
 	</select>
+	
+	
+	<!--  <select id="creatRandomCheckByNumber" resultType="RandomCheck">  
+        
+      SELECT id as video_id, user_id    FROM video_ident AS t1
+     JOIN (
+          SELECT ROUND(RAND() *((SELECT MAX(id) FROM video_ident where is_delete=0 )-(SELECT MIN(id) FROM video_ident is_delete=0))+(SELECT MIN(id) FROM video_identis_delete=0)) AS id
+      ) AS t2 
+     WHERE t1.id >= t2.id 
+    ORDER BY t1.add_time desc
+     <if test="number!=-1">  
+       LIMIT number;
+     </if>
+     
+	</select> -->
+	
+	 
+    
+    	<insert id="insertRandomCheckBatch"  useGeneratedKeys="true" >
+        insert into  random_check (video_id, user_id, add_time) values 
+         <foreach collection="list" item="rc" separator=",">   
+                (#{rc.video_id},#{rn.user_id},createTime)  
+         </foreach>
+    </insert>
+	
+	
+	<insert id="creatRandomCheckByNumberAndYear"  useGeneratedKeys="true" >
+        insert into  random_check (video_id, user_id )  
+        select id,user_id from video_ident	WHERE		is_delete = 0  
+         And  NOT EXISTS (select id from video_ident WHERE	is_delete = 0 ) 
+    
+	     <if test="year != null and  year !=''">  
+	      and year=#{year}
+	     </if>
+	     order by rand()  
+	     <if test="number!=-1">  
+	       LIMIT #{number};
+	     </if>
+    </insert>
+	
 </mapper>

@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "<%=path%>/randomCheck/randomCheckList?status=${status}",
+            url: "<%=path%>/randomCheck/randomCheckList?status=${status}&video_status=${video_status}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -95,9 +95,9 @@ return fmt;
 	
 	function strFormat(val) { 
          if (val == 3) 
-         return "人工审核未通过";
+         return "抽查审核未通过";
         else  if (val == 2)  
-            return "人工审核通过";
+            return "抽查审核通过";
         else 
            return "等待人工抽查审核";
          
@@ -238,15 +238,28 @@ function infoFormatter( value, row, index){
          <shiro:hasPermission name="randomCheck:Show">
           <div class="menu-list">
           <div class="rule-single-select">
-            <select name="status" onchange="Search()" id="status">
-	           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
-	           <option  ${status==1?"selected='selected'":'' }  value="1">待验证</option>
-               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
-	           <option  ${status==3?"selected='selected'":'' }  value="3">匹配失败</option>
-               <option  ${status==4?"selected='selected'":'' }  value="4">黑名单</option>
+            <select name="video_status" onchange="Search()" id="video_status">
+	           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
+	           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
+               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
+	           <option  ${video_status==3?"selected='selected'":'' }  value="3">匹配失败</option>
+               <option  ${video_status==4?"selected='selected'":'' }  value="4">黑名单</option>
         </select>
         </div>
         </div>
+        
+      
+          <div class="menu-list"> 
+          <div class="rule-single-select">
+            <select name="status" onchange="Search()" id="status">
+	           <option  ${status==null?"selected='selected'":'' } value="">人工抽查审核状态</option>
+	           <option  ${status==1?"selected='selected'":'' }  value="1">待抽查审核</option>
+               <option  ${status==2?"selected='selected'":'' }  value="2">抽查通过</option>
+	           <option  ${status==3?"selected='selected'":'' }  value="3">抽查未通过</option> 
+        </select>
+        </div>
+        </div>
+        
       </shiro:hasPermission>
       </div>
        

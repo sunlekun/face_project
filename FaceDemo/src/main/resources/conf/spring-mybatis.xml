@@ -59,5 +59,6 @@
  	<bean id="navigationService" 	class="com.demo.service.impl.NavigationServiceImpl"></bean>
 	<bean id="roleNavigationService" 	class="com.demo.service.impl.RoleNavigationServiceImpl"></bean>
 	<bean id="randomCheckService" 	class="com.demo.service.impl.RandomCheckServiceImpl"></bean>
+	<bean id="videoIdentService" 	class="com.demo.service.impl.VideoIdentServiceImpl"></bean>
    
 </beans>

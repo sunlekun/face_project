@@ -11,7 +11,10 @@ import com.demo.model.RandomCheck;
 @Transactional(propagation=Propagation.REQUIRES_NEW,readOnly=false,isolation=Isolation.DEFAULT)
 public interface RandomCheckDao {
 	public List<RandomCheck>  findRandomCheckByStatus( @Param("status") String status);
-	public List<RandomCheck>  findRandomCheckByVideoStatus(@Param("video_status")  String video_status);
+	public List<RandomCheck>  findRandomCheckByVideoStatusAndStatus(@Param("video_status")  String video_status,@Param("status") String status);
+	public int  creatRandomCheckByNumberAndYear( @Param("number") int number,@Param("year") String year);
+	public int  insertRandomCheckBatch(List<RandomCheck> randomChecks);  
+
 }
 
  
