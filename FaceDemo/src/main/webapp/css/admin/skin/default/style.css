@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* CSS Document */
 @import url("../layout.css");
 @import url("../base.css");
@@ -154,7 +154,7 @@ textarea.input{ width:300px; height:65px; }
 /* =========================内页通用样式.结束======================= */
 
 /* ==========================列表页样式.开始======================== */
-/* .toolbar-wrap{ padding:10px 0; width:100%; *position:relative; *z-index:1; }
+.toolbar-wrap{ padding:10px 0; width:100%; *position:relative; *z-index:1; }
 .toolbar{ top:0; right:15px; left:15px; bottom:auto; padding:10px 0 5px; min-height:32px; background:#fff; z-index:2; font-size:12px; color:#333; }
 	.toolbar:after{ clear:both; content:"."; display:block; height:0; visibility:hidden; }
 	.toolbar .box-wrap{ position:relative; }
@@ -179,41 +179,7 @@ textarea.input{ width:300px; height:65px; }
 	.toolbar .r-list .btn-search{ margin:0 0 0 -1px;  }
 	.toolbar .r-list .img-view{ margin-left:10px; }
 	.toolbar .r-list .txt-view{ border-left:none; }
-    .toolbar .r-list a i{ font-size:14px; }  */
-    
-.toolbar-wrap{ padding:10px 0; width:100%; *position:relative; *z-index:1; }
-.toolbar{ top:0; right:15px; left:15px; bottom:auto; padding:10px 0 5px; min-height:32px; background:#fff; z-index:2; font-size:12px; color:#333; }
-	.toolbar:after{ clear:both; content:"."; display:block; height:0; visibility:hidden; }
-	.toolbar .box-wrap{ position:relative; }	
-	.toolbar .menu-btn{ display:none; width:30px; height:30px; border:solid 1px #eee; background:url(skin_icons.png) no-repeat -384px -20px #fafafa; cursor:pointer; }
-	.toolbar .l-list{ display:block; }
-	.toolbar .l-list .icon-list{ float:left; display:block; margin:0 10px 0 1px; padding-bottom:5px; }
-	.toolbar .l-list .icon-list:after{clear:both;content:".";display:block;height:0;visibility:hidden;}
-	.toolbar .l-list .icon-list li{ float:left; }
-	.toolbar .l-list .icon-list li a{ display:inline-block; margin-left:-1px; padding:5px 10px 5px 8px; border:solid 1px #eee; color:#333; font-size:12px; text-decoration:none; background:#fafafa; white-space:nowrap; word-break:break-all; }
-	.toolbar .l-list .icon-list li a:hover{ color:#2A72C5; }
-	.toolbar .l-list .icon-list li a span{ display:inline-block; vertical-align:middle; }
-	.toolbar .l-list .icon-list li a i{ display:inline-block; margin-right:3px; width:14px; height:14px; text-indent:-999em; background:url(skin_icons.png) no-repeat; vertical-align:middle; *text-indent:0; }
-	.toolbar .l-list .icon-list li a.add i{ background-position:0 -28px; }
-	.toolbar .l-list .icon-list li a.save i{ background-position:-28px -28px; }
-	.toolbar .l-list .icon-list li a.all i{ background-position:-56px -28px; }
-	.toolbar .l-list .icon-list li a.del i{ background-position:-84px -28px; }
-	.toolbar .l-list .icon-list li a.folder i{ background-position:-112px -28px; }
-	.toolbar .l-list .icon-list li a.list i{ background-position:-140px -28px; }
-	.toolbar .l-list .icon-list li a.move i{ background-position:-252px -28px; }
-	.toolbar .l-list .icon-list li a.copy i{ background-position:-280px -28px; }
-	.toolbar .l-list .icon-list li a.date i{ background-position:-308px -28px; }
-	.toolbar .l-list .icon-list li a.lock i{ background-position:-336px -28px; }
-	.toolbar .l-list .icon-list li a.msg i{ background-position:-364px -28px; }
-	.toolbar .l-list .menu-list{ float:left; display:block; margin:0; padding-bottom:5px; }
-	.toolbar .l-list .menu-list:after{clear:both;content:".";display:block;height:0;visibility:hidden;}
-	
-	.toolbar .r-list{ display:block; position:absolute; top:0; right:0; }
-	.toolbar .r-list .keyword{ display:block; float:left; margin:0; padding:0 5px; width:110px; height:30px; line-height:28px; font-size:12px; border:1px solid #888; color:#444; }
-	.toolbar .r-list .btn-search{ display:block; float:left; margin:0 0 0 -1px; padding:0; width:30px; height:30px; line-height:30px; border:1px solid #888; background:url(skin_icons.png) -160px -20px no-repeat #fafafa; cursor:pointer; text-indent:-9999px; }
-	.toolbar .r-list .img-view{ display:block; float:left; margin-left:10px; width:30px; height:30px; border:1px solid #eee; background:url(skin_icons.png) -187px -20px no-repeat #fafafa; text-indent:-9999px; }
-	.toolbar .r-list .txt-view{ display:block; float:left; width:30px; height:30px; border:1px solid #eee; border-left:none; background:url(skin_icons.png) -216px -20px no-repeat #fafafa; text-indent:-9999px; }
-    
+    .toolbar .r-list a i{ font-size:14px; }
 /*迷你样式*/
 .toolbar.mini .menu-btn{ display:block; }
 .toolbar.mini .l-list{ display:none; position:absolute; top:37px; left:0; right:0; float:none; padding:5px; padding-bottom:0; border:1px solid #eee; background:#fafafa; z-index:1; }
@@ -235,7 +201,7 @@ textarea.input{ width:300px; height:65px; }
 		.ltable td .img-box img{ padding:1px; width:30px; height:30px; border:1px solid #eee; }
 	.ltable tr:hover{ background:#f7f7f7; }
 	.ltable .odd_bg{ background:#fafafa; }
-	.ltable td .user-avatar{  width:64px; height:64px; line-height:64px; text-align:center; background:#fff;}
+	.ltable td .user-avatar{ display:block; width:64px; height:64px; line-height:64px; text-align:center; background:#fff;}
 	    .ltable td .user-avatar:hover{ text-decoration:none; }
 	    .ltable td .user-avatar i{ color:#eee; font-size:54px; line-height:64px;}
 	.ltable td .user-box{ padding-left:10px; }
@@ -508,7 +474,7 @@ textarea.input{ width:300px; height:65px; }
 /*下拉菜单*/
 .single-select{ position:relative; display:inline-block; margin-right:5px; vertical-align:middle; cursor:pointer; *float:left; }
 	.single-select .boxwrap{ display:inline-block; vertical-align:middle; }
-	.single-select .select-tit{ position:relative; display:block; margin-bottom:1px; padding:5px 38px 5px 10px; min-width:40px;  border:solid 1px #eee; text-decoration:none; background:#fff; white-space:nowrap; word-break:break-all; }
+	.single-select .select-tit{ position:relative; display:block; margin-bottom:1px; padding:5px 38px 5px 10px; min-width:40px; line-height:20px; height:20px; border:solid 1px #eee; text-decoration:none; background:#fff; white-space:nowrap; word-break:break-all; }
 	.single-select .select-tit span{ display:inline-block; color:#333; font-size:12px; vertical-align:middle; }
 	.single-select .select-tit i{ position:absolute; right:0; top:0; display:block; width:28px; height:100%; border-left:1px solid #eee; color:#666; font-size:10px; line-height:30px; text-align:center; background:#fafafa; -webkit-transform:scale(0.833); }
 	.single-select .select-items{ display:none; position:absolute; left:0; top:35px; box-shadow:0px 1px 4px rgba(0,0,0,0.1); /*overflow:hidden;*/ }

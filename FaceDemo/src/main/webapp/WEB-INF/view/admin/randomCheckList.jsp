@@ -54,8 +54,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     });
                     $('#table').bootstrapTable('load', tabledata);
                      
-                    $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "<%=path%>/randomCheck/randomCheckDetial?id="+$element.id;                  
+                    $('#table').on('dbl-click-row.bs.table',function(row, $element) {     
+                      window.location.href = "<%=path%>/randomCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+$element.id+"&video_id="+$element.video_id;                  
                      
                    });
                    
@@ -103,24 +103,7 @@ return fmt;
          
 	}
 
-
-function imgFormatter( value, row, index){  
- /* var s='<shiro:hasPermission name="randomCheck:Edit">'+
-      '<a class="user-avatar" href="check_show.aspx?action=Show&id=103155">'+
-          '<img width="64" height="64" src="/video_identity'+row['videoIdent']['img_url']+'" />'+
-       '</a>' +
-  '</shiro:hasPermission>'+
-  '<shiro:lacksPermission name="randomCheck:Edit">'+
-      '<a class="user-avatar" href="#">'+
-          '<img width="64" height="64" src="/video_identity'+row['videoIdent']['img_url']+'" />'+
-       '</a>' +
-  '</shiro:lacksPermission>';
-  alert(s); */
-return '<a class="user-avatar" href="check_show.aspx?action=Show&id=103155">'+
-          '<img width="64" height="64" src="/video_identity'+row['videoIdent']['img_url']+'" />'+
-       '</a>';
-
-}
+ 
 function infoFormatter( value, row, index){ 
  
    var date = new Date(row['vadd_time']);
@@ -128,12 +111,12 @@ function infoFormatter( value, row, index){
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="randomCheck:Edit">'+
-		      '<a class="user-avatar" href="check_show.aspx?action=Show&id=103155">'+
+		   '<shiro:hasPermission name="randomCheck:Confirm">'+
+		      '<a class="user-avatar" href="randomCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id='+row['id']+'&video_id='+row['video_id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="randomCheck:Edit">'+
+		  '<shiro:lacksPermission name="randomCheck:Confirm">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
 		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
@@ -147,21 +130,16 @@ function infoFormatter( value, row, index){
          ' </span>'+
         ' </div>'+
      ' </div>'; 
- 
+  
    
  return s;
 }
 	function actionFormatter(value, row, index) { 
  <%--  return "<a class='update'  href = '<%=path%>/randomCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
-      return "<shiro:hasPermission name='randomCheck:Edit'><a class='update'  href = '<%=path%>/randomCheck/toRandomCheckEdit?id="+value+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'> <a class='detial'  href = '<%=path%>/randomCheck/randomCheckDetial?id="+value+"'>详情</a></shiro:hasPermission>" ;
+     return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/randomCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/randomCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>"; 
+ 
     } 
-    //表格  - 操作 - 事件
-    window.actionEvents = {
-     'click .update': function(e, value, row, index) {   
-          //修改操作
-          window.location.href = "<%=path%>/randomCheck/toRandomCheckEdit?id="+value;
-      } 
-     } 
+    
      
       function Search(){
       
@@ -211,6 +189,9 @@ function infoFormatter( value, row, index){
   <span>认证抽查列表</span>
 </div>
 <!--/导航栏-->
+ 
+
+
 
 <!--工具栏-->
 <%-- <div id="floatHead" class="toolbar-wrap">

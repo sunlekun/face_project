@@ -105,5 +105,19 @@
 	       LIMIT #{number};
 	     </if>
     </insert>
+    
+    <select id="findRandomCheckById" resultType="RandomCheck"> 
+		   
+	select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard,v.img_url as img_url , v.add_time as vadd_time ,v.year as year  from random_check r 
+	   LEFT JOIN users u on u.id=r.user_id
+	   LEFT JOIN video_ident  v on v.id=r.video_id
+	 where r.is_delete=0   and v.is_delete=0 and u.is_delete=0 and r.id= #{id}   
+      
+	</select>
+    
+    
+    <update id="updateRandomCheckStatus" parameterType="RandomCheck">
+		update random_check set status=#{status} where id=#{id} 
+	</update>
 	
 </mapper>

@@ -40,5 +40,11 @@ public class RandomCheckServiceImpl implements RandomCheckService{
 		public int insertRandomCheckBatch(List<RandomCheck> randomChecks){
 			return randomCheckDao.insertRandomCheckBatch( randomChecks);
 		}
+		public RandomCheck findRandomCheckById(Integer id){
+			return randomCheckDao.findRandomCheckById(id);
+		}
+		public void updateRandomCheckStatus(Integer status, Integer id){
+			 randomCheckDao.updateRandomCheckStatus(status, id);
+		}
 	 
 	}

@@ -7,6 +7,7 @@ public class VideoIdent {
 	private int id;
 	private String  year;
 	private int user_id;
+	private User user;
 	private String video_url;
 	private String video_code;
 	private String img_url;
@@ -23,8 +24,22 @@ public class VideoIdent {
 	 
 	private  Timestamp add_time;
 	private int is_delete;
+	
+	
+/*	//为了显示使用
+	private String user_name;
+	private String user_idcard;
+	private String mobile;
+	private String img_url;*/
+	
 	public int getId() {
 		return id;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	public void setId(int id) {
 		this.id = id;

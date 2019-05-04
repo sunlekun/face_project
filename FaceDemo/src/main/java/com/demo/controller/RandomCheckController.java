@@ -20,6 +20,7 @@ import net.sf.json.JSONObject;
 
 
 
+
 import org.apache.log4j.Logger; 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 
+
 import com.alibaba.fastjson.JSON;  
 import com.demo.model.RandomCheck;
+import com.demo.model.VideoIdent;
 import com.demo.realm.PermissionName;
 import com.demo.service.RandomCheckService;
 import com.demo.service.VideoIdentService;
@@ -131,72 +134,54 @@ public class RandomCheckController {
 		 
 
 		} 
-	/*@RequestMapping(value = "/xzbDetial")
-	@RequiresPermissions("xzb:View")
-	@PermissionName("乡镇办详情")
-	public ModelAndView xzbDetial(int id,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping(value = "/toRandomCheckConfirm")
+	@RequiresPermissions("randomCheck:Confirm")
+	@PermissionName("抽查审核")
+	public ModelAndView toRandomCheckConfirm(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		Xzb xzb=xzbService.findXzbById(id); 
-		modelAndView.addObject("xzb", xzb); 
-		modelAndView.setViewName("admin/xzbDetial"); 
+		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	
+		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id);
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.addObject("randomCheck", randomCheck); 
+		modelAndView.addObject("status", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.setViewName("admin/randomCheckConfirm"); 
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/toXzbEdit")
-	@RequiresPermissions("xzb:Edit")
-	@PermissionName("乡镇办修改")
-	public ModelAndView toXzbEdit(int id,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping(value = "/randomCheckConfirm")
+	@PermissionName("视频详情")
+	public ModelAndView randomCheckConfirm(int status,int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
-		Xzb xzb=xzbService.findXzbById(id); 
-		modelAndView.addObject("xzb", xzb); 
-		modelAndView.setViewName("admin/xzbEdit");
 		
-		return modelAndView;
-	}
-	@RequestMapping(value = "/xzbEdit")	
-	public ModelAndView xzbEdit(Xzb xzb ,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String s=request.getParameter("status");
+		
 	
-		ModelAndView modelAndView = new ModelAndView();
-		
-		xzbService.updateXzb(xzb);
+		randomCheckService.updateRandomCheckStatus(status, id);
 		 
-		modelAndView.setViewName("redirect:/xzb/toXzbList");
-		return modelAndView;
-	}
-	@RequestMapping(value = "/toXzbAdd")
-	@RequiresPermissions("xzb:Add")
-	@PermissionName("乡镇办增加")
-	public ModelAndView toXzbAdd(HttpServletRequest request,HttpServletResponse response) {
-		ModelAndView modelAndView = new ModelAndView(); 
-		modelAndView.setViewName("admin/xzbAdd"); 
-		return modelAndView;
-	}
-	@RequestMapping(value = "/xzbAdd")
-	public ModelAndView xzbAdd(Xzb xzb ,HttpServletRequest request,HttpServletResponse response) throws IOException {
-	
-		ModelAndView modelAndView = new ModelAndView(); 
-		xzb.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
-		xzbService.insertXzb(xzb);
+		modelAndView.addObject("status1", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		
-		modelAndView.setViewName("redirect:/xzb/toXzbList");
+		modelAndView.setViewName("redirect:/randomCheck/toRandomCheckList");
 		return modelAndView;
 	}
-	
-	@RequestMapping(value = "/xzbDelete")
-	@RequiresPermissions("xzb:Delete")
-	@PermissionName("乡镇办删除")
-	public ModelAndView xzbDelete(HttpServletRequest request) {
-		ModelAndView modelAndView = new  ModelAndView();
-		String  idss=request.getParameter("ids");
-		if(idss!=null&&idss.length()>0){
-			String[] ids=idss.split(",");
-			if(ids.length>=1)
-				xzbService.deleteXzbBatch(ids);
-		}
-		
-		modelAndView.setViewName("redirect:/xzb/toXzbList");
+	 
+	@RequestMapping(value = "/randomCheckDetial")
+	@PermissionName("视频详情")
+	public ModelAndView randomCheckDetial(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	 
+		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id); 
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.addObject("randomCheck", randomCheck); 
+		modelAndView.addObject("status", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.setViewName("admin/randomCheckDetial"); 
 		return modelAndView;
-	}*/
+	}
 	
 }
