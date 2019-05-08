@@ -227,7 +227,7 @@ public class RoleController {
 	}
 	 
 	 
-	@RequiresPermissions("role:isExistRoleName") 
+	/*@RequiresPermissions("role:isExistRoleName") */
 	@RequestMapping(value = "/isExistRoleName")
 	public  void isExistRoleName(String role_name,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		  

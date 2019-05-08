@@ -18,7 +18,8 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util.xsd">
     
-    
+
+        
 <!--     <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">   -->
 <!--     <property name="concurrentConsumers" value="2" />   -->
 <!--     <property name="connectionFactory" ref="connectionFactory" />     -->
@@ -70,7 +71,14 @@
      <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
       p:prefix="/WEB-INF/view/" p:suffix=".jsp"/>
    
+    
    <!--注入配置文件 -->
 	<util:properties id="sysConfig" location="classpath:conf/sysConfig.properties" />
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8" /> 
+        <property name="maxUploadSize" value="10485760000" />
+        <property name="maxInMemorySize" value="40960" />
+    </bean>
  
 </beans>

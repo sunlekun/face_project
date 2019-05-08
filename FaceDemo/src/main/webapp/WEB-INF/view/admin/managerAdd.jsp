@@ -37,35 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        $(".mainbody").Validform({
       
 		 beforeSubmit : function(curform) {  
-		 
-        var user_name = $("#user_name").val(); 
-        if(user_name!='')//验证是否为空
-        { 
-        $.ajax(
-            {
-                url:"manager/isExistUserName",
-                data:{user_name:user_name},
-                type: "POST",
-                async:false, 
-                dataType:"json",
-                success: function(data)
-                    {   
-                        if(data.status=='true')
-                        {
-                            $("#msg").html("用户名可使用");
-                            $("#msg").attr("class","Validform_checktip Validform_right");
-                            $("#flag").val("1"); 
-                        }
-                        else
-                        {   
-                            $("#msg").html("用户名已被占用,请更换!");                            
-                            $("#msg").attr("class","Validform_checktip Validform_wrong");
-                            $("#flag").val("0"); 
-                        }
-                    }
-            });
-          }
-          
+		
           if($("#flag").val()=='0') 
                {
                   alert("用户名已被占用,请更换!");   
@@ -95,12 +67,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
        
      }  
+     
+     
+      $(document).ready(function(){    
+   $("#user_name").blur(function(){  
+
+    var user_name = $("#user_name").val(); 
+ 
+     if(user_name!='')//验证是否为空
+    { 
+     $.ajax(
+            {
+                url:"manager/isExistUserName",
+                data:{user_name:user_name},
+                type: "POST",
+                dataType:"json",
+                success: function(data)
+                    {   
+                        if(data.status=='true')
+                        {
+                            $("#msg").html("用户名可使用");
+                            $("#msg").attr("class","Validform_checktip Validform_right");
+                            $("#flag").val("1"); 
+                        }
+                        else
+                        {   
+                            $("#msg").html("用户名已被占用,请更换!");                            
+                            $("#msg").attr("class","Validform_checktip Validform_wrong");
+                            $("#flag").val("0"); 
+                        }
+                    }
+            });
+      
+    }
+  });
+ 
+    });
 </script>
 </head>
 <body class="mainbody">
 <form method="post" action="<%=path%>/manager/managerAdd" id="form1">
 <!--  <input type="hidden" name="is_lock" id="is_lock" value="0" /> -->
- <input type="hidden" name="flag" id="flag" value="0" />
+ <input type="hidden" name="flag" id="flag" value="1" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />

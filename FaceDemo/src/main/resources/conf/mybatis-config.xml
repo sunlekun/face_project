@@ -18,5 +18,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="RandomCheck" type="com.demo.model.RandomCheck" />
 		<typeAlias alias="User" type="com.demo.model.User" />
 		<typeAlias alias="VideoIdent" type="com.demo.model.VideoIdent" />
+		<typeAlias alias="TempUser" type="com.demo.model.TempUser" />
 	</typeAliases>
 </configuration>

@@ -16,7 +16,7 @@
     </insert>
     
 	<select id="findAllRole" resultType="Role">
-		select * from manager_role where is_delete=0
+		select * from manager_role where is_delete=0  order by  add_time   desc
 	</select>
 	
 	

@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    $("#role_name").blur(function(){  
 
     var role_name = $("#role_name").val(); 
-   
+ 
      if(role_name!='')//验证是否为空
     { 
         $.ajax(
@@ -93,8 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 type: "POST",
                 dataType:"json",
                 success: function(data)
-                    {   
-                     
+                    {                          
                         if(data.status=='true')
                         {
                             $("#msg").html("角色名可使用");
