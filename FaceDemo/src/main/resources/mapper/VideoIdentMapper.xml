@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.VideoIdentDao">
+	   <select id="findVidoIdentYears" resultType="String"> 		   
+	    select  distinct(year) from video_ident	 where is_delete=0 	 
+	  </select>
+	  
+	  
+	 <!--   <select id="findVideoIdentById" resultType="VideoIdent"> 
+		   
+	select v.* ,u.user_name as user_name ,u.user_idcard as user_idcard,v.img_url as img_url , v.add_time as vadd_time ,v.year as year  from  video_ident  v 
+	   LEFT JOIN users u on u.id=v.user_id
+	
+	 where v.is_delete=0 and u.is_delete=0 and v.id= #{id}   
+      
+	</select> -->
+	 
+
+	<resultMap id="videoIdent" type="VideoIdent">
+		<result property="id" column="id" />
+		<result property="year" column="year" />
+		<result property="user_id" column="user_id" />
+		<result property="video_url" column="video_url" />
+		<result property="video_code" column="video_code" />
+	
+		<result property="img_url" column="img_url" />
+		<result property="audio_url" column="audio_url" />
+		<result property="audio_txt" column="audio_txt" />
+		<result property="video_num" column="video_num" />
+		<result property="face_score" column="face_score" />
+		<result property="video_status" column="video_status" />
+		<result property="audio_status" column="audio_status" />
+		<result property="auditors_txt" column="auditors_txt" />
+		<result property="auditors_reason" column="auditors_reason" />
+	
+		<result property="txt_remarks" column="txt_remarks" />
+		<result property="txt_img" column="txt_img" />
+	
+		<result property="add_time" column="add_time" />
+		<result property="is_delete" column="is_delete" />
+		
+        <association property="user" column="user_id"     javaType="User" select="getUserById" />
+      
+    </resultMap>
+	
+	<select id="getUserById"  resultType="User">
+        SELECT * FROM users WHERE id = #{id} and is_delete=0
+    </select>
+    
+    
+    <select id="findVideoIdentById" resultMap="videoIdent"> 
+	    select v.*  from  video_ident  v  where v.is_delete=0 and v.id= #{id}   
+    </select> 
+</mapper>

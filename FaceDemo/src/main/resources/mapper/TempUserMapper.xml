@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.TempUserDao">
+ 
+	 
+	 
+    <select id="findAllTempUser" resultType="TempUser">
+		select m.* from temp_users m where m.is_delete=0 order by m.add_time  desc
+	 </select>
+	 
+	<select id="findTempUserByUserIdcard" resultType="TempUser">
+		select * from temp_users  where  user_idcard=#{0} and   is_delete=0;
+	 </select>
+	 <select id="findTempUserById" resultType="TempUser">
+	     select m.* from temp_users m   where m.id=#{0} and m.is_delete=0 
+	 </select>
+	 
+
+ 
+	  
+	 
+	 <update id="updateTempUser" parameterType="TempUser">
+		update tempUser  
+		<set>  
+         user_name=#{user_name},user_idcard=#{user_idcard}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
+         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},add_time=#{add_time},is_delete=#{is_delete}
+       </set> 
+       where id=#{id}
+	</update>
+	
+	 
+
+	<insert id="insertTempUser" parameterType="TempUser">
+		insert into temp_users (user_name, user_idcard, user_township,user_village,data_type,mobile,status,status_reason,thumb_path,original_path,add_time,update_time) 
+		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{status}, #{status_reason},#{thumb_path},#{original_path},#{add_time},#{update_time})
+	</insert>
+	
+	  <delete id="deleteTempUserBatch" parameterType="int">
+        update temp_users set is_delete=1  where id  in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	 
+</mapper>
