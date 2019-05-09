@@ -22,10 +22,10 @@
 	  
 	 
 	 <update id="updateTempUser" parameterType="TempUser">
-		update tempUser  
+		update temp_users  
 		<set>  
          user_name=#{user_name},user_idcard=#{user_idcard}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
-         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},add_time=#{add_time},is_delete=#{is_delete}
+         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},update_time=#{update_time},is_delete=#{is_delete}
        </set> 
        where id=#{id}
 	</update>

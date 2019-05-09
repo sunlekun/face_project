@@ -11,12 +11,13 @@
         btntext: "浏览...", //上传按钮的文字
         swf: null //SWF上传控件相对地址
     };
+    
     //初始化上传控件
     $.fn.InitUploader = function (b) {
         var fun = function (parentObj) {
             var p = $.extend({}, $.upLoadDefaults.property, b || {});
             var btnObj = $('<div class="upload-btn">' + p.btntext + '</div>').appendTo(parentObj);
-            
+         
             //初始化属性
             p.sendurl += "?action=UpLoadFile";
             if (p.water) {
@@ -50,7 +51,7 @@
                 fileVal: 'Filedata', //上传域的名称
                 fileSingleSizeLimit: p.filesize * 1024 //文件大小
             });
-
+           
             //当validate不通过时，会以派送错误事件的形式通知
             uploader.on('error', function (type) {
                 switch (type) {
@@ -131,6 +132,7 @@
                     progressObj.children(".txt").html("上传成功：" + file.name);
                 }
                 uploader.removeFile(file); //从队列中移除
+               
             });
 
             //不管成功或者失败，文件上传完成时触发

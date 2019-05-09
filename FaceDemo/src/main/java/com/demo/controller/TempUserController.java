@@ -48,8 +48,13 @@ public class TempUserController {
 	@RequiresPermissions("tempUser:Show")
 	@PermissionName("居民信息采集管理")
 	public ModelAndView toTempUserList(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView(); 
-		modelAndView.setViewName("admin/tempUserList"); 
+		ModelAndView modelAndView = new ModelAndView();
+		String type=request.getParameter("type");
+		if("Img".equals(type))
+			modelAndView.setViewName("admin/tempUserListImg"); 
+		else
+		    modelAndView.setViewName("admin/tempUserList"); 
+		modelAndView.addObject("type", type);  
 		return modelAndView;
 	}
 	@RequestMapping(value = "/tempUserList")	
@@ -88,9 +93,10 @@ public class TempUserController {
 	public ModelAndView toTempUserEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		TempUser tempUserDetial= tempUserService.findTempUserById(id) ;  
-		
-		modelAndView.addObject("tempUserDetial", tempUserDetial); 
+		TempUser tempUser= tempUserService.findTempUserById(id) ;  
+		List<Xzb> xzbs= xzbService.findAllXzb();
+		modelAndView.addObject("xzbs", xzbs); 
+		modelAndView.addObject("tempUser", tempUser); 
 		modelAndView.setViewName("admin/tempUserEdit");
 		
 		return modelAndView;
@@ -100,7 +106,31 @@ public class TempUserController {
 	
 		ModelAndView modelAndView = new ModelAndView();
 			
-		
+		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
+		    
+		    
+		if (hid_photo_names != null && hid_photo_names.length == 3)
+		{
+			String path = "";
+			for (int i = 0; i < hid_photo_names.length; i++) {
+				String[] name = hid_photo_names[i].split("\\|");
+				/*
+				 * if(name!=null&&name.length>=2) { String[]
+				 * name1=name[1].split("\\/"); System.out.println(name1[3]);
+				 * path+=name[1]+";"; }
+				 */
+				path += name[1] + ";";
+			}
+
+			if (path.length() > 0)
+			{
+				path = path.substring(0, path.length() - 1);
+				tempUser.setOriginal_path(path);
+				tempUser.setOriginal_path(path);
+			}
+		}
+	 		
+		tempUser.setUpdate_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
 		tempUserService.updateTempUser(tempUser);
 		
 		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
@@ -125,11 +155,18 @@ public class TempUserController {
 		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
 		    
 		  
+		
+			JSONObject object = new JSONObject();
+
+			object.put("status", "true");
+			
+				
+			
 		    ModelAndView modelAndView = new ModelAndView();
 	       
 		    tempUser.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
 	 		 
-	 		if(hid_photo_names!=null)
+	 		if(hid_photo_names!=null&&hid_photo_names.length==3)
 	 		{
 	 		String path="";
 	        for(int i=0;i<hid_photo_names.length;i++)
@@ -152,18 +189,80 @@ public class TempUserController {
 	       }
 	 		}
 	        
-	          
-	     /*   modelAndView.addObject("type", request.getParameter("type"));
-			modelAndView.addObject("status", request.getParameter("status"));
-			modelAndView.addObject("ismodify", request.getParameter("ismodify"));
-	        modelAndView.setViewName("redirect:/record/toRecordList");
-*/
+	 
+    	/*object.put("status", false); 
+	    object.put("msg", "用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
+     
+	          */
+	 
 		tempUserService.insertTempUser(tempUser);
 
+	 
 		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
 
 		return modelAndView;
 	}
+	
+	
+	public void  tempUserAdd1(TempUser tempUser ,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		
+		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
+		    
+		  
+		
+			JSONObject object = new JSONObject();
+
+			
+			 
+	       
+		    tempUser.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+	 		 
+	 		if(hid_photo_names!=null&&hid_photo_names.length==3)
+	 		{
+	 		String path="";
+	        for(int i=0;i<hid_photo_names.length;i++)
+	        {    
+	        	String[] name=hid_photo_names[i].split("\\|"); 
+	        /*	if(name!=null&&name.length>=2) 
+	        	{ 
+	        		String[] name1=name[1].split("\\/"); 
+	        		System.out.println(name1[3]);
+	        		path+=name[1]+";";
+	        	}*/
+	        	path+=name[1]+";";
+	        }
+	         
+	        if(path.length()>0)
+	       {
+	        	path=path.substring(0, path.length()-1);
+	        	tempUser.setOriginal_path(path);
+	        	tempUser.setOriginal_path(path);
+	       }
+	 		}
+	        
+	 
+   	/*object.put("status", false); 
+	    object.put("msg", "用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
+    
+	          */
+	     /*   modelAndView.addObject("type", request.getParameter("type"));
+			modelAndView.addObject("status", request.getParameter("status"));
+			modelAndView.addObject("ismodify", request.getParameter("ismodify"));
+	        modelAndView.setViewName("redirect:/record/toRecordList");
+*/      
+	 		object.put("status", "true");
+
+		tempUserService.insertTempUser(tempUser);
+
+		
+		object.put("msg", "");
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write(object.toString());
+		/*modelAndView.setViewName("redirect:/tempUser/toTempUserList");
+
+		return modelAndView;*/
+	}
+	
 	
 	@RequestMapping(value = "/upload")
 	public void upload( /*@RequestParam("file")  MultipartFile file,*/HttpServletRequest request,HttpServletResponse response) throws IOException {
@@ -173,6 +272,7 @@ public class TempUserController {
 		
 		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
 	    Map<String,MultipartFile> files=mul.getFileMap();
+	    
 	    for(MultipartFile file:files.values())
 	    {
 	
@@ -203,7 +303,8 @@ public class TempUserController {
 		object.put("path", "/collect_info/upload/" + filename );
 		object.put("thumb","/collect_info/upload/" + filename);
 	    }
-		object.put("status", "1");
+		object.put("status", true);
+		
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString()); 
 	   

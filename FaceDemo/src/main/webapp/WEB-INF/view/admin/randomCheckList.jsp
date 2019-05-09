@@ -196,20 +196,7 @@ function infoFormatter( value, row, index){
 
 
 <!--工具栏-->
-<%-- <div id="floatHead" class="toolbar-wrap">
-  <div class="toolbar"  id="toolbar">
-    <div class="box-wrap">
-      <a class="menu-btn"></a>
-      <div class="l-list">
-        <ul class="icon-list">
-          <li><a class="add" href="<%=path %>/randomCheck/toRandomCheckAdd"><i></i><span>新增</span></a></li>
-          <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
-        </ul>
-      </div>
-       
-    </div>
-  </div>
-</div> --%>
+ 
  <div id="toolbar" class="btn-group"> 
    <div class="toolbar"  >
     <div class="box-wrap">

@@ -85,9 +85,26 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
- 
-		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+ var s='  <ul><li>'+
+       ' <div class="details">'+
+      '    <div class="check">'+
+       '     <span class="checkall"><input id="rptList2_chkId_0" type="checkbox" name="rptList2$ctl01$chkId" /></span>'+
+       '     <input type="hidden" name="rptList2$ctl01$hidId" id="rptList2_hidId_0" value="3120" />'+
+      '    </div>'+
+      '    <div class="pic"><img src="../skin/default/loadimg.gif" data-original="/upload/201905/09/201905091610256218.jpg.ashx?w=228&h=165&mode=crop" /></div><i class="absbg"></i>'+
+      '    <h1><span><a href="caiji_edit.aspx?action=Edit&id=3120">李水琴</a></span></h1>'+
+      '    <div class="remark"> 41108119541206726X </div>'+
+      '    <div class="tools">'+
+         '     待审核'+
+    '      </div>'+
+          '<div class="foot">'+
+         '   <p class="time">2019-05-09 16:10:35</p>'+
+        '    <a href="caiji_edit.aspx?action=Edit&id=3120" title="编辑"><i class="iconfont icon-pencil"></i></a>'+
+        '    <a href="caiji_edit.aspx?action=Copy&id=3120" title="导入"><i class="iconfont icon-copy"></i></a>'+
+       '   </div>'+
+       ' </div>'+
+     ' </li></ul>';
+
    
  return s;
 }
@@ -201,7 +218,7 @@ function infoFormatter( value, row, index){
 <div class="table-container">
   <table width="100%"    id="table"  
            data-striped="true" data-side-pagination="client"  data-toolbar="#toolbar"  data-search="true"
-           data-show-export="true" data-page-list="[10,25,50,100,500,1000,ALL]"  
+           data-show-export="true" data-page-list="[10,25,50,100,500,1000,ALL]"  data-show-header="false"
            data-detail-view="false" data-detail-formatter="detailFormatter"
            data-minimum-count-columns="2" data-pagination="true" 
            data-response-handler="responseHandler" data-row-style="rowStyle1"
@@ -210,21 +227,25 @@ function infoFormatter( value, row, index){
         <thead>
         <tr>
            
-            <th data-field="state" data-checkbox="true"></th>
+           <!--  <th data-field="state" data-checkbox="true"></th>
             <th data-sortable="false" data-field="id"  data-visible="false"  data-align="center"
                 data-filter-control="input">选择
-            </th>
+            </th> -->
             <th data-sortable="true" data-field="user_name" data-align="center"
                 data-filter-control="input"  data-formatter="infoFormatter">姓名
             </th>
             
              
             <th data-sortable="true"  data-field="add_time" data-align="center"
-                data-filter-control="input" data-formatter="timeFormat">采集时间
+                data-filter-control="input" data-formatter="infoFormatter">采集时间
             </th>
-             <th data-field="id" data-formatter="actionFormatter" data-align="center"
-                        data-events="actionEvents">操作
-             </th>
+             <th data-sortable="true"  data-field="add_time" data-align="center"
+                data-filter-control="input" data-formatter="infoFormatter">采集时间
+            </th>
+             <th data-sortable="true"  data-field="add_time" data-align="center"
+                data-filter-control="input" data-formatter="infoFormatter">采集时间
+            </th>
+              
         </tr>
         </thead>
     
