@@ -3,7 +3,6 @@ package com.demo.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,15 +110,5 @@ public class DateFormatUtil {
 		}
 		return rtnDateTime;
 	}
-	
-	/**
-	 * 当月第一天
-	 */
-	public static String dayOfMonthe() throws Exception {
-		LocalDate today = LocalDate.now();//取当前时间
-		LocalDate firstDate = today.withDayOfMonth(1);//当月第一天
-		return firstDate.toString().replace("-", "");
-	}
-	
 }
 

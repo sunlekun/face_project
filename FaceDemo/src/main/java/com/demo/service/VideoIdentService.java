@@ -1,7 +1,15 @@
 package com.demo.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
  
+
+
+
+
+
 
 import com.demo.model.VideoIdent;
 
@@ -18,4 +26,5 @@ import com.demo.model.VideoIdent;
 public interface VideoIdentService {
 	public List<String>  findVidoIdentYears();
 	public VideoIdent findVideoIdentById(Integer id);
+	public List<VideoIdent> findVideoListByIdAndTime(int id, String time);
 }
