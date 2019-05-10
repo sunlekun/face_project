@@ -7,6 +7,7 @@ import com.demo.model.TempUser;
 public interface TempUserService {
 	 
 	public List<TempUser> findAllTempUser();
+	public List<TempUser> findAllTempUserByKey(String key);
 	public TempUser findTempUserById(int id);
 	public List<TempUser> findTempUserByUserIdcard(String user_idcard);
 	

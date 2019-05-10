@@ -24,7 +24,9 @@ public class TempUserServiceImpl implements TempUserService {
 	public List<TempUser> findAllTempUser(){
 		return tempUserDao.findAllTempUser();
 	}
-	
+	public List<TempUser> findAllTempUserByKey(String key){
+		return tempUserDao.findAllTempUserByKey(key);
+	}
 	@Override
 	public TempUser findTempUserById(int id){
 		return tempUserDao.findTempUserById(id);

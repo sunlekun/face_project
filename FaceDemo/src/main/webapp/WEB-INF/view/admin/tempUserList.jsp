@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "tempUser/tempUserList",
+            url: "tempUser/tempUserList?type=${type}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "tempUser/tempUserDetial?id="+$element.id;                  
+                       window.location.href = "tempUser/tempUserDetial?type=${type}&id="+$element.id;                  
                      
                    });
                    
@@ -85,7 +85,7 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
+ var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
 		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
    
@@ -102,19 +102,19 @@ function infoFormatter( value, row, index){
 	
 	
 	function actionFormatter(value, row, index) {  
-      return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+      return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
   
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<tempUser/toTempUserEdit?id="+row['id'];
+          window.location.href = "<tempUser/toTempUserEdit?type=${type}&id="+row['id'];
       } 
      } 
      
       function Search(){
-     document.getElementById("form1").action="tempUser/toTempUserList"; 
+     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}"; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -138,7 +138,7 @@ function infoFormatter( value, row, index){
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete"; 
+        from.action="tempUser/tempUserDelete?type=${type}"; 
         from.submit();
        }  
      
@@ -149,7 +149,7 @@ function infoFormatter( value, row, index){
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList"  id="form1">
+<form method="post"  action="tempUser/toTempUserList?type=${type}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -170,7 +170,7 @@ function infoFormatter( value, row, index){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd"><i></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUser:Delete">
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  

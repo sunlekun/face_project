@@ -19,7 +19,7 @@ public class TempUser {
 	private String original_path;
 	
 	private Timestamp add_time;
-	private Timestamp update_time;
+	private Timestamp audit_time;
 	private int is_delete;
 	public int getId() {
 		return id;
@@ -94,11 +94,11 @@ public class TempUser {
 		this.add_time = add_time;
 	}
 	
-	public Timestamp getUpdate_time() {
-		return update_time;
+	public Timestamp getAudit_time() {
+		return audit_time;
 	}
-	public void setUpdate_time(Timestamp update_time) {
-		this.update_time = update_time;
+	public void setAudit_time(Timestamp audit_time) {
+		this.audit_time = audit_time;
 	}
 	public int getIs_delete() {
 		return is_delete;

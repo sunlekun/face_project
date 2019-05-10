@@ -19,5 +19,13 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="User" type="com.demo.model.User" />
 		<typeAlias alias="VideoIdent" type="com.demo.model.VideoIdent" />
 		<typeAlias alias="TempUser" type="com.demo.model.TempUser" />
+		<typeAlias alias="DetectAuth" type="com.demo.model.DetectAuth" />
 	</typeAliases>
+	
+	<!-- 配置分页插件 PageHelper -->  
+    <plugins>  
+       <plugin interceptor="com.github.pagehelper.PageHelper">  
+       <property name="dialect" value="mysql"/>  
+       </plugin>    
+     </plugins>  
 </configuration>

@@ -31,6 +31,8 @@ import com.demo.realm.PermissionName;
 import com.demo.service.TempUserService;
 import com.demo.service.XzbService;
 import com.demo.util.LoadProperties;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @RequestMapping(value = "/tempUser")
@@ -47,16 +49,35 @@ public class TempUserController {
 	@RequestMapping(value = "/toTempUserList")
 	@RequiresPermissions("tempUser:Show")
 	@PermissionName("居民信息采集管理")
-	public ModelAndView toTempUserList(HttpServletRequest request) {
+	public ModelAndView toTempUserList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String type=request.getParameter("type");
+		
 		if("Img".equals(type))
-			modelAndView.setViewName("admin/tempUserListImg"); 
+		{
+			if(pageSize==null)
+				pageSize=10;
+			if(pageNumber==null)
+				pageNumber =1;
+			PageHelper.startPage(pageNumber, pageSize);
+			List<TempUser> tempUsers=  tempUserService.findAllTempUserByKey(key); 
+			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
+			modelAndView.addObject("page", page); 
+			modelAndView.addObject("key", key); 
+            modelAndView.setViewName("admin/tempUserListImg"); 
+            
+		}
 		else
-		    modelAndView.setViewName("admin/tempUserList"); 
+		{
+			type="Word";
+			modelAndView.setViewName("admin/tempUserList"); 
+		    }
+		
 		modelAndView.addObject("type", type);  
+		System.out.println(type);
 		return modelAndView;
 	}
+	
 	@RequestMapping(value = "/tempUserList")	
 	public void tempUserList(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		 
@@ -82,7 +103,10 @@ public class TempUserController {
 		TempUser tempUser= tempUserService.findTempUserById(id) ;
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs); 
-		modelAndView.addObject("tempUser", tempUser);  
+		modelAndView.addObject("tempUser", tempUser); 
+		
+		String type=request.getParameter("type");
+		modelAndView.addObject("type", type);  
 		modelAndView.setViewName("admin/tempUserDetial"); 
 		return modelAndView;
 	}
@@ -97,6 +121,10 @@ public class TempUserController {
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs); 
 		modelAndView.addObject("tempUser", tempUser); 
+		
+		String type=request.getParameter("type");
+		modelAndView.addObject("type", type);  
+		
 		modelAndView.setViewName("admin/tempUserEdit");
 		
 		return modelAndView;
@@ -130,10 +158,11 @@ public class TempUserController {
 			}
 		}
 	 		
-		tempUser.setUpdate_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+		 
 		tempUserService.updateTempUser(tempUser);
-		
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
+
+	
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
 		return modelAndView;
 	}
 	
@@ -145,6 +174,11 @@ public class TempUserController {
 		
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs); 
+		
+		String type=request.getParameter("type");
+		modelAndView.addObject("type", type);  
+		
+		
 		modelAndView.setViewName("admin/tempUserAdd");
 		
 		return modelAndView;
@@ -198,70 +232,12 @@ public class TempUserController {
 		tempUserService.insertTempUser(tempUser);
 
 	 
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
 
 		return modelAndView;
 	}
 	
 	
-	public void  tempUserAdd1(TempUser tempUser ,HttpServletRequest request,HttpServletResponse response) throws IOException {
-		
-		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
-		    
-		  
-		
-			JSONObject object = new JSONObject();
-
-			
-			 
-	       
-		    tempUser.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
-	 		 
-	 		if(hid_photo_names!=null&&hid_photo_names.length==3)
-	 		{
-	 		String path="";
-	        for(int i=0;i<hid_photo_names.length;i++)
-	        {    
-	        	String[] name=hid_photo_names[i].split("\\|"); 
-	        /*	if(name!=null&&name.length>=2) 
-	        	{ 
-	        		String[] name1=name[1].split("\\/"); 
-	        		System.out.println(name1[3]);
-	        		path+=name[1]+";";
-	        	}*/
-	        	path+=name[1]+";";
-	        }
-	         
-	        if(path.length()>0)
-	       {
-	        	path=path.substring(0, path.length()-1);
-	        	tempUser.setOriginal_path(path);
-	        	tempUser.setOriginal_path(path);
-	       }
-	 		}
-	        
-	 
-   	/*object.put("status", false); 
-	    object.put("msg", "用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
-    
-	          */
-	     /*   modelAndView.addObject("type", request.getParameter("type"));
-			modelAndView.addObject("status", request.getParameter("status"));
-			modelAndView.addObject("ismodify", request.getParameter("ismodify"));
-	        modelAndView.setViewName("redirect:/record/toRecordList");
-*/      
-	 		object.put("status", "true");
-
-		tempUserService.insertTempUser(tempUser);
-
-		
-		object.put("msg", "");
-		response.setCharacterEncoding("utf-8");
-		response.getWriter().write(object.toString());
-		/*modelAndView.setViewName("redirect:/tempUser/toTempUserList");
-
-		return modelAndView;*/
-	}
 	
 	
 	@RequestMapping(value = "/upload")
@@ -323,7 +299,7 @@ public class TempUserController {
 				tempUserService.deleteTempUserBatch(ids);
 		}
 		
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
 		return modelAndView;
 	}
 	

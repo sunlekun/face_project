@@ -10,6 +10,19 @@
 		select m.* from temp_users m where m.is_delete=0 order by m.add_time  desc
 	 </select>
 	 
+	  <select id="findAllTempUserByKey" resultType="TempUser">
+		select m.* from temp_users m where m.is_delete=0 
+		
+		   <if test="key!=null  and key!=''">   
+          and (m.user_name like '%${key}%' or m.user_idcard like '%${key}%' )
+        </if> 
+		 
+		order by m.add_time  desc
+	 
+	 
+	 </select>
+	 
+	 
 	<select id="findTempUserByUserIdcard" resultType="TempUser">
 		select * from temp_users  where  user_idcard=#{0} and   is_delete=0;
 	 </select>
@@ -25,7 +38,7 @@
 		update temp_users  
 		<set>  
          user_name=#{user_name},user_idcard=#{user_idcard}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
-         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},update_time=#{update_time},is_delete=#{is_delete}
+         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},audit_time=#{audit_time},is_delete=#{is_delete}
        </set> 
        where id=#{id}
 	</update>
@@ -33,8 +46,8 @@
 	 
 
 	<insert id="insertTempUser" parameterType="TempUser">
-		insert into temp_users (user_name, user_idcard, user_township,user_village,data_type,mobile,status,status_reason,thumb_path,original_path,add_time,update_time) 
-		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{status}, #{status_reason},#{thumb_path},#{original_path},#{add_time},#{update_time})
+		insert into temp_users (user_name, user_idcard, user_township,user_village,data_type,mobile,status,status_reason,thumb_path,original_path,add_time,audit_time) 
+		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{status}, #{status_reason},#{thumb_path},#{original_path},#{add_time},#{audit_time})
 	</insert>
 	
 	  <delete id="deleteTempUserBatch" parameterType="int">

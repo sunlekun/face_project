@@ -1,5 +1,7 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -20,118 +22,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="js/admin/scripts/jquery/jquery.lazyload.min.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/artdialog/dialog-plus-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/layindex.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/common.js"></script>
-
-
-<!--css样式-->
-<link rel="stylesheet" type="text/css"  href="css/admin/bootstrap/bootstrap.min.css"/>
-<link rel="stylesheet" type="text/css"  href="css/admin/bootstrap/bootstrap-table.css" />
-<!--js-->
-<%-- <script src="<%=path %>/js/bootstrap/jquery-1.12.0.min.js" type="text/javascript"></script> --%>
-<script type="text/javascript" charset="utf-8"  src="js/admin/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" charset="utf-8"  src="js/admin/bootstrap/bootstrap-table.js"></script>
-<script type="text/javascript" charset="utf-8"  src="js/admin/bootstrap/bootstrap-table-zh-CN.js"></script>
+ 
+ <script type="text/javascript">
+        $(function () {
+            //图片延迟加载
+            $(".pic img").lazyload({ effect: "fadeIn" });
+            //点击图片链接
+            $(".pic img").click(function () {
+                var linkUrl = $(this).parent().parent().find(".foot a").attr("href");
+                if (linkUrl != "") {
+                    location.href = linkUrl; //跳转到修改页面
+                }
+            });
+        });
+    </script>
  
 <script type="text/javascript"> 
-	 
-     $.ajax({
-            type: 'post',
-            url: "tempUser/tempUserList",
-            async: true,
-            type: 'post',
-            dataType: 'text',
-            success: function (data, status) {
-                
-                var strs = $.parseJSON($.trim(data));
-                var tabledata=strs.jsons;
-               
-                    $('#table').bootstrapTable({
-                        data: tabledata
-                    });
-                    $('#table').bootstrapTable('load', tabledata);
-                     
-                    $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "tempUser/tempUserDetial?id="+$element.id;                  
-                     
-                   });
-                   
-		}
-       })
+ function Search(){
 
-   // 对Date的扩展，将 Date 转化为指定格式的String
-// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
-// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
-// 例子：
-// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
-// (new Date()).Format("yyyy-M-d h:m:s.S")   ==> 2006-7-2 8:9:4.18
-Date.prototype.Format = function (fmt) { //author: meizz
-var o = {
-"M+": this.getMonth() + 1, //月份
-"d+": this.getDate(), //日
-"h+": this.getHours(), //小时
-"m+": this.getMinutes(), //分
-"s+": this.getSeconds(), //秒
-"q+": Math.floor((this.getMonth() + 3) / 3), //季度
-"S": this.getMilliseconds() //毫秒
-};
-if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-for (var k in o)
-if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-return fmt;
-}
-
-
-function infoFormatter( value, row, index){ 
- 
- var s='  <ul><li>'+
-       ' <div class="details">'+
-      '    <div class="check">'+
-       '     <span class="checkall"><input id="rptList2_chkId_0" type="checkbox" name="rptList2$ctl01$chkId" /></span>'+
-       '     <input type="hidden" name="rptList2$ctl01$hidId" id="rptList2_hidId_0" value="3120" />'+
-      '    </div>'+
-      '    <div class="pic"><img src="../skin/default/loadimg.gif" data-original="/upload/201905/09/201905091610256218.jpg.ashx?w=228&h=165&mode=crop" /></div><i class="absbg"></i>'+
-      '    <h1><span><a href="caiji_edit.aspx?action=Edit&id=3120">李水琴</a></span></h1>'+
-      '    <div class="remark"> 41108119541206726X </div>'+
-      '    <div class="tools">'+
-         '     待审核'+
-    '      </div>'+
-          '<div class="foot">'+
-         '   <p class="time">2019-05-09 16:10:35</p>'+
-        '    <a href="caiji_edit.aspx?action=Edit&id=3120" title="编辑"><i class="iconfont icon-pencil"></i></a>'+
-        '    <a href="caiji_edit.aspx?action=Copy&id=3120" title="导入"><i class="iconfont icon-copy"></i></a>'+
-       '   </div>'+
-       ' </div>'+
-     ' </li></ul>';
-
-   
- return s;
-}
-
-    function timeFormat(val) {
-    if (val != null) {
-            var date = new Date(val);
-            return   date.Format("yyyy-MM-dd hh:mm:ss");
-           // return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()+' '+date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-        }
-	}
-	
-	
-	function actionFormatter(value, row, index) {  
-      return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+	 var pageSize= $("#pageSize").val();
+     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").submit();
+ }
+    function toPage(pageNumber){
   
-    } 
-    //表格  - 操作 - 事件
-    window.actionEvents = {
-     'click .update': function(e, value, row, index) {   
-          //修改操作
-          window.location.href = "<tempUser/toTempUserEdit?id="+row['id'];
-      } 
-     } 
-     
-      function Search(){
-     document.getElementById("form1").action="tempUser/toTempUserList"; 
+     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageNumber="+pageNumber; 
+     document.getElementById("form1").submit();
+ }
+  function setPageSize(){
+    var pageSize= $("#pageSize").val();
+     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -166,7 +91,7 @@ function infoFormatter( value, row, index){
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList"  id="form1">
+<form method="post"  action="tempUser/toTempUserList?type=${type}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -179,84 +104,217 @@ function infoFormatter( value, row, index){
 </div>
 <!--/导航栏-->
 
+
 <!--工具栏-->
-  <div id="toolbar" class="btn-group"> 
-   <div class="toolbar"  >
+<div id="floatHead" class="toolbar-wrap">
+  <div class="toolbar">
     <div class="box-wrap">
-      <a class="menu-btn"></a>
+      <a class="menu-btn"><i class="iconfont icon-more"></i></a>
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd"><i></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUser:Delete">
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
           </shiro:hasPermission>
-           
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          
         </ul>
       </div>
-      
-     <%--   <div class="r-list">
-        <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" />
-        <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack(&#39;lbtnSearch&#39;,&#39;&#39;)"><i class="iconfont icon-search"></i></a>
-        <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="javascript:__doPostBack(&#39;lbtnViewImg&#39;,&#39;&#39;)"><i class="iconfont icon-list-img"></i></a>
-        <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="javascript:__doPostBack(&#39;lbtnViewTxt&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i></a>
-      </div> --%>
-      
-       
+      <div class="r-list">
+        <input name="key" type="text" id="key" class="keyword" value="${key}" />
+        <a id="lbtnSearch" class="btn-search" onclick="Search()"><i class="iconfont icon-search"></i></a>
+        <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a>
+        <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a>
+      </div>
     </div>
   </div>
- </div>  
+</div>
 <!--/工具栏-->
-
-
 
 
 <!--列表-->
 <div class="table-container">
-  <table width="100%"    id="table"  
-           data-striped="true" data-side-pagination="client"  data-toolbar="#toolbar"  data-search="true"
-           data-show-export="true" data-page-list="[10,25,50,100,500,1000,ALL]"  data-show-header="false"
-           data-detail-view="false" data-detail-formatter="detailFormatter"
-           data-minimum-count-columns="2" data-pagination="true" 
-           data-response-handler="responseHandler" data-row-style="rowStyle1"
-           data-filter-control="true" 
-           data-classes="ltable" class="ltable"   >
-        <thead>
-        <tr>
-           
-           <!--  <th data-field="state" data-checkbox="true"></th>
-            <th data-sortable="false" data-field="id"  data-visible="false"  data-align="center"
-                data-filter-control="input">选择
-            </th> -->
-            <th data-sortable="true" data-field="user_name" data-align="center"
-                data-filter-control="input"  data-formatter="infoFormatter">姓名
-            </th>
+  <!--文字列表-->
+  
+  <!--/文字列表-->
+
+  <!--图片列表-->
+  
+  <div class="imglist">
+    <ul>
+    <c:forEach items="${page.list }" var="tempUser" >
+  
+      <li>
+        <div class="details">
+          <div class="check">
+            <span class="checkall"><input id="chkId" type="checkbox" name="chkId" /></span>
+            <input type="hidden" name="hidId" id="hidId" value="${ tempUser.id}" />
+          </div>
+          <div class="pic"><img src="../skin/default/loadimg.gif" data-original="${fn:split(tempUser.original_path, ';')}[0]?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
+          <h1><span>
+          
+          
+            <shiro:hasPermission name="tempUser:Edit">
+             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="tempUser:Edit">
+           		  ${ tempUser.user_name}
+            </shiro:lacksPermission>
             
+            
+          
+          
+          </span></h1>
+          <div class="remark">
+            ${ tempUser.user_idcard}
+          </div>
+          <div class="tools">
+	          <c:if test="${ tempUser.status==1}">
+	                                         待审核
+	          </c:if>
+	          <c:if test="${ tempUser.status==2}">
+	               <font color="#45b97c">审核通过</font>
+	          </c:if>
+	           <c:if test="${ tempUser.status==3}">
+	                <font color="red">审核未通过</font>
+	          </c:if>
              
-            <th data-sortable="true"  data-field="add_time" data-align="center"
-                data-filter-control="input" data-formatter="infoFormatter">采集时间
-            </th>
-             <th data-sortable="true"  data-field="add_time" data-align="center"
-                data-filter-control="input" data-formatter="infoFormatter">采集时间
-            </th>
-             <th data-sortable="true"  data-field="add_time" data-align="center"
-                data-filter-control="input" data-formatter="infoFormatter">采集时间
-            </th>
-              
-        </tr>
-        </thead>
-    
-</table>
+          </div>
+          <div class="foot">
+            <p class="time">${ tempUser.add_time}</p>
+            <shiro:hasPermission name="tempUser:Edit">
+             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="tempUser:Edit">
+           		 <i class="iconfont icon-pencil">
+            </shiro:lacksPermission>
+            
+            <shiro:hasPermission name="tempUser:Add">
+          	 	 <a href="tempUser/toTempUserAdd?type=${type }" title="导入"><i class="iconfont icon-copy"></i></a> 
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="tempUser:Add">
+               <i class="iconfont icon-copy">
+            </shiro:lacksPermission>
+           
+          </div>
+        </div>
+      </li>
   
+    </c:forEach>
+      
+    </ul>
+  </div>
   
+  <!--/图片列表-->
 </div>
-
-
 <!--/列表-->
+
+<!--内容底部-->
+<div class="line20"></div>
+<div class="pagelist">
+  <div class="l-btns">
+    <span>显示</span><input name="pageSize" type="text" value="${page.pageSize}" onchange="setPageSize()" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="pageSize" class="pagenum" onkeydown="return checkNumber(event);" /><span>条/页</span>
+  </div>
+  <div id="PageContent" class="default"><span>共${page.total}记录</span>
+  
+  <c:choose>
+		<c:when test="${page.pageNum==1  }">	
+			 <span class="disabled">«上一页</span> 
+		<!-- 分是否为第一页的两种情况，不为第一页的话，那么就要设置首页和上一页为有onclick点击事件 -->
+		</c:when>
+		<c:otherwise> 
+			<a onclick="toPage(${page.pageNum-1})">«上一页</a>
+		</c:otherwise>						
+ </c:choose>
  
+ <!-- 分页处理的优化工作 -->
+<c:choose>
+	<c:when test="${page.pageNum + 4 > page.pages}">  <!-- 现在每个分页为显示5页 ，所以先判断当前的页面+4是否大于总的页面数-->
+		<c:choose>
+			<c:when test="${page.pages-4 > 0}">   <!-- 判断是否总的页面数也是大于5，因为这样的话，就会出现两种情况 -->
+				<c:forEach var="index1" begin="${page.pages-4}" end="${page.pages}" step="1">
+				<c:if test="${index1 >= 1}">
+					<c:choose>
+						<c:when test="${page.pageNum == index1}">
+							<span class="current">${page.pageNum}</span>
+						</c:when>
+						<c:otherwise>
+							<a onclick="toPage(${index1});">${index1}</a>												
+						</c:otherwise>
+					</c:choose>
+				</c:if>
+				</c:forEach>
+		</c:when>
+
+		<c:otherwise>  <!-- 当总的页面数都不足5的时候，那么直接全部显示即可，不需要考虑太多 -->
+			<c:forEach  var="pagenumber"  begin="1" end="${page.pages}">
+			<!-- 判断页码是否是当前页，是的话，就换个颜色来标记 -->
+			<c:choose>
+					<c:when test="${page.pageNum == pagenumber}">
+						<span class="current">${page.pageNum}</span>
+					</c:when>
+					<c:otherwise>
+						<a onclick="toPage(${pagenumber});">${pagenumber}</a>												
+					</c:otherwise>
+			</c:choose>				
+			</c:forEach>
+		</c:otherwise>
+</c:choose>
+
+</c:when>
+
+<c:otherwise>  <!-- 当当前页面数+4都还是小于总的页面数的情况 -->
+	<c:choose>
+	<c:when test="${page.pageNum != 1}">	<!-- 判断当前页面是否就是第一页，因为这样也会有两种情况的处理 -->												
+		<c:forEach var="index2" begin="${page.pageNum-1}" end="${page.pageNum+3}"> <!-- 从当前页面减一的页面数开始，这样点击前面一页就会显示其他的页面，从而实现页面跳转 -->
+			<c:choose>
+				<c:when test="${page.pageNum == index2}">
+					<span class="current">${page.pageNum}</span>
+				</c:when>
+				<c:otherwise>
+					<a onclick="toPage(${index2});">${index2}</a>												
+				</c:otherwise>	
+			</c:choose>										
+		</c:forEach>												
+	</c:when>
+	
+	<c:otherwise>	<!-- 当当前页面数就是第一页的时候，就直接显示1-5页即可 -->											
+		<c:forEach var="index3" begin="1" end="5">
+			<c:choose>
+				<c:when test="${page.pageNum == index3}">
+					<span class="current">${page.pageNum}</span>
+				</c:when>
+				<c:otherwise>
+					<a onclick="toPage(${index3});">${index3}</a>											
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>													
+	</c:otherwise>												
+	</c:choose>
+</c:otherwise>
+</c:choose>
+
+
+<!-- 处理 当前页是否最后一页，不是的话，就需要添加下一页的点击时间-->
+<c:choose>
+	<c:when test="${page.pageNum == page.pages }"> 
+		<span class="disabled">下一页»</span> 
+	</c:when>
+	<c:otherwise>
+		<a onclick="toPage(${page.pageNum}+1)">下一页»</a>
+	</c:otherwise>						
+</c:choose>
+									
+ 
+  
+  </div>
+</div>
+<!--/内容底部-->
+
+ 
+
 </form>
 </body>
 </html>
