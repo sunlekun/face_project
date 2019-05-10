@@ -2,6 +2,7 @@ package com.test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -34,10 +35,20 @@ public class TestService {
 		List<TempUser> users = tempUserService.findTempUserByUserIdcard("411324198910014526");
 		System.out.println(users.size());
 		LocalDateTime time = LocalDateTime.now();
-		LocalDateTime date= time.withDayOfMonth(1);
-		LocalDate today = LocalDate.now();//取当前时间
-		LocalDate firstDate = today.withDayOfMonth(1);//当月第一天
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.dayOfMonth());
+//		LocalDateTime date= time.withDayOfMonth(1);
+//		LocalDate today = LocalDate.now();//取当前时间
+//		LocalDate firstDate = today.withDayOfMonth(1);//当月第一天
+		
+		
+		Date date = new Date();
+		System.out.println(date);
+		long l = 7200*1000;
+		Date beforeDate = new Date(date .getTime() + l);
+		System.out.println(beforeDate);
+		System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		
+		
+		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 		System.out.println(list.size());
 	}
 }
