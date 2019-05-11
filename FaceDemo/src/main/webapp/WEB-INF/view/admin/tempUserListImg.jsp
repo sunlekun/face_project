@@ -2,6 +2,7 @@
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -50,8 +51,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      document.getElementById("form1").submit();
  }
     function toPage(pageNumber){
-  
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageNumber="+pageNumber; 
+    var pageSize= $("#pageSize").val();
+     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
      document.getElementById("form1").submit();
  }
   function setPageSize(){
@@ -112,13 +113,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <a class="menu-btn"><i class="iconfont icon-more"></i></a>
       <div class="l-list">
         <ul class="icon-list">
-          <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i></i><span>新增</span></a></li>
-          </shiro:hasPermission>
-          <shiro:hasPermission name="tempUser:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
-          </shiro:hasPermission>
+          
+          
           <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
+          
+           <shiro:hasPermission name="tempUser:Add">
+               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
+          </shiro:hasPermission>
           
         </ul>
       </div>
@@ -152,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <span class="checkall"><input id="chkId" type="checkbox" name="chkId" /></span>
             <input type="hidden" name="hidId" id="hidId" value="${ tempUser.id}" />
           </div>
-          <div class="pic"><img src="../skin/default/loadimg.gif" data-original="${fn:split(tempUser.original_path, ';')}[0]?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
+          <div class="pic"><img src="css/admin/skin/default/loadimg.gif" data-original="${fn:split(tempUser.original_path, ';')}[0]?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
           <h1><span>
           
           
@@ -183,19 +184,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
           </div>
           <div class="foot">
-            <p class="time">${ tempUser.add_time}</p>
+            <p class="time"><fmt:formatDate value="${ tempUser.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/></p>
             <shiro:hasPermission name="tempUser:Edit">
              	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
-           		 <i class="iconfont icon-pencil">
+           		 <i class="iconfont icon-pencil"></i>
             </shiro:lacksPermission>
             
             <shiro:hasPermission name="tempUser:Add">
           	 	 <a href="tempUser/toTempUserAdd?type=${type }" title="导入"><i class="iconfont icon-copy"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Add">
-               <i class="iconfont icon-copy">
+               <i class="iconfont icon-copy"></i>
             </shiro:lacksPermission>
            
           </div>

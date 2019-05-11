@@ -1,7 +1,9 @@
 package com.demo.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier; 
  
@@ -26,6 +28,9 @@ public class TempUserServiceImpl implements TempUserService {
 	}
 	public List<TempUser> findAllTempUserByKey(String key){
 		return tempUserDao.findAllTempUserByKey(key);
+	}
+	public List<TempUser> findAllTempUserByMultiCondition(HashMap<String ,String > map){
+		return tempUserDao.findAllTempUserByMultiCondition(map);
 	}
 	@Override
 	public TempUser findTempUserById(int id){

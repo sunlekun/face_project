@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Timestamp; 
 import java.util.Calendar;
 import java.util.Date; 
+import java.util.HashMap;
 import java.util.List; 
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,9 @@ import net.sf.json.JSONObject;
 
 
 
+
 import org.apache.log4j.Logger; 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +42,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 
+
 import com.alibaba.fastjson.JSON;  
+import com.demo.model.Manager;
 import com.demo.model.RandomCheck;
 import com.demo.model.VideoIdent;
 import com.demo.realm.PermissionName;
@@ -72,7 +77,12 @@ public class RandomCheckController {
 	@RequestMapping(value = "/randomCheckList")	
 	public void randomCheckList(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		  
-		List<RandomCheck> randomChecks = randomCheckService.findRandomCheckByVideoStatusAndStatus(request.getParameter("video_status"), request.getParameter("status")); 
+		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		HashMap<String ,Object > map=new HashMap<String ,Object >();
+		map.put("video_status", request.getParameter("video_status"));
+		map.put("status", request.getParameter("status"));
+		map.put("data_type", manager.getUser_type());
+		List<RandomCheck> randomChecks = randomCheckService.findRandomCheckByMultiCondition(map); 
 		 
 		String jsons = JSON.toJSONString(randomChecks);
 
@@ -109,8 +119,14 @@ public class RandomCheckController {
 	@RequestMapping(value = "/randomCheckSet")	
     public void randomCheckSet(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
+		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		HashMap<String ,Object > map=new HashMap<String ,Object >();
+		map.put("video_status", null);
+		map.put("status", "1");
+		map.put("data_type", manager.getUser_type());
+		List<RandomCheck> randomChecks = randomCheckService.findRandomCheckByMultiCondition(map); 
 		 
-		List<RandomCheck> randomChecks  = randomCheckService.findRandomCheckByVideoStatusAndStatus(null,"1");	 
+		/*List<RandomCheck> randomChecks  = randomCheckService.findRandomCheckByVideoStatusAndStatus(null,"1");*/	 
 		JSONObject object=new JSONObject();
 		  
 		if(randomChecks!=null&&randomChecks.size()>0){	
@@ -122,9 +138,13 @@ public class RandomCheckController {
 		        
 		}
 		else{  
-			int count= randomCheckService.creatRandomCheckByNumberAndYear(300 ,request.getParameter("year"));
-			object.put("status", "true");
-		    object.put("url","randomCheck/toRandomCheckList");
+			    map=new HashMap<String ,Object >();
+				map.put("number", 300);
+				map.put("year", request.getParameter("year"));
+				map.put("data_type", manager.getUser_type());
+				int count= randomCheckService.creatRandomCheckByMultiCondition(map);
+				object.put("status", "true");
+			    object.put("url","randomCheck/toRandomCheckList");
 		    
 		   
 		}

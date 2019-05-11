@@ -71,6 +71,33 @@
 	</select>
 	
 	
+	
+	<select id="findRandomCheckByMultiCondition" parameterType="java.util.HashMap"  resultType="RandomCheck">
+			select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard,v.img_url as img_url , v.add_time as vadd_time ,v.year as year  from random_check r 
+	   LEFT JOIN users u on u.id=r.user_id
+	   LEFT JOIN video_ident  v on v.id=r.video_id
+	 where r.is_delete=0   and v.is_delete=0 and u.is_delete=0
+		<if test="video_status != null and  video_status !='' ">  
+        and v.video_status= #{video_status}   
+        </if> 
+        <if test="status != null and  status !='' ">  
+       and r.status= #{status}   
+        </if>
+       
+        
+        <if test="data_type!=null  and data_type!=''">   
+          and u.data_type=#{data_type}
+        </if> 
+        
+         order by r.add_time   desc
+        
+        
+		 
+	 
+	 
+	 </select>
+	 
+	 
 	<!--  <select id="creatRandomCheckByNumber" resultType="RandomCheck">  
         
       SELECT id as video_id, user_id    FROM video_ident AS t1
@@ -95,14 +122,18 @@
     </insert>
 	
 	
-	<insert id="creatRandomCheckByNumberAndYear"  useGeneratedKeys="true" >
+	<insert id="creatRandomCheckByMultiCondition"  useGeneratedKeys="true" >
         insert into  random_check (video_id, user_id )  
-        select id,user_id from video_ident	WHERE		is_delete = 0  
-         And  NOT EXISTS (select id from video_ident WHERE	is_delete = 0 ) 
+        select v.id,v.user_id from video_ident v left join users u on u.id=user_id	WHERE		v.is_delete = 0  
+         And  NOT EXISTS (SELECT		id,user_id	FROM		random_check	WHERE		is_delete = 0) 
     
 	     <if test="year != null and  year !=''">  
-	      and year=#{year}
+	      and v.year=#{year}
 	     </if>
+	     <if test="data_type!=null  and data_type!=''">   
+          and u.data_type=#{data_type}
+         </if> 
+	     
 	     order by rand()  
 	     <if test="number!=-1">  
 	       LIMIT #{number};

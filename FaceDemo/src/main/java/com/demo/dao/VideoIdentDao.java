@@ -1,7 +1,11 @@
 package com.demo.dao;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
  
+
+
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,6 +19,7 @@ import com.demo.model.VideoIdent;
 public interface VideoIdentDao {
 	public List<String>  findVidoIdentYears( );
 	public VideoIdent findVideoIdentById( @Param("id") Integer id);
+	public List<VideoIdent> findVideoListByIdAndTime(@Param("id") Integer id, @Param("date") String date);
 	
 }
 

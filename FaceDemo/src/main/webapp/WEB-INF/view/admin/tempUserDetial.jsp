@@ -230,6 +230,31 @@ function __doPostBack(eventTarget, eventArgument) {
   <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
   
    
+   
+  <div id="div_Is_status">
+  <dl>
+    <dt>审核状态</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="rblIsStatus">
+        <input id="rblIsStatus_0" type="radio" name="rblIsStatus" value="2" ${tempUser.status==2?"checked='checked'":'' } disabled="false"/><label for="rblIsStatus_0">正常</label>
+        <input id="rblIsStatus_1" type="radio" name="rblIsStatus" value="1" ${tempUser.status==1?"checked='checked'":'' } disabled="false"/><label for="rblIsStatus_1">待审核</label>
+        <input id="rblIsStatus_2" type="radio" name="rblIsStatus" value="3" ${tempUser.status==3?"checked='checked'":'' } disabled="false"/><label for="rblIsStatus_2">未通过</label></span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>未通过原因</dt>
+    <dd><textarea name="txtReStatus" rows="2" cols="20" id="txtReStatus" class="input" placeholder="审核未通过时填写" value="${tempUser.status_reason }" readonly>
+</textarea></dd>
+  </dl>
+  <!-- <dl>
+    <dt></dt>
+    <dd><input type="submit" name="btnStatus" value="审核提交" id="btnStatus" class="btn green" /></dd>
+  </dl> -->
+  </div>
+   
+   
   </c:if>
    <c:if test="${empty tempUser}">
     未查询到相关信息！

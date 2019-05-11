@@ -88,10 +88,25 @@ function infoFormatter( value, row, index){
  var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
 		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
-   
+  
+  var a='居民信息采集审核通过的，不能修改';
+  if(row['status']==2)
+  s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'javascript:alert(&apos;"+a+"&apos;);' >"+row['user_name']+"</a></shiro:hasPermission>"+
+ 
+		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
  return s;
 }
 
+function strFormat(val) { 
+         if (val == 3) 
+         return "审核未通过";
+        else  if (val == 2)  
+            return "审核通过";
+        else 
+           return "待审核";
+         
+	}
+	
     function timeFormat(val) {
     if (val != null) {
             var date = new Date(val);
@@ -102,8 +117,11 @@ function infoFormatter( value, row, index){
 	
 	
 	function actionFormatter(value, row, index) {  
-      return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
-  
+	var a='居民信息采集审核通过的，不能修改';
+	if(row['status']==2) 
+       return "<shiro:hasPermission name='tempUser:Edit'><a   href = 'javascript:alert(&apos;"+a+"&apos;);' >修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+    else
+     return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
@@ -170,25 +188,17 @@ function infoFormatter( value, row, index){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUser:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
           </shiro:hasPermission>
            
            <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
            <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
         </ul>
       </div>
-      
-     <%--   <div class="r-list">
-        <input name="txtKeywords" type="text" id="txtKeywords" class="keyword" />
-        <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack(&#39;lbtnSearch&#39;,&#39;&#39;)"><i class="iconfont icon-search"></i></a>
-        <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="javascript:__doPostBack(&#39;lbtnViewImg&#39;,&#39;&#39;)"><i class="iconfont icon-list-img"></i></a>
-        <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="javascript:__doPostBack(&#39;lbtnViewTxt&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i></a>
-      </div> --%>
-      
-       
+    
     </div>
   </div>
  </div>  
@@ -217,7 +227,9 @@ function infoFormatter( value, row, index){
             <th data-sortable="true" data-field="user_name" data-align="center"
                 data-filter-control="input"  data-formatter="infoFormatter">姓名
             </th>
-            
+            <th data-sortable="true"  data-field="status" data-align="center"
+                data-filter-control="input" data-formatter="strFormat">审核状态
+            </th>
              
             <th data-sortable="true"  data-field="add_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">采集时间

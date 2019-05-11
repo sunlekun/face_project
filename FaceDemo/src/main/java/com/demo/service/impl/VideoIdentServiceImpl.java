@@ -1,11 +1,18 @@
 package com.demo.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
  
+
+
+
+
 
 import com.demo.dao.VideoIdentDao; 
 import com.demo.model.VideoIdent;
@@ -35,6 +42,12 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		@Override
 		public VideoIdent findVideoIdentById(Integer id) { 
 			return videoIdentDao.findVideoIdentById(id);
+		}
+
+		@Override
+		public List<VideoIdent> findVideoListByIdAndTime(int id, String date) {
+			return videoIdentDao.findVideoListByIdAndTime(id,date);
+			
 		}
 		
 	}

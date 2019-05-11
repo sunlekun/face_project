@@ -178,10 +178,10 @@ return fmt;
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="role:Add">
-               <li><a class="add" href="role/toRoleAdd"><i></i><span>新增</span></a></li>
+               <li><a class="add" href="role/toRoleAdd"><i class="iconfont icon-close"></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="role:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>  
           </shiro:hasPermission>
         </ul>
       </div>

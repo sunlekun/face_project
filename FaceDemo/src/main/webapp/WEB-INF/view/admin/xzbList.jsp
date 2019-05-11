@@ -183,10 +183,10 @@ return fmt;
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="xzb:Add">
-         	 <li><a class="add" href="xzb/toXzbAdd"><i></i><span>新增</span></a></li>
+         	 <li><a class="add" href="xzb/toXzbAdd"><i class="iconfont icon-close"></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="xzb:Delete">
-         	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span>删除</span></a></li>  
+         	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>  
           </shiro:hasPermission>
         </ul>
       </div>

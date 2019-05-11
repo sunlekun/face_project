@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>居民信息采集</title>
+<title>居民采集信息修改</title>
 
 <link rel="stylesheet" type="text/css" href="js/admin/scripts/artdialog/ui-dialog.css" />
 <link rel="stylesheet" type="text/css" href="css/admin/skin/icon/iconfont.css" />
@@ -40,51 +40,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       
 		 beforeSubmit : function(curform) {
 		 
-		var user_idcard = $("#user_idcard").val(); 
-		if(user_idcard!=''&&user_idcard!='${tempUser.user_idcard}')//验证是否为空
-		    {  
-		     $.ajax(
-		            {
-		                url:"tempUser/isExistUserIdcard",
-		                data:{user_idcard:user_idcard},
-		                async: false,
-		                type: "POST",
-		                dataType:"json",
-		                success: function(data)
-		                    {   
-		                  
-		                        if(data.status=='true')
-		                        {
-		                            $("#msg").html("用户身份信息可使用");
-		                            $("#msg").attr("class","Validform_checktip Validform_right");
-		                            $("#flag").val("1"); 
-		                        }
-		                        else
-		                        {   
-		                            $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
-		                            $("#msg").attr("class","Validform_checktip Validform_wrong");
-		                            $("#flag").val("0"); 
-		                        }
-		                    }
-		            });
-		      
-		    }  
-				
-          if($("#flag").val()=='0') 
-           {
-                  alert("用户身份信息已采集,请勿重复采集!");   
-                  $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
-                  $("#msg").attr("class","Validform_checktip Validform_wrong");
-                  $("#flag").val("0");
-                   
-                            
-                  return false;
-               }  
-               if($("#img_ul li").length!=3) 
+           
+          if($("#img_ul li").length!=3) 
               {
                   alert("用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。");   
                   return false;
-               } 
+               }  
+			
 				return true;
 				//这里明确return false的话表单将不会提交;
 			}   
@@ -167,8 +129,10 @@ function changes(obj){
 </head>
 <body class="mainbody">
 <form method="post" action="tempUser/tempUserEdit?type=${type}" id="form1" enctype="multipart/form-data">
-<input type="hidden" name="id" id="id" value="${tempUser.id }" />
- <input type="hidden" name="flag" id="flag" value="1" />
+ <input type="hidden" name="status" id="status" value="${tempUser.status }" />
+ <input type="hidden" name="status_reason" id="status_reason" value="${tempUser.status_reason }" />
+ <input type="hidden" name="id" id="id" value="${tempUser.id }" />
+ <input type="hidden" name="audit_time" id="audit_time" value="${tempUser.audit_time }" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -206,7 +170,7 @@ function __doPostBack(eventTarget, eventArgument) {
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <span>居民信息编辑</span>
+  <span>居民采集信息修改</span>
 </div>
 <div class="line10"></div>
 <!--/导航栏-->
@@ -223,14 +187,14 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 
 <div class="tab-content" >
-  <c:if test="${!empty tempUser}">
+  <c:if test="${!empty tempUser}"> 
    <dl>
     <dt>所属类型</dt>
     <dd>
       <div class="rule-single-select">
       <select name="data_type" id="data_type" onchange="changes(this)" datatype="*" errormsg="请选择所属类型！" sucmsg=" "> 
      	<option value="">请选择所属类型...</option>
-	    <option value="机关事业养老保险"  ${tempUser.data_type=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option> 
+	   <option value="机关事业养老保险"  ${tempUser.data_type=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option> 
 	    <option value="城乡居民养老保险"  ${tempUser.data_type=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
 	    <option value="企业职工养老保险"  ${tempUser.data_type=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option> 
       </select>
@@ -252,14 +216,13 @@ function __doPostBack(eventTarget, eventArgument) {
 
       </select>
       </div>
+      <span class="Validform_checktip">*</span>
     </dd>
   </dl>
   
-  
-  
-  <dl id="div_village" style="display:${tempUser.data_type=='城乡居民养老保险'?'block':'none'}">
+  <dl id="div_village" style="display:${tempUser.data_type=='城乡居民养老保险'?'block':'none'}" >
     <dt>村(社区)名称</dt>
-    <dd><input name="user_village" type="text"  id="user_village"  value="${ tempUser.user_village}"  class="input normal" datatype="*" nullmsg="请输入村(社区)名称" errormsg="请输入村(社区)名称" /> <span class="Validform_checktip">*</span></dd>
+    <dd><input name="user_village" type="text"  id="user_village" value="${ tempUser.user_village}"  class="input normal" datatype="*" nullmsg="请输入村(社区)名称" errormsg="请输入村(社区)名称" /> <span class="Validform_checktip">*</span></dd>
   </dl>
   
   <dl>
@@ -269,31 +232,17 @@ function __doPostBack(eventTarget, eventArgument) {
  
  <dl>
     <dt>身份证号</dt>
-    <dd><input name="user_idcard" type="text"  id="user_idcard" value="${ tempUser.user_idcard}"  maxlength='18' class="input normal" datatype='idcard'  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
+    <dd><input name="user_idcard" type="text"  id="user_idcard" value="${ tempUser.user_idcard}" readonly maxlength='18' class="input normal"  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
  </dl>
   
    
   <dl>
     <dt>手机号码</dt>
-    <dd><input name="mobile" type="text" maxlength="11" id="mobile" value="${ tempUser.mobile}"  class="input normal" datatype="/((^1\d{10})(,1\d{10})*$)+/" nullmsg="请填写手机号码" errormsg="手机号必须是以1开头的11位数字" /> <span class="Validform_checktip">*请认真核对,输入后不可修改</span></dd>
+    <dd><input name="mobile" type="text" maxlength="11" id="mobile" value="${ tempUser.mobile}" class="input normal" datatype="/((^1\d{10})(,1\d{10})*$)+/" nullmsg="请填写手机号码" errormsg="手机号必须是以1开头的11位数字" /> <span class="Validform_checktip">*请认真核对,输入后不可修改</span></dd>
   </dl>
   
   
-  <!-- 
-   <dl>
-    <dt>图片相册</dt>
-    <dd>
-      <div class="upload-box upload-album"></div>
-      <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
-      <div class="photo-list">
-        <ul id="img_ul">
-          
-        </ul>
-      </div>
-    </dd>
-  </dl>
- <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl> -->
-
+  
  <dl>
     <dt>图片相册</dt>
     <dd>
@@ -321,13 +270,12 @@ function __doPostBack(eventTarget, eventArgument) {
        </dd>
   </dl>
  <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
-     
-  
-    </c:if>
+
+  </c:if>
    <c:if test="${empty tempUser}">
     未查询到相关信息！
     </c:if>
- 
+  
 </div>
 <!--/内容-->
 

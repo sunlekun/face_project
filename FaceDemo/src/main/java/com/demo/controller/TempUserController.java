@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.demo.model.Manager;
-import com.demo.model.Role;
+import com.demo.model.Manager; 
 import com.demo.model.TempUser;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
@@ -51,6 +52,7 @@ public class TempUserController {
 	@PermissionName("居民信息采集管理")
 	public ModelAndView toTempUserList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
+		
 		String type=request.getParameter("type");
 		
 		if("Img".equals(type))
@@ -60,7 +62,12 @@ public class TempUserController {
 			if(pageNumber==null)
 				pageNumber =1;
 			PageHelper.startPage(pageNumber, pageSize);
-			List<TempUser> tempUsers=  tempUserService.findAllTempUserByKey(key); 
+			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+			HashMap<String ,String > map=new HashMap<String ,String >();
+			map.put("key", key);
+			map.put("data_type", manager.getUser_type());
+			map.put("user_township", manager.getXzb());
+			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
 			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
 			modelAndView.addObject("page", page); 
 			modelAndView.addObject("key", key); 
@@ -73,16 +80,18 @@ public class TempUserController {
 			modelAndView.setViewName("admin/tempUserList"); 
 		    }
 		
-		modelAndView.addObject("type", type);  
-		System.out.println(type);
+		modelAndView.addObject("type", type);   
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/tempUserList")	
 	public void tempUserList(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		 
-		 
-		List<TempUser> tempUsers=  tempUserService.findAllTempUser(); 
+		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		HashMap<String ,String > map=new HashMap<String ,String >(); 
+		map.put("data_type", manager.getUser_type());
+		map.put("user_township", manager.getXzb());
+		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
 		String jsons = JSON.toJSONString(tempUsers); 
 		JSONObject object = new JSONObject();

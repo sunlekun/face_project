@@ -1,5 +1,6 @@
 package com.demo.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.demo.dao.RandomCheckDao;   
 import com.demo.model.RandomCheck; 
+import com.demo.model.TempUser;
 import com.demo.service.RandomCheckService; 
 /**
  * @Author Yang
@@ -34,8 +36,11 @@ public class RandomCheckServiceImpl implements RandomCheckService{
 		public List<RandomCheck>  findRandomCheckByVideoStatusAndStatus(String video_status,String status){
 			return randomCheckDao.findRandomCheckByVideoStatusAndStatus( video_status,status);
 		}
-		public int  creatRandomCheckByNumberAndYear( int number, String year){
-			return randomCheckDao.creatRandomCheckByNumberAndYear( number,year);
+		public List<RandomCheck> findRandomCheckByMultiCondition(HashMap<String ,Object > map){
+			return randomCheckDao.findRandomCheckByMultiCondition(map);
+		}
+		public int  creatRandomCheckByMultiCondition( HashMap<String ,Object > map){
+			return randomCheckDao.creatRandomCheckByMultiCondition( map);
 		}
 		public int insertRandomCheckBatch(List<RandomCheck> randomChecks){
 			return randomCheckDao.insertRandomCheckBatch( randomChecks);

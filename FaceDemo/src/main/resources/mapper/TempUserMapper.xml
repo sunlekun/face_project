@@ -13,8 +13,29 @@
 	  <select id="findAllTempUserByKey" resultType="TempUser">
 		select m.* from temp_users m where m.is_delete=0 
 		
-		   <if test="key!=null  and key!=''">   
+		 <if test="key!=null  and key!=''">   
           and (m.user_name like '%${key}%' or m.user_idcard like '%${key}%' )
+        </if> 
+        
+		order by m.add_time  desc
+	 	 
+	 </select>
+	 
+	 
+	 
+	 <select id="findAllTempUserByMultiCondition" parameterType="java.util.HashMap"  resultType="TempUser">
+		select m.* from temp_users m where m.is_delete=0 
+		
+		<if test="key!=null  and key!=''">   
+          and (m.user_name like '%#{key}%' or m.user_idcard like '%#{key}%' )
+        </if> 
+        
+         <if test="data_type!=null  and data_type!=''">   
+          and m.data_type=#{data_type}
+        </if> 
+        
+         <if test="user_township!=null  and user_township!=''">   
+          and m.user_township=#{user_township}
         </if> 
 		 
 		order by m.add_time  desc
@@ -30,7 +51,7 @@
 	     select m.* from temp_users m   where m.id=#{0} and m.is_delete=0 
 	 </select>
 	 
-
+  
  
 	  
 	 

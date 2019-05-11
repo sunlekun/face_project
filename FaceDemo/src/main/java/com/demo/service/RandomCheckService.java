@@ -1,7 +1,9 @@
 package com.demo.service;
 
+import java.util.HashMap;
 import java.util.List;
  
+
 
 
 
@@ -10,6 +12,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.demo.model.RandomCheck; 
+import com.demo.model.TempUser;
 /**
  * @Author Yang
  * @Date 创建时间：2017-12-01
@@ -22,7 +25,8 @@ import com.demo.model.RandomCheck;
 public interface RandomCheckService {
 	public List<RandomCheck>  findRandomCheckByStatus(String status);
 	public List<RandomCheck>  findRandomCheckByVideoStatusAndStatus(String video_status,String status);
-	public int  creatRandomCheckByNumberAndYear( int number, String year);
+	public List<RandomCheck> findRandomCheckByMultiCondition(HashMap<String ,Object > map);
+	public int  creatRandomCheckByMultiCondition( HashMap<String ,Object > map);
 	public int insertRandomCheckBatch(List<RandomCheck> randomChecks); 
 	public RandomCheck findRandomCheckById(Integer id);
 	public void updateRandomCheckStatus(Integer status, Integer id);	  
