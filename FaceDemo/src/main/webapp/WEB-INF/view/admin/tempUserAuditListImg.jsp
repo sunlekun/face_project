@@ -14,7 +14,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>居民信息采集列表</title>
+<title>居民信息审核列表</title>
   
 <link rel="stylesheet" type="text/css" href="js/admin/scripts/artdialog/ui-dialog.css" />
 <link rel="stylesheet" type="text/css" href="css/admin/skin/icon/iconfont.css" />
@@ -47,52 +47,63 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  function Search(){
 
 	 var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="tempUserAudit/toTempUserAuditList?type=${type}&pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
     function toPage(pageNumber){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
+     document.getElementById("form1").action="tempUserAudit/toTempUserAuditList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
      document.getElementById("form1").submit();
  }
   function setPageSize(){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="tempUserAudit/toTempUserAuditList?type=${type}&pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  
-    // var rows1 = $.map($("#table").bootstrapTable('getSelections');
-    var rows = $("#table").bootstrapTable('getSelections');  
-    if (rows.length== 0) {  
+   var objs = document.getElementsByName("chkId");
+   
+   var ids = '';
+      for (var i = 0; i < objs.length; i++)
+      {
+        var obj = objs[i];
+        //判断是否是checkbox并且已经选中
+        if (obj.type == "checkbox" && obj.checked)  
+          ids += obj.value + ",";  
+      }
+      
+   
+   
+     ids = ids.substring(0, ids.length - 1);  
+    
+    if(ids=='')
+    {  
         alert("对不起，请先选择要删除的记录!");  
         return;  
-    }  
+    } 
+     
      var con=confirm("删除记录后不可恢复，您确定吗？"); //在页面上弹出对话框
-            
+    
      if(con==true)
      {
-        var ids = '';  
-          for (var i = 0; i < rows.length; i++)   
-              ids += rows[i]['id'] + ",";  
-         
-         ids = ids.substring(0, ids.length - 1);  
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete"; 
+        from.action="tempUserAudit/tempUserAuditDelete"; 
         from.submit();
        }  
      
     }
+     
 }
 	  
 </script>
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList?type=${type}"  id="form1">
+<form method="post"  action="tempUserAudit/toTempUserAuditList?type=${type}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -101,7 +112,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
   <a href="manager/center" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <span>居民信息采集列表</span>
+  <span>居民信息审核列表</span>
 </div>
 <!--/导航栏-->
 
@@ -113,21 +124,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <a class="menu-btn"><i class="iconfont icon-more"></i></a>
       <div class="l-list">
         <ul class="icon-list">
-          
+        
           
           <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
           
-           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
+           <shiro:hasPermission name="tempUserAudit:Add">
+               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
+          </shiro:hasPermission>
+          <shiro:hasPermission name="tempUserAudit:Delete">
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+          </shiro:hasPermission>
+          <shiro:hasPermission name="tempUserAudit:Show">
+	          <li><a id="btnDownLoadFiles" href="javascript:__doPostBack(&#39;btnDownLoadFiles&#39;,&#39;&#39;)"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownExcel" href="javascript:__doPostBack(&#39;btnDownExcel&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i><span>Excel数据下载</span></a></li>
           </shiro:hasPermission>
           
+           
         </ul>
       </div>
       <div class="r-list">
         <input name="key" type="text" id="key" class="keyword" value="${key}" />
         <a id="lbtnSearch" class="btn-search" onclick="Search()"><i class="iconfont icon-search"></i></a>
-        <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a>
-        <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a>
+        <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a>
+        <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a>
       </div>
     </div>
   </div>
@@ -147,37 +166,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <ul>
     <c:forEach items="${page.list }" var="tempUser" >
   
-      <li>
+  <li>
         <div class="details">
           <div class="check">
-            <span class="checkall"><input id="chkId" type="checkbox" name="chkId" /></span>
+            <span class="checkall"><input id="chkId" type="checkbox" name="chkId" value="${ tempUser.id}" /></span>
             <input type="hidden" name="hidId" id="hidId" value="${ tempUser.id}" />
+            <input type="hidden" name="hidIdCard" id="hidIdCard" value="${ tempUser.user_idcard}" />
           </div>
           <div class="pic"><img src="css/admin/skin/default/loadimg.gif" data-original="${fn:split(tempUser.original_path, ';')}[0]?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
-          <h1><span>
-          
-          <c:if test="${ tempUser.status==2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="javascript:alert('居民信息采集审核已通过，不能修改！');" >${ tempUser.user_name}</a>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		  ${ tempUser.user_name}
-            </shiro:lacksPermission>
-            
-           </c:if>
-            
-           <c:if test="${ tempUser.status!=2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		  ${ tempUser.user_name}
-            </shiro:lacksPermission>
-            
-            </c:if>
-          
-          
-          </span></h1>
+          <h1>
+	          <span>
+	          <shiro:hasPermission name="tempUserAudit:Edit">
+	             	  <a href="tempUserAudit/toTempUserAuditEdit?type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
+	            </shiro:hasPermission>
+	            <shiro:lacksPermission name="tempUserAudit:Edit">
+	           		  ${ tempUser.user_name}
+	            </shiro:lacksPermission>
+	          
+	          </span>
+          </h1>
           <div class="remark">
             ${ tempUser.user_idcard}
           </div>
@@ -194,35 +201,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
           </div>
           <div class="foot">
-            <p class="time"><fmt:formatDate value="${ tempUser.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/></p>
-            <c:if test="${ tempUser.status==2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="javascript:alert('居民信息采集审核已通过，不能修改！');"  title="编辑"><i class="iconfont icon-pencil"></i></a>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		 <i class="iconfont icon-pencil"></i>
-            </shiro:lacksPermission>
-            </c:if>
+            <p class="time"> <fmt:formatDate  value="${ tempUser.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/> </p>
             
-             <c:if test="${ tempUser.status!=2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
+            <shiro:hasPermission name="tempUserAudit:Edit">
+             	  <a href="tempUserAudit/toTempUserAuditEdit?type=${type }&id=${ tempUser.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		 <i class="iconfont icon-pencil"></i>
+            <shiro:lacksPermission name="tempUserAudit:Edit">
+           		<a href="javascript:;" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:lacksPermission>
-            </c:if>
             
-            <shiro:hasPermission name="tempUser:Add">
-          	 	 <a href="tempUser/toTempUserAdd?type=${type }" title="导入"><i class="iconfont icon-copy"></i></a> 
+            <shiro:hasPermission name="tempUserAudit:Add">
+          	 	 <a href="tempUserAudit/toTempUserAuditAdd?type=${type }" title="导入照片入"><i class="iconfont icon-pic"></i></a> 
             </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Add">
-               <i class="iconfont icon-copy"></i>
+            <shiro:lacksPermission name="tempUserAudit:Add">
+                <a href="javascript:;" title="导入照片入"><i class="iconfont icon-pic"></i></a> 
             </shiro:lacksPermission>
-           
+            
+            
+            
           </div>
         </div>
       </li>
+  
+  
   
     </c:forEach>
       

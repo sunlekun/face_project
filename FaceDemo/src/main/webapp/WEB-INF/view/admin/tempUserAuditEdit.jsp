@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>居民采集信息修改</title>
+<title>居民采集信息审核</title>
 
 <link rel="stylesheet" type="text/css" href="js/admin/scripts/artdialog/ui-dialog.css" />
 <link rel="stylesheet" type="text/css" href="css/admin/skin/icon/iconfont.css" />
@@ -128,9 +128,9 @@ function changes(obj){
 </script>
 </head>
 <body class="mainbody">
-<form method="post" action="tempUser/tempUserEdit?type=${type}" id="form1" enctype="multipart/form-data"> 
+<form method="post" action="tempUserAudit/tempUserAuditEdit?type=${type}" id="form1" enctype="multipart/form-data">
+ 
  <input type="hidden" name="id" id="id" value="${tempUser.id }" />
-
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -166,9 +166,9 @@ function __doPostBack(eventTarget, eventArgument) {
   <a href="tempUser/toTempUserList?type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>
+  <a href="tempUser/toTempUserList?type=${type}"><span>居民信息审核列表</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <span>居民采集信息修改</span>
+  <span>居民采集信息审核</span>
 </div>
 <div class="line10"></div>
 <!--/导航栏-->
@@ -185,7 +185,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 
 <div class="tab-content" >
-  <c:if test="${!empty tempUser}"> 
+   <c:if test="${!empty tempUser}">
    <dl>
     <dt>所属类型</dt>
     <dd>
@@ -269,6 +269,30 @@ function __doPostBack(eventTarget, eventArgument) {
   </dl>
  <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
 
+  <div id="div_Is_status">
+  <dl>
+    <dt>审核状态</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="status">
+        <input id="status" type="radio" name="status" value="2" ${tempUser.status==2?"checked='checked'":'' } /><label for="rblIsStatus_0">正常</label>
+        <input id="status" type="radio" name="status" value="1" ${tempUser.status==1?"checked='checked'":'' } /><label for="rblIsStatus_1">待审核</label>
+        <input id="status" type="radio" name="status" value="3" ${tempUser.status==3?"checked='checked'":'' } /><label for="rblIsStatus_2">未通过</label>
+        </span>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>未通过原因</dt>
+    <dd><textarea name="status_reason" rows="2" cols="20" id="status_reason" class="input" placeholder="审核未通过时填写" value="${ tempUser.status_reason}" >
+</textarea></dd>
+  </dl>
+<!--   <dl>
+    <dt></dt>
+    <dd><input type="submit" name="btnStatus" value="审核提交" id="btnStatus" class="btn green" /></dd>
+  </dl> -->
+  </div>
+</div>
   </c:if>
    <c:if test="${empty tempUser}">
     未查询到相关信息！

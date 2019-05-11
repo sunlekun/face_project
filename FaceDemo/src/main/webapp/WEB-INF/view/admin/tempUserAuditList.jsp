@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "tempUser/tempUserList?type=${type}",
+            url: "tempUserAudit/tempUserAuditList?type=${type}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "tempUser/tempUserDetial?type=${type}&id="+$element.id;                  
+                       window.location.href = "tempUserAudit/tempUserAuditDetial?type=${type}&id="+$element.id;                  
                      
                    });
                    
@@ -85,15 +85,10 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
+ var s="<shiro:hasPermission name='tempUserAudit:Edit'><a class='detial'  href = 'tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
-		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
-  
-  var a='居民信息采集审核已通过，不能修改！';
-  if(row['status']==2)
-  s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'javascript:alert(&apos;"+a+"&apos;);' >"+row['user_name']+"</a></shiro:hasPermission>"+
- 
-		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+		"<shiro:lacksPermission name='tempUserAudit:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+   
  return s;
 }
 
@@ -106,7 +101,6 @@ function strFormat(val) {
            return "待审核";
          
 	}
-	
     function timeFormat(val) {
     if (val != null) {
             var date = new Date(val);
@@ -117,24 +111,22 @@ function strFormat(val) {
 	
 	
 	function actionFormatter(value, row, index) {  
-	var a='居民信息采集审核已通过，不能修改！';
-	if(row['status']==2) 
-       return "<shiro:hasPermission name='tempUser:Edit'><a   href = 'javascript:alert(&apos;"+a+"&apos;);' >修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
-    else
-     return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+	
+      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+  
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<tempUser/toTempUserEdit?type=${type}&id="+row['id'];
+          window.location.href = "<tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id'];
       } 
      } 
      
-      function Search(){
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}"; 
+   /*    function Search(){
+     document.getElementById("form1").action="tempUserAudit/toTempUserList?type=${type}"; 
      document.getElementById("form1").submit();
- }
+ } */
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  
@@ -156,7 +148,7 @@ function strFormat(val) {
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete?type=${type}"; 
+        from.action="tempUserAudit/tempUserAuditDelete?type=${type}"; 
         from.submit();
        }  
      
@@ -167,7 +159,7 @@ function strFormat(val) {
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList?type=${type}"  id="form1">
+<form method="post"  action="tempUserAudit/totempUserAuditList?type=${type}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -187,15 +179,20 @@ function strFormat(val) {
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
+          <shiro:hasPermission name="tempUserAudit:Add">
+               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
           </shiro:hasPermission>
-          <shiro:hasPermission name="tempUser:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
+          <shiro:hasPermission name="tempUserAudit:Delete">
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
           </shiro:hasPermission>
+          <shiro:hasPermission name="tempUserAudit:Show">
+	          <li><a id="btnDownLoadFiles" href="javascript:__doPostBack(&#39;btnDownLoadFiles&#39;,&#39;&#39;)"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownExcel" href="javascript:__doPostBack(&#39;btnDownExcel&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i><span>Excel数据下载</span></a></li>
+          </shiro:hasPermission>
+          
            
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
         </ul>
       </div>
     
@@ -227,11 +224,11 @@ function strFormat(val) {
             <th data-sortable="true" data-field="user_name" data-align="center"
                 data-filter-control="input"  data-formatter="infoFormatter">姓名
             </th>
-            <th data-sortable="true"  data-field="status" data-align="center"
+              <th data-sortable="true"  data-field="status" data-align="center"
                 data-filter-control="input" data-formatter="strFormat">审核状态
             </th>
-             
-             <th data-sortable="true"  data-field="audit_time" data-align="center"
+            
+            <th data-sortable="true"  data-field="audit_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">审核时间
             </th>
             

@@ -167,7 +167,9 @@ public class TempUserController {
 			}
 		}
 	 		
-		 
+		tempUser.setStatus(1);
+		tempUser.setStatus_reason(null);
+		tempUser.setAudit_time(null);
 		tempUserService.updateTempUser(tempUser);
 
 	
