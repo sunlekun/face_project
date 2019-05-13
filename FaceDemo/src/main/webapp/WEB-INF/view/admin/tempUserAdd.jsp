@@ -205,7 +205,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 <!--导航栏-->
 <div class="location">
-  <a href="tempUser/toTempUserList?type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="tempUser/toTempUserList?status=${status}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>

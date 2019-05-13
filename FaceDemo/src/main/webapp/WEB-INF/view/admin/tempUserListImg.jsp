@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete"; 
+        from.action="tempUser/tempUserDelete?status=${status}"; 
         from.submit();
        }  
      
@@ -118,10 +118,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
           
            <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUser/toTempUserAdd?status=${status}&type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
           </shiro:hasPermission>
           
+         
+          
         </ul>
+        
+        
+         <shiro:hasPermission name="tempUser:Show">
+	          <div class="menu-list">
+	          <div class="rule-single-select">
+	            <select name="status" onchange="Search()" id="status">
+		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
+		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
+	               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
+		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
+	        </select>
+	        </div>
+	        </div>
+        
+        </shiro:hasPermission>
       </div>
       <div class="r-list">
         <input name="key" type="text" id="key" class="keyword" value="${key}" />
@@ -168,7 +185,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
            <c:if test="${ tempUser.status!=2}">
             <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
+             	  <a href="tempUser/toTempUserEdit?status=${status}&type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		  ${ tempUser.user_name}
@@ -206,7 +223,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
              <c:if test="${ tempUser.status!=2}">
             <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
+             	  <a href="tempUser/toTempUserEdit?status=${status}&type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		 <i class="iconfont icon-pencil"></i>
@@ -214,9 +231,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </c:if>
             
             <shiro:hasPermission name="tempUser:Add">
-          	 	 <a href="tempUser/toTempUserAdd?type=${type }" title="导入"><i class="iconfont icon-copy"></i></a> 
+          	 	 <a href="tempUser/toTempUserAdd?status=${status}&type=${type }" title="导入"><i class="iconfont icon-pic"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Add">
+               <i class="iconfont icon-pic"></i>
+            </shiro:lacksPermission>
+            
+            
+            <shiro:hasPermission name="tempUser:View">
+          	 	 <a href="tempUser/tempUserDetial?status=${status}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="tempUser:View">
                <i class="iconfont icon-copy"></i>
             </shiro:lacksPermission>
            

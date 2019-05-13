@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUserAudit/tempUserAuditDelete"; 
+        from.action="tempUserAudit/tempUserAuditDelete?status=${status}"; 
         from.submit();
        }  
      
@@ -129,18 +129,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
           
            <shiro:hasPermission name="tempUserAudit:Add">
-               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Delete">
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Show">
-	          <li><a id="btnDownLoadFiles" href="javascript:__doPostBack(&#39;btnDownLoadFiles&#39;,&#39;&#39;)"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownLoadFiles" href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
 	          <li><a id="btnDownExcel" href="javascript:__doPostBack(&#39;btnDownExcel&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i><span>Excel数据下载</span></a></li>
           </shiro:hasPermission>
           
            
         </ul>
+        
+        
+            <shiro:hasPermission name="tempUserAudit:Show">
+	          <div class="menu-list">
+	          <div class="rule-single-select">
+	            <select name="status" onchange="Search()" id="status">
+		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
+		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
+	               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
+		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
+	        </select>
+	        </div>
+	        </div>
+        
+      </shiro:hasPermission>
       </div>
       <div class="r-list">
         <input name="key" type="text" id="key" class="keyword" value="${key}" />
@@ -177,7 +192,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <h1>
 	          <span>
 	          <shiro:hasPermission name="tempUserAudit:Edit">
-	             	  <a href="tempUserAudit/toTempUserAuditEdit?type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
+	             	  <a href="tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
 	            </shiro:hasPermission>
 	            <shiro:lacksPermission name="tempUserAudit:Edit">
 	           		  ${ tempUser.user_name}
@@ -204,17 +219,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <p class="time"> <fmt:formatDate  value="${ tempUser.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/> </p>
             
             <shiro:hasPermission name="tempUserAudit:Edit">
-             	  <a href="tempUserAudit/toTempUserAuditEdit?type=${type }&id=${ tempUser.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
+             	  <a href="tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type }&id=${ tempUser.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUserAudit:Edit">
            		<a href="javascript:;" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:lacksPermission>
             
             <shiro:hasPermission name="tempUserAudit:Add">
-          	 	 <a href="tempUserAudit/toTempUserAuditAdd?type=${type }" title="导入照片入"><i class="iconfont icon-pic"></i></a> 
+          	 	 <a href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type }" title="导入照片"><i class="iconfont icon-pic"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUserAudit:Add">
-                <a href="javascript:;" title="导入照片入"><i class="iconfont icon-pic"></i></a> 
+                <a href="javascript:;" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+            </shiro:lacksPermission>
+            
+            <shiro:hasPermission name="tempUserAudit:View">
+          	 	 <a href="tempUserAudit/tempUserAuditDetial?status=${status}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="tempUserAudit:View">
+                <a href="javascript:;" title="详情"><i class="iconfont icon-copy"></i></a> 
             </shiro:lacksPermission>
             
             

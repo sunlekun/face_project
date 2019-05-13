@@ -128,7 +128,7 @@ function changes(obj){
 </script>
 </head>
 <body class="mainbody">
-<form method="post" action="tempUser/tempUserEdit?type=${type}" id="form1" enctype="multipart/form-data"> 
+<form method="post" action="tempUser/tempUserEdit?status1=${status}&type=${type}" id="form1" enctype="multipart/form-data"> 
  <input type="hidden" name="id" id="id" value="${tempUser.id }" />
 
 <div class="aspNetHidden">
@@ -163,7 +163,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 <!--导航栏-->
 <div class="location">
-  <a href="tempUser/toTempUserList?type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="tempUser/toTempUserList?status=${status}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>

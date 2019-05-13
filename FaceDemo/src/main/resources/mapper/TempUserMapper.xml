@@ -37,6 +37,9 @@
          <if test="user_township!=null  and user_township!=''">   
           and m.user_township=#{user_township}
         </if> 
+         <if test="status!=null  and status!=''">   
+          and m.status=#{status}
+        </if> 
 		 
 		order by m.add_time  desc
 	 

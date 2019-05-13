@@ -67,6 +67,7 @@ public class TempUserController {
 			map.put("key", key);
 			map.put("data_type", manager.getUser_type());
 			map.put("user_township", manager.getXzb());
+			map.put("status", request.getParameter("status"));
 			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
 			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
 			modelAndView.addObject("page", page); 
@@ -79,7 +80,8 @@ public class TempUserController {
 			type="Word";
 			modelAndView.setViewName("admin/tempUserList"); 
 		    }
-		
+	 
+		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.addObject("type", type);   
 		return modelAndView;
 	}
@@ -91,6 +93,7 @@ public class TempUserController {
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
 		map.put("data_type", manager.getUser_type());
 		map.put("user_township", manager.getXzb());
+		map.put("status", request.getParameter("status"));
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
 		String jsons = JSON.toJSONString(tempUsers); 
@@ -116,6 +119,7 @@ public class TempUserController {
 		
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
+		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.setViewName("admin/tempUserDetial"); 
 		return modelAndView;
 	}
@@ -133,7 +137,7 @@ public class TempUserController {
 		
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
-		
+		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.setViewName("admin/tempUserEdit");
 		
 		return modelAndView;
@@ -173,7 +177,7 @@ public class TempUserController {
 		tempUserService.updateTempUser(tempUser);
 
 	
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status1"));
 		return modelAndView;
 	}
 	
@@ -188,8 +192,8 @@ public class TempUserController {
 		
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
-		
-		
+		modelAndView.addObject("status", request.getParameter("status"));
+	 
 		modelAndView.setViewName("admin/tempUserAdd");
 		
 		return modelAndView;
@@ -204,8 +208,6 @@ public class TempUserController {
 			JSONObject object = new JSONObject();
 
 			object.put("status", "true");
-			
-				
 			
 		    ModelAndView modelAndView = new ModelAndView();
 	       
@@ -310,7 +312,7 @@ public class TempUserController {
 				tempUserService.deleteTempUserBatch(ids);
 		}
 		
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
 		return modelAndView;
 	}
 	

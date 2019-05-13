@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "tempUserAudit/tempUserAuditList?type=${type}",
+            url: "tempUserAudit/tempUserAuditList?status=${status}&type=${type}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -53,7 +53,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "tempUserAudit/tempUserAuditDetial?type=${type}&id="+$element.id;                  
+                       window.location.href = "tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+$element.id;                  
                      
                    });
                    
@@ -85,7 +85,7 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUserAudit:Edit'><a class='detial'  href = 'tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
+ var s="<shiro:hasPermission name='tempUserAudit:Edit'><a class='detial'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
 		"<shiro:lacksPermission name='tempUserAudit:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
    
@@ -112,21 +112,21 @@ function strFormat(val) {
 	
 	function actionFormatter(value, row, index) {  
 	
-      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
   
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<tempUserAudit/toTempUserAuditEdit?type=${type}&id="+row['id'];
+          window.location.href = "<tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id'];
       } 
      } 
      
-   /*    function Search(){
-     document.getElementById("form1").action="tempUserAudit/toTempUserList?type=${type}"; 
+      function Search(){
+     document.getElementById("form1").action="tempUserAudit/toTempUserAuditList?type=${type}"; 
      document.getElementById("form1").submit();
- } */
+ }
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  
@@ -148,7 +148,7 @@ function strFormat(val) {
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUserAudit/tempUserAuditDelete?type=${type}"; 
+        from.action="tempUserAudit/tempUserAuditDelete?status=${status}&type=${type}"; 
         from.submit();
        }  
      
@@ -180,13 +180,13 @@ function strFormat(val) {
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="tempUserAudit:Add">
-               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Delete">
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Show">
-	          <li><a id="btnDownLoadFiles" href="javascript:__doPostBack(&#39;btnDownLoadFiles&#39;,&#39;&#39;)"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downLoadFiles?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
 	          <li><a id="btnDownExcel" href="javascript:__doPostBack(&#39;btnDownExcel&#39;,&#39;&#39;)"><i class="iconfont icon-list-txt"></i><span>Excel数据下载</span></a></li>
           </shiro:hasPermission>
           
@@ -194,6 +194,20 @@ function strFormat(val) {
            <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
            <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
         </ul>
+        
+            <shiro:hasPermission name="tempUserAudit:Show">
+	          <div class="menu-list">
+	          <div class="rule-single-select">
+	            <select name="status" onchange="Search()" id="status">
+		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
+		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
+	               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
+		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
+	        </select>
+	        </div>
+	        </div>
+        
+      </shiro:hasPermission>
       </div>
     
     </div>
