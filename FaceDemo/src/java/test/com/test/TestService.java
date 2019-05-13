@@ -28,7 +28,7 @@ import com.demo.util.DateFormatUtil;
  * @Description 类描述:测试类
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:conf/spring-mybatis.xml"})
+@ContextConfiguration(locations = {"classpath:conf/spring-mybatis.xml","classpath:conf/application-context.xml"})
 public class TestService {
 	@Autowired
 	private TempUserService tempUserService;
