@@ -155,11 +155,14 @@ public class TempUserController {
 			String path = "";
 			for (int i = 0; i < hid_photo_names.length; i++) {
 				String[] name = hid_photo_names[i].split("\\|");
-				/*
-				 * if(name!=null&&name.length>=2) { String[]
-				 * name1=name[1].split("\\/"); System.out.println(name1[3]);
-				 * path+=name[1]+";"; }
-				 */
+				
+				/* if(name!=null) 
+				 { 
+					 String[]	 name1=name[1].split("\\/"); 
+					 System.out.println(name1[2]);
+				     path+=name[1]+";";
+				 }*/
+				 
 				path += name[1] + ";";
 			}
 
