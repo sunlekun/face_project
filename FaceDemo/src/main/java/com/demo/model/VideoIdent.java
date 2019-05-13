@@ -1,6 +1,6 @@
 package com.demo.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class VideoIdent {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +22,7 @@ public class VideoIdent {
 	private String txt_remarks;
 	private String txt_img;
 	 
-	private  Timestamp add_time;
+	private Date add_time;
 	private int is_delete;
 	
 	
@@ -138,10 +138,10 @@ public class VideoIdent {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Timestamp getAdd_time() {
+	public Date getAdd_time() {
 		return add_time;
 	}
-	public void setAdd_time(Timestamp add_time) {
+	public void setAdd_time(Date add_time) {
 		this.add_time = add_time;
 	}
 	public int getIs_delete() {

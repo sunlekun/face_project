@@ -11,10 +11,13 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.druid.util.StringUtils;
+import com.demo.bean.DetectAuthRespBean;
 import com.demo.core.TxFaceService;
 import com.demo.model.DetectAuth;
 import com.demo.model.TempUser;
@@ -68,16 +71,34 @@ public class FaceDetectAuthController {
 		//验证在7200秒内是或否调用核身前置接口
 		Date date = new Date();
 		long l = 7200*1000;
-		Date beforeDate = new Date(date .getTime() + l);
-		System.out.println(beforeDate);
-		System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		Date beforeDate = new Date(date .getTime() - l);
 		List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(users.get(0).getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 		if(listDA!=null&&listDA.size()>0){
 			modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
+			return modelAndView;
 		}else{
-			txFaceService.faceProcess(users.get(0));
+			DetectAuthRespBean respBean = txFaceService.faceProcess(users.get(0));
+			modelAndView.setViewName("redirect:"+respBean.getUrl());
+			return modelAndView;
 		}
-//		modelAndView.setViewName("redirect:/manager/toManagerList");
-		return modelAndView;
+	}
+	
+	/**
+	 * 人脸核身结果接收地址
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/notify.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String notify(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		
+		String BizToken = request.getParameter("BizToken");
+		if(!StringUtils.isEmpty(BizToken)){
+			
+		}
+		return null;
+		
 	}
 }
