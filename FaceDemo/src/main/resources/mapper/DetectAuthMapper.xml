@@ -4,7 +4,13 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.dao.DetectAuthDao">
     
- 
+  <select id="findDetectAuthByIdAndTime" resultType="DetectAuth"> 
+	    select *  from  detectAuth  where user_idcard= #{userIdcard} 
+	    and create_time>=STR_TO_DATE(#{time},'%Y%m%d %H')  
+    </select> 
 	  
-	 
+	<insert id="insertDA">
+	INSERT INTO detectAuth (bizToken, url, create_time, request_id, user_idcard) 
+	VALUES (#{bizToken}, #{url}, #{create_time}, #{request_id}, #{user_idcard});
+	</insert> 
 </mapper>

@@ -1,12 +1,12 @@
 package com.demo.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class DetectAuth {
 	private static final long serialVersionUID = 1L;
 	private String bizToken	;
 	private String url	;
-	private Timestamp create_time;
+	private Date create_time;
 	private String request_id	;
 	private String user_idcard	;
 	public String getBizToken() {
@@ -21,10 +21,10 @@ public class DetectAuth {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public Timestamp getCreate_time() {
+	public Date getCreate_time() {
 		return create_time;
 	}
-	public void setCreate_time(Timestamp create_time) {
+	public void setCreate_time(Date create_time) {
 		this.create_time = create_time;
 	}
 	public String getRequest_id() {

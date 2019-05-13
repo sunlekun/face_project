@@ -1,9 +1,5 @@
 package com.demo.controller;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjuster;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +10,16 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.druid.util.StringUtils;
+import com.demo.core.TxFaceService;
+import com.demo.model.DetectAuth;
 import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
+import com.demo.service.DetectAuthService;
 import com.demo.service.TempUserService;
 import com.demo.service.VideoIdentService;
 import com.demo.util.DateFormatUtil;
@@ -41,6 +39,11 @@ public class FaceDetectAuthController {
 	@Autowired
 	private VideoIdentService videoIdentService;
 	
+	@Autowired
+	private DetectAuthService detectAuthService;
+	
+	@Autowired
+	private TxFaceService txFaceService;
 	
 	@RequestMapping(value = "/reqFaceDetectAuth")
 	public ModelAndView idToDAuthUrl(String user_idcard,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -57,12 +60,23 @@ public class FaceDetectAuthController {
 			return modelAndView;
 		}
 		//验证是否人脸核身过
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.dayOfMonth());
+		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.dayOfMonth());
 		if(list!=null&&list.size()>0){
 			modelAndView.addObject("error", "当月身份信息已经审核过，详情请咨询当地乡镇有关部门");
 			return modelAndView;
 		}
 		//验证在7200秒内是或否调用核身前置接口
+		Date date = new Date();
+		long l = 7200*1000;
+		Date beforeDate = new Date(date .getTime() + l);
+		System.out.println(beforeDate);
+		System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(users.get(0).getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		if(listDA!=null&&listDA.size()>0){
+			modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
+		}else{
+			txFaceService.faceProcess(users.get(0));
+		}
 //		modelAndView.setViewName("redirect:/manager/toManagerList");
 		return modelAndView;
 	}

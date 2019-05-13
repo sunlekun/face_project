@@ -18,6 +18,9 @@
 	<!-- 引入jdbc配置文件 -->
     <context:property-placeholder location="classpath:conf/jdbc.properties"/>
     
+    <!--注入配置文件 -->
+	<util:properties id="sysConfig" location="classpath:conf/sysConfig.properties" />
+    
    <!--本示例采用DBCP连接池。 连接池配置如下 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="${jdbc_driverClassName}" />
@@ -61,5 +64,6 @@
 	<bean id="randomCheckService" 	class="com.demo.service.impl.RandomCheckServiceImpl"></bean>
 	<bean id="videoIdentService" 	class="com.demo.service.impl.VideoIdentServiceImpl"></bean>
 	<bean id="tempUserService" 	class="com.demo.service.impl.TempUserServiceImpl"></bean>
-   
+	<bean id="detectAuthService" 	class="com.demo.service.impl.DetectAuthServiceImpl"></bean>
+	<bean id="txFaceService" 	class="com.demo.core.TxFaceService"></bean>
 </beans>

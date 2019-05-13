@@ -7,6 +7,8 @@ package com.demo.bean;
  */
 public class DetectAuthRespBean {
 	
+	private String respCode;
+	
 	private String Url;
 	
 	private String BizToken;
@@ -35,6 +37,14 @@ public class DetectAuthRespBean {
 
 	public void setRequestId(String requestId) {
 		RequestId = requestId;
+	}
+
+	public String getRespCode() {
+		return respCode;
+	}
+
+	public void setRespCode(String respCode) {
+		this.respCode = respCode;
 	}
 	
 	

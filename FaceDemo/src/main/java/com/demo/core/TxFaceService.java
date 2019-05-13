@@ -1,17 +1,18 @@
 package com.demo.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
+import java.sql.Timestamp;
+import java.util.Date;
 
-import net.sf.json.JSONObject;
-
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.demo.bean.DetectAuthReqBean;
+import com.demo.bean.DetectAuthRespBean;
+import com.demo.model.DetectAuth;
+import com.demo.model.TempUser;
+import com.demo.service.DetectAuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencentcloudapi.common.Credential;
@@ -30,46 +31,50 @@ import com.tencentcloudapi.faceid.v20180301.models.DetectAuthResponse;
  */
 @Component
 public class TxFaceService {
+	public static Logger log= Logger.getLogger(TxFaceService.class);
+	@Autowired
+	public DetectAuthService detectAuthService;
 	/**
 	 * 密钥ID
 	 */
 	@Value("#{sysConfig.SecretId}")
-    private String secretId;
+    public String secretId;
 	/**
 	 * 密钥值
 	 */
 	@Value("#{sysConfig.SecretKey}")
-    private String secretKey;
+	public String secretKey;
 	/**
 	 * 请求地址
 	 */
 	@Value("#{sysConfig.faceUrl}")
-    private String url;
+    public String url;
 	/**
 	 * 地区
 	 */
 	@Value("#{sysConfig.region}")
-    private String region;
+    public String region;
 	
 	/**
 	 * 业务编号
 	 */
 	@Value("#{sysConfig.ruleId}")
-    private String ruleId;
+    public String ruleId;
 	
 	/**
 	 * 版本号
 	 */
 	@Value("#{sysConfig.version}")
-    private String version;
+    public String version;
 	
 	/**
 	 * 接口名称
 	 */
 	@Value("#{sysConfig.action}")
-    private String action;
+    public String action;
 	
-	public boolean faceProcess(){
+	public DetectAuthRespBean faceProcess(TempUser tempUser){
+		DetectAuthRespBean respBean = new DetectAuthRespBean();
 		try {
 		Credential cred = new Credential(secretId, secretKey);
 		HttpProfile httpProfile = new HttpProfile();
@@ -85,19 +90,31 @@ public class TxFaceService {
         reqBean.setVersion(version);
         reqBean.setRegion(region);
         reqBean.setRuleId(ruleId);
-        reqBean.setImageBase64("");
+        reqBean.setImageBase64(tempUser.getOriginal_path());
         ObjectMapper mapper = new ObjectMapper();
         String mapJakcson = mapper.writeValueAsString(reqBean);
-        System.out.println(mapJakcson);
+        log.info(mapJakcson);
         DetectAuthRequest req = DetectAuthRequest.fromJsonString(mapJakcson, DetectAuthRequest.class);
         
         DetectAuthResponse resp = client.DetectAuth(req);
+        
+        respBean.setRespCode("sucess");
+        respBean.setBizToken(resp.getBizToken());
+        respBean.setUrl(resp.getUrl());
+        DetectAuth da = new DetectAuth();
+        da.setBizToken(resp.getBizToken());
+        da.setUrl(resp.getUrl());
+        da.setCreate_time(new Date());
+        da.setRequest_id(resp.getRequestId());
+        da.setUser_idcard(tempUser.getUser_idcard());
+        detectAuthService.insertDA(da);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("请求实名核身接口失败",e);
+			respBean.setRespCode("error");
+			return respBean;
 		}
         
-		return false;
+		return respBean;
 	}
 	
 	public static void main(String[] args) throws JsonProcessingException {
