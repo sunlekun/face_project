@@ -58,4 +58,14 @@
 	    select v.*  from  video_ident  v  where v.is_delete=0 and v.user_id= #{id} 
 	    and v.add_time>=STR_TO_DATE(#{date},'%Y%m%d %H')  
     </select> 
+    
+    
+    <insert id="insertVideoIdent" parameterType="VideoIdent">
+
+    insert into  video_ident (year, user_id, video_url, video_code, img_url, audio_url, audio_txt, video_num, face_score, video_status, audio_status, auditors_txt, auditors_reason, txt_remarks, txt_img, add_time)
+        values (#{year},#{ user_id},#{ video_url},#{ video_code},#{ img_url},#{ audio_url},#{ audio_txt},#{ video_num},#{ face_score},#{ video_status},#{ audio_status},#{ auditors_txt},#{ auditors_reason},#{ txt_remarks},#{ txt_img},#{ add_time})
+
+	
+	
+	</insert>
 </mapper>
