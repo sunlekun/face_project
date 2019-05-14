@@ -1,7 +1,5 @@
 package com.demo.dao;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
  
 
@@ -20,7 +18,7 @@ public interface VideoIdentDao {
 	public List<String>  findVidoIdentYears( );
 	public VideoIdent findVideoIdentById( @Param("id") Integer id);
 	public List<VideoIdent> findVideoListByIdAndTime(@Param("id") Integer id, @Param("date") String date);
-	
+	void insertVideoIdent(VideoIdent videoIdent);
 }
 
  

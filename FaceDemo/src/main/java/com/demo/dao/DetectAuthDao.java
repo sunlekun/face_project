@@ -15,5 +15,8 @@ public interface DetectAuthDao {
 	List<DetectAuth> findDetectAuthByIdAndTime(@Param("userIdcard")String userIdcard,@Param("time") String time);
 
 	void insertDA(DetectAuth detectAuth);
+
+
+	String findUserId(@Param("bizToken")String bizToken);
 	 
 }

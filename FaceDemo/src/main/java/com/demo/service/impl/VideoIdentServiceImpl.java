@@ -49,5 +49,10 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 			return videoIdentDao.findVideoListByIdAndTime(id,date);
 			
 		}
+
+		@Override
+		public void insertVL(VideoIdent videoIdent) {
+			videoIdentDao.insertVideoIdent(videoIdent);
+		}
 		
 	}

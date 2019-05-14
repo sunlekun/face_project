@@ -13,6 +13,7 @@ import com.demo.bean.DetectAuthRespBean;
 import com.demo.bean.GetDetectInfoReq;
 import com.demo.model.DetectAuth;
 import com.demo.model.TempUser;
+import com.demo.model.VideoIdent;
 import com.demo.service.DetectAuthService;
 import com.demo.service.VideoIdentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -159,7 +160,11 @@ public class TxFaceService {
 	            String status = jo.get("Text").getAsJsonObject().get("ErrCode").toString();
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
-	        } catch (Exception e) {
+	            String  userId = detectAuthService.findUserId(BizToken);
+	            VideoIdent videoIdent = new VideoIdent();
+	            videoIdent.setUser(user);
+	            videoIdentService.insertVL(videoIdent);
+		   } catch (Exception e) {
 	                System.out.println(e.toString());
 	        }
 	}

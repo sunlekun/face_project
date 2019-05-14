@@ -23,9 +23,9 @@ import com.demo.util.DateFormatUtil;
 
 /**
  * @author lekun.sun
- * @version åˆ›å»ºæ—¶é—´ï¼š2019å¹´5æœˆ10æ—¥ ä¸‹åˆ1:57:04
- * @ClassName ç±»åç§°
- * @Description ç±»æè¿°:æµ‹è¯•ç±»
+ * @version ´´½¨Ê±¼ä£º2019Äê5ÔÂ10ÈÕ ÏÂÎç1:57:04
+ * @ClassName ÀàÃû³Æ
+ * @Description ÀàÃèÊö:²âÊÔÀà
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:conf/spring-mybatis.xml","classpath:conf/application-context.xml"})
@@ -45,8 +45,8 @@ public class TestService {
 		System.out.println(users.size());
 		LocalDateTime time = LocalDateTime.now();
 //		LocalDateTime date= time.withDayOfMonth(1);
-//		LocalDate today = LocalDate.now();//å–å½“å‰æ—¶é—´
-//		LocalDate firstDate = today.withDayOfMonth(1);//å½“æœˆç¬¬ä¸€å¤©
+//		LocalDate today = LocalDate.now();//È¡µ±Ç°Ê±¼ä
+//		LocalDate firstDate = today.withDayOfMonth(1);//µ±ÔÂµÚÒ»Ìì
 		
 		
 		Date date = new Date();
@@ -63,7 +63,7 @@ public class TestService {
 	
 	@Test
 	public void test1() {
-		//éªŒè¯åœ¨7200ç§’å†…æ˜¯æˆ–å¦è°ƒç”¨æ ¸èº«å‰ç½®æ¥å£
+		//ÑéÖ¤ÔÚ7200ÃëÄÚÊÇ»ò·ñµ÷ÓÃºËÉíÇ°ÖÃ½Ó¿Ú
 		TempUser tempUser = new TempUser();
 		tempUser.setUser_idcard("340826198806280833");
 //		txFaceService.faceProcess(tempUser);
@@ -74,7 +74,7 @@ public class TestService {
 				System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 				List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(tempUser.getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 				if(listDA!=null&&listDA.size()>0){
-					System.out.println("7200ç§’å†…è°ƒç”¨è¿‡");
+					System.out.println("7200ÃëÄÚµ÷ÓÃ¹ı");
 //					modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
 				}else{
 					txFaceService.faceProcess(tempUser);
@@ -85,7 +85,7 @@ public class TestService {
 //        da.setUrl("http://test");
 //        da.setCreate_time(new Date());
 //        da.setRequest_id("12");
-//        da.setUser_idcard("æ¨ä¼Ÿ");
+//        da.setUser_idcard("ÑîÎ°");
 //        detectAuthService.insertDA(da);
 	}
 }
