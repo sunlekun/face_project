@@ -32,4 +32,11 @@ public class DetectAuthServiceImpl implements DetectAuthService {
 		detectAuthDao.insertDA(detectAuth);
 		
 	}
+
+	@Override
+	public String findUserId(String bizToken) {
+		// TODO Auto-generated method stub
+		return detectAuthDao.findUserId(bizToken);
+	}
+
 }

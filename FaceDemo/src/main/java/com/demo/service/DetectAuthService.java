@@ -14,4 +14,6 @@ public interface DetectAuthService {
 	List<DetectAuth> findDetectAuthByIdAndTime(String userIdcard,String time);
 
 	void insertDA(DetectAuth detectAuth);
+
+	String findUserId(String bizToken);
 }

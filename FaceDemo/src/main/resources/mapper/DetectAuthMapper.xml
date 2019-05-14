@@ -13,4 +13,9 @@
 	INSERT INTO detectAuth (bizToken, url, create_time, request_id, user_idcard) 
 	VALUES (#{bizToken}, #{url}, #{create_time}, #{request_id}, #{user_idcard});
 	</insert> 
+	
+	<select id="findUserId" resultType="String" > 
+	   select id from temp_users where 
+	   user_idcard = (select user_idcard from detectAuth where bizToken=#{bizToken})
+    </select> 
 </mapper>
