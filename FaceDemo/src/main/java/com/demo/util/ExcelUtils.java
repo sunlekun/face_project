@@ -34,7 +34,7 @@ public class ExcelUtils {
 	 * @return 返回一个HSSFWorkbook
 	 * @throws Exception
 	 */
-	public static <T> HSSFWorkbook export(
+	public static <T> HSSFWorkbook export1(
 			String fileName, String[] excelHeader, Collection<T> dataList)
 			throws Exception {
 		
@@ -133,9 +133,7 @@ public class ExcelUtils {
 		return wb;
 	}
 	
-	public static <T> HSSFWorkbook export(
-			String fileName, String[] excelHeader, List<TempUser> dataList)
-			throws Exception {
+	public static <T> HSSFWorkbook export(String fileName, String[] excelHeader,  Collection<T>  dataList)throws Exception {
 		
 		// 创建一个Workbook，对应一个Excel文件
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -161,15 +159,18 @@ public class ExcelUtils {
 		 
 		// 在sheet中添加标题行
 		HSSFRow row = sheet.createRow((int) 0);// 行数从0开始
+		HSSFCell sequenceCell = row.createCell(0);// cell列 从0开始 第一列添加序号
+		sequenceCell.setCellValue("序号");
+		sequenceCell.setCellStyle(titleStyle);
 		sheet.autoSizeColumn(0);// 自动设置宽度
-		 
+		
 		
 		// 为标题行赋值
 		for (int i = 0; i < excelHeader.length; i++) {
 			HSSFCell titleCell = row.createCell(i + 1);// 0号位被序号占用，所以需+1
 			titleCell.setCellValue(excelHeader[i]);
 			titleCell.setCellStyle(titleStyle);
-			sheet.autoSizeColumn(i);// 0号位被序号占用，所以需+1
+			sheet.autoSizeColumn(i+1);// 0号位被序号占用，所以需+1
 		}
 				
 				
@@ -190,7 +191,7 @@ public class ExcelUtils {
 		dataFont.setFontName("宋体"); // 字体
 		dataStyle.setFont(dataFont);
 		// 遍历集合数据，产生数据行
-		Iterator<TempUser> it = dataList.iterator();
+		Iterator<T> it = dataList.iterator();
 		int index = 0;
 		while (it.hasNext()) {
 			index++;// 0号位被占用 所以+1
@@ -200,12 +201,13 @@ public class ExcelUtils {
 			sequenceCellValue.setCellValue(index);
 			sequenceCellValue.setCellStyle(dataStyle);
 			sheet.autoSizeColumn(0);
-			TempUser t =  it.next();
+			
+			TempUser t =  (TempUser)it.next();
 			String value="";//姓名#身份证号码#类型#乡镇办#村名#手机号#是否审核通过
 			for (int i = 0; i < excelHeader.length; i++) {
 				HSSFCell dataCell = row.createCell(i + 1);
-				dataCell.setCellStyle(dataStyle);
-				
+				dataCell.setCellStyle(dataStyle);				 
+				sheet.autoSizeColumn(i + 1);
 				switch(i){
 				case 0:
 				    value=t.getUser_name();
