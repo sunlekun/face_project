@@ -115,18 +115,18 @@ function infoFormatter( value, row, index){
 	   '<div  style="float: left;">'+
 		   '<shiro:hasPermission name="randomCheck:Confirm">'+
 		      '<a class="user-avatar" href="randomCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id='+row['id']+'&video_id='+row['video_id']+'">'+
-		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
+		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
 		  '<shiro:lacksPermission name="randomCheck:Confirm">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
-		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
+		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
 		  '</shiro:lacksPermission>'+
 	   '</div>'+
        '<div class="user-box" style="float: left;">'+ 
           '<h4><b style="font-size:16px;" title="姓名：'+row['user_name']+'">'+row['user_name']+'</b> <y title="年份：'+row['year']+'">(采集年份：'+row['year']+')</y></h4>'+
-          '<i>采集时间：'+d+'</i>'+
+          '<i>所属乡镇：'+row['user_township']+'-'+row['user_village']+'</i>'+
           '<span>'+
            ' 身份证号：'+row['user_idcard']+
          ' </span>'+
@@ -205,7 +205,7 @@ function infoFormatter( value, row, index){
         <ul class="icon-list">
           
         </ul>
-         <shiro:hasPermission name="randomCheck:Show">
+         <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
           <div class="rule-single-select">
             <select name="video_status" onchange="Search()" id="video_status">
@@ -219,14 +219,7 @@ function infoFormatter( value, row, index){
         </div>
         
       
-          <div class="menu-list"> 
-          <div class="rule-single-select">
-            <select name="status" onchange="Search()" id="status">
-	           <option  ${status==null?"selected='selected'":'' } value="">人工抽查审核状态</option>
-	           <option  ${status==1?"selected='selected'":'' }  value="1">待抽查审核</option>
-               <option  ${status==2?"selected='selected'":'' }  value="2">抽查通过</option>
-	           <option  ${status==3?"selected='selected'":'' }  value="3">抽查未通过</option> 
-        </select>
+        
         </div>
         </div>
         

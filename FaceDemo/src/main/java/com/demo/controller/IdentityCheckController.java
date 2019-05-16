@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
+import com.demo.model.RandomCheck;
 import com.demo.model.VideoIdent;
 import com.demo.realm.PermissionName;
 import com.demo.service.VideoIdentService; 
@@ -64,6 +65,26 @@ public class IdentityCheckController {
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 	    modelAndView.setViewName("admin/identityCheckList"); 
 	    return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/toIdentityCheckConfirm")
+	@RequiresPermissions("identityCheck:Confirm")
+	@PermissionName("抽查认证")
+	public ModelAndView toRandomCheckConfirm(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+//		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	
+		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id);
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+//		modelAndView.addObject("randomCheck", randomCheck); 
+		modelAndView.addObject("status", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.setViewName("admin/randomCheckConfirm"); 
+		return modelAndView;
 	}
 	
 }
