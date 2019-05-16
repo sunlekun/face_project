@@ -125,7 +125,6 @@ public class TestService {
 	
 	@Test
 	public void test3() {
-		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
-		System.out.println(userId);
+		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
 	}
 }

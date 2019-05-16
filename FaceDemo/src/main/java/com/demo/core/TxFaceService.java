@@ -1,5 +1,6 @@
 package com.demo.core;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -16,6 +17,8 @@ import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
 import com.demo.service.DetectAuthService;
 import com.demo.service.VideoIdentService;
+import com.demo.util.Base64Utils;
+import com.demo.util.DateFormatUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
@@ -83,6 +86,12 @@ public class TxFaceService {
 	 */
 	@Value("#{sysConfig.action}")
     public String action;
+	
+	/**
+	 * 版本号
+	 */
+	@Value("#{sysConfig.filePuth}")
+    public String filePuth;
 	
 	public DetectAuthRespBean faceProcess(TempUser tempUser){
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
@@ -152,7 +161,6 @@ public class TxFaceService {
 	            GetDetectInfoRequest req = GetDetectInfoRequest.fromJsonString(mapJakcson, GetDetectInfoRequest.class);
 	            
 	            GetDetectInfoResponse resp = client.GetDetectInfo(req);
-	            String respStr = resp.getDetectInfo();
 	            
 	            JsonParser jp = new JsonParser();
 	    		//将json字符串转化成json对象
@@ -161,10 +169,14 @@ public class TxFaceService {
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
 	            String  userId = detectAuthService.findUserId(BizToken);
+	            String imgName = userId+".jpg";
+	            String audioName = userId+".mp4";
+	            Base64Utils.base64ToFile(img,filePuth+DateFormatUtil.getCurrentDT()+"//",imgName);
+	            Base64Utils.base64ToFile(audio,filePuth+DateFormatUtil.getCurrentDT()+"//",audioName);
 	            VideoIdent videoIdent = new VideoIdent();
 	            videoIdent.setUser_id(Integer.valueOf(userId));
-	            videoIdent.setImg_url(img);
-	            videoIdent.setAudio_url(audio);
+	            videoIdent.setImg_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+imgName);
+	            videoIdent.setVideo_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+audioName);
 	            int video_status;
 	            if("0".equals(status)){
 	            	video_status=2;

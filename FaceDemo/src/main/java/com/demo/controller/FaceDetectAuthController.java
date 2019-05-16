@@ -96,7 +96,7 @@ public class FaceDetectAuthController {
 		
 		String BizToken = request.getParameter("BizToken");
 		if(!StringUtils.isEmpty(BizToken)){
-			
+			txFaceService.notifyProcess(BizToken);
 		}
 		return null;
 		
