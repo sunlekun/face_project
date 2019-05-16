@@ -83,6 +83,8 @@
         </select>
         
         
+        
+        
         <select id="findVideoListByUserId"    resultType="videoIdent">
 			select r.* ,u.user_name as user_name from video_ident r    LEFT JOIN users u on u.id=r.user_id 
       	    where r.is_delete=0    and u.is_delete=0 and r.user_id=#{user_id} 
