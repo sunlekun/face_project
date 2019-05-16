@@ -95,7 +95,7 @@ public class TempUserAuditController {
 			type="Word";
 			modelAndView.setViewName("admin/tempUserAuditList"); 
 		    }
-		System.out.println("status=="+request.getParameter("status"));
+	 
 		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.addObject("type", type);   
 		return modelAndView;
@@ -104,7 +104,7 @@ public class TempUserAuditController {
 	@RequestMapping(value = "/tempUserAuditList")	
 	@RequiresPermissions("tempUserAudit:Show")
 	public void tempUserAuditList(HttpServletRequest request,HttpServletResponse response) throws IOException {
-		System.out.println("status=="+request.getParameter("status")); 
+		 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
 		map.put("data_type", manager.getUser_type());
@@ -215,7 +215,7 @@ public class TempUserAuditController {
 	
 	@RequestMapping(value = "/downExcel")
 	 @RequiresPermissions("tempUserAudit:Show")	
-	public  HttpServletResponse downExcel(HttpServletRequest request, HttpServletResponse response){
+	public  void downExcel(HttpServletRequest request, HttpServletResponse response){
 		 List<File> files = new ArrayList<File>();
      	Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
  		HashMap<String ,String > map=new HashMap<String ,String >(); 
@@ -246,11 +246,11 @@ public class TempUserAuditController {
 			   e.printStackTrace();
 			}
 		
-		 return response ;
+		 //return response ;
 	}
 	@RequestMapping(value = "/downLoadFiles")
 	 @RequiresPermissions("tempUserAudit:Show")	
-	public  HttpServletResponse downLoadFiles(HttpServletRequest request, HttpServletResponse response)	   throws Exception {
+	public  void downLoadFiles(HttpServletRequest request, HttpServletResponse response)	   throws Exception {
 	        try {
 	            /**这个集合就是你想要打包的所有文件，
 	             * 这里假设已经准备好了所要打包的文件
@@ -312,7 +312,7 @@ public class TempUserAuditController {
 	                zipOut.close();
 	                fous.close();
 	              
-	               return downloadZip(file,response);
+	                downloadZip(file,response);
 	            }catch (Exception e) {
 	                    e.printStackTrace();
 	                }
@@ -323,7 +323,7 @@ public class TempUserAuditController {
 	               // OutputStream out = response.getOutputStream();
 	               
 	         
-	            return response ;
+	            
 	        }
 	    
 	      /**
@@ -338,7 +338,7 @@ public class TempUserAuditController {
 	                zipFile(file, outputStream);
 	            }
 	        }
-	    public static HttpServletResponse downloadZip(File file,HttpServletResponse response) {
+	    public static void downloadZip(File file,HttpServletResponse response) {
 	        try {
 	        // 以流的形式下载文件。
 	        InputStream fis = new BufferedInputStream(new FileInputStream(file.getPath()));
@@ -366,7 +366,7 @@ public class TempUserAuditController {
 	             
 	             file.delete();
 	        }
-	        return response;
+	      
 	    }
 
 	    /**  

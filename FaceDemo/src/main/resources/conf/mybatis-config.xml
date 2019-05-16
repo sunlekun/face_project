@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="VideoIdent" type="com.demo.model.VideoIdent" />
 		<typeAlias alias="TempUser" type="com.demo.model.TempUser" />
 		<typeAlias alias="DetectAuth" type="com.demo.model.DetectAuth" />
+		<typeAlias alias="Log" type="com.demo.model.Log" />
 	</typeAliases>
 	
 	<!-- 配置分页插件 PageHelper -->  

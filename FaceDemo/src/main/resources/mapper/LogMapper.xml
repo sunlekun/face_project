@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.LogDao">
+    
+	<select id="findAllLog"  resultType="Log">
+		select l.*  from manager_log l    order by add_time desc
+	</select>
+	  
+	<select id="findLogByTime"   resultType="Log" >
+		select l.* from manager_log l where 1=1 
+		
+		 
+        <if test="startTime != null and startTime != ''">
+		and unix_timestamp(l.add_time) &gt;= unix_timestamp(#{startTime})
+		</if>
+		<if test="endTime != null and endTime != ''">
+		and unix_timestamp(l.add_time) &lt;=  unix_timestamp(#{endTime})
+		</if>
+
+		 order by add_time desc
+	</select>
+	
+	<insert id="insertLog" parameterType="Log" useGeneratedKeys="true" keyProperty="id">
+		insert into xzb(user_id,user_name,action_type,remark,user_ip,add_time) 
+		values (#{user_id} ,#{user_name},#{action_type},#{remark},#{user_ip},#{add_time})
+	</insert>
+	 
+	
+	 
+</mapper>

@@ -1,0 +1,34 @@
+package com.demo.service.impl;
+
+import java.util.List; 
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+ 
+ 
+
+
+import com.demo.dao.LogDao;
+import com.demo.model.Log;
+import com.demo.service.LogService;
+@Service
+public class LogServiceImpl implements LogService{
+	@Autowired
+    @Qualifier("logDao")
+    private LogDao logDao;
+	
+	public List<Log>  findAllLog(){
+		return logDao.findAllLog();
+	}
+	public List<Log>  findLogByTime(String startTime, String endTime){
+		return logDao.findLogByTime(startTime,  endTime);
+	}
+	public int  insertLog(Log log){
+		return logDao.insertLog(log);
+	}
+}
