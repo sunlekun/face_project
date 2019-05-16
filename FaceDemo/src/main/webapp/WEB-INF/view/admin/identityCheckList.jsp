@@ -63,12 +63,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    
 		}
        })
+
 // 对Date的扩展，将 Date 转化为指定格式的String
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
 // 例子：
 // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
-// (new Date()).Format("yyyy-M-d h:m:s.S")   ==> 2006-7-2 8:9:4.18
+// (new Date()).Format("yyyy-M-d h:m:s.S")?? ==> 2006-7-2 8:9:4.18
 Date.prototype.Format = function (fmt) { //author: meizz
 var o = {
 "M+": this.getMonth() + 1, //月份
@@ -84,6 +85,7 @@ for (var k in o)
 if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 return fmt;
 }
+
     function timeFormat(val) {
     if (val != null) {
             var date = new Date(val);
@@ -92,16 +94,20 @@ return fmt;
         }
 	}
 	
-	
+    
 	function strFormat(val) { 
          if (val == 3) 
-         return "抽查审核未通过";
+         return "认证未通过，详情请咨询当地乡镇办";
         else  if (val == 2)  
-            return "抽查审核通过";
+            return "审核通过";
         else 
            return "等待人工抽查审核";
          
 	}
+    function dataFormat(val) { 
+        return val;
+	}
+
  
 function infoFormatter( value, row, index){ 
  
@@ -135,14 +141,14 @@ function infoFormatter( value, row, index){
 }
 	function actionFormatter(value, row, index) { 
  <%--  return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
-     return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>"; 
- 
+<%--      return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";  --%>
+return "<shiro:hasPermission name='randomCheck:Confirm'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";
     } 
     
      
       function Search(){
       
-     document.getElementById("form1").action="<%=path%>/identityCheck/toIdentityCheckList"; 
+     document.getElementById("form1").action="<%=path%>/identityCheck/toIdentityCheckList?video_status=${video_status}"; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -166,7 +172,7 @@ function infoFormatter( value, row, index){
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="<%=path%>/identityCheck/randomCheckDelete"; 
+        from.action="<%=path%>/identityCheck/identityCheckDelete"; 
         from.submit();
        }  
      
@@ -200,27 +206,31 @@ function infoFormatter( value, row, index){
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          
+       
+        <shiro:hasPermission name="identityCheck:Delete">
+            <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
+        </shiro:hasPermission>
+         <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="/identityCheck/toIdentityCheckList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="/identityCheck/toIdentityCheckList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+           <li><a id="btnDownExcel" href="identityCheck/downExcel?video_status=${video_status}&type=${type}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
         </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
-          <div class="rule-single-select">
-            <select name="video_status" onchange="Search()" id="video_status">
-	           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
-	           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
-               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
-	           <option  ${video_status==3?"selected='selected'":'' }  value="3">匹配失败</option>
-               <option  ${video_status==4?"selected='selected'":'' }  value="4">黑名单</option>
-        </select>
-        </div>
+        	  <div class="rule-single-select">
+         		   <select name="video_status" onchange="Search()" id="video_status">
+			           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
+			           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
+		               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
+			           <option  ${video_status==3?"selected='selected'":'' }  value="3">匹配失败</option>
+		               <option  ${video_status==4?"selected='selected'":'' }  value="4">黑名单</option>
+		    	    </select>
+        		
+      		  </div>
         </div>
         
-      
-        
-        </div>
-        </div>
         
       </shiro:hasPermission>
+     
       </div>
        
     </div>
@@ -250,9 +260,11 @@ function infoFormatter( value, row, index){
             <th data-sortable="true" data-field="title" data-align="left" 
                 data-filter-control="input" data-formatter="infoFormatter">用户信息
             </th>
-            
-           <th data-sortable="true" data-field="status" data-align="center"
-                data-filter-control="input"  data-formatter="strFormat">人工抽查审核状态
+            <th data-sortable="true"  data-field="data_type" data-align="center"
+                data-filter-control="input" data-formatter="dataFormat">类型
+            </th>
+           <th data-sortable="true" data-field="video_status" data-align="center"
+                data-filter-control="input"  data-formatter="strFormat">视频认证状态
             </th>           
             <th data-sortable="true"  data-field="add_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">创建时间

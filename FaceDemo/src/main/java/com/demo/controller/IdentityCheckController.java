@@ -1,6 +1,9 @@
 package com.demo.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
 import com.demo.model.RandomCheck;
+import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
 import com.demo.realm.PermissionName;
 import com.demo.service.VideoIdentService; 
+import com.demo.util.ExcelUtils;
 
 /**
  * @author lekun.sun
@@ -102,6 +108,43 @@ public class IdentityCheckController {
 		
 		modelAndView.setViewName("redirect:/identityCheck/toIdentityCheckList");
 		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/downExcel")
+	public  void downExcel(HttpServletRequest request, HttpServletResponse response){ 
+		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		HashMap<String ,Object > map=new HashMap<String ,Object >();
+		map.put("video_status", request.getParameter("video_status"));
+//		map.put("status", request.getParameter("status"));
+		map.put("data_type", manager.getUser_type());
+		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
+//		String jsons = JSON.toJSONString(identityChecks);
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+		String fileName="视频认证审核人员"+df.format(System.currentTimeMillis());
+	     
+		try {
+			 // 设置请求
+			/*response.setContentType("application/application/vnd.ms-excel");
+			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));*/
+			
+			response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
+	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(fileName + ".xls", "UTF-8"));
+			
+			String[] excelHeader = {"姓名","身份证号码","类型","乡镇办","村名","手机号","是否审核通过"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+			HSSFWorkbook wb=ExcelUtils.export2( fileName, excelHeader, identityChecks);//调用封装好的导出方法，具体方法在下面
+			 
+			OutputStream outputStream = response.getOutputStream();// 打开流
+			wb.write(outputStream);// HSSFWorkbook写入流
+			wb.close();// HSSFWorkbook关闭
+			outputStream.flush();// 刷新流
+			outputStream.close();// 关闭流	 
+			 } catch (Exception e) {
+			   e.printStackTrace();
+			}
+		
+		 //return response ;
 	}
 	
 }
