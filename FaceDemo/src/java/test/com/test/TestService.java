@@ -41,6 +41,12 @@ public class TestService {
 	private  TxFaceService txFaceService;
 	@Test
 	public void test() throws Exception{
+		
+		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
+		
+		/**
+		 * 
+		
 		List<TempUser> users = tempUserService.findTempUserByUserIdcard("411324198910014526");
 		System.out.println(users.size());
 		LocalDateTime time = LocalDateTime.now();
@@ -59,10 +65,13 @@ public class TestService {
 		
 		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 		System.out.println(list.size());
+		 */
 	}
 	
 	@Test
 	public void test1() {
+		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
+		System.out.println(userId);
 		//验证在7200秒内是或否调用核身前置接口
 		TempUser tempUser = new TempUser();
 		tempUser.setUser_idcard("340826198806280833");
@@ -87,5 +96,36 @@ public class TestService {
 //        da.setRequest_id("12");
 //        da.setUser_idcard("杨伟");
 //        detectAuthService.insertDA(da);
+	}
+	
+	@Test
+	public void test2() {
+		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
+//		System.out.println(userId);
+		List<TempUser> users = tempUserService.findTempUserByUserIdcard("411324198910014526");
+		System.out.println(users.size());
+		LocalDateTime time = LocalDateTime.now();
+//		LocalDateTime date= time.withDayOfMonth(1);
+//		LocalDate today = LocalDate.now();//取当前时间
+//		LocalDate firstDate = today.withDayOfMonth(1);//当月第一天
+		
+		
+		Date date = new Date();
+		System.out.println(date);
+		long l = 7200*1000;
+		Date beforeDate = new Date(date .getTime() + l);
+		System.out.println(beforeDate);
+		System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		
+		
+		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+		System.out.println(list.size());
+	}
+	
+	
+	@Test
+	public void test3() {
+		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
+		System.out.println(userId);
 	}
 }
