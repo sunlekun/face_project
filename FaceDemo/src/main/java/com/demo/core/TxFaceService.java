@@ -162,7 +162,18 @@ public class TxFaceService {
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
 	            String  userId = detectAuthService.findUserId(BizToken);
 	            VideoIdent videoIdent = new VideoIdent();
-//	            videoIdent.setUser(user);
+	            VideoIdent videoIdent = new VideoIdent();
+	            videoIdent.setUser_id(Integer.valueOf(userId));
+	            videoIdent.setImg_url(img);
+	            videoIdent.setAudio_url(audio);
+	            int video_status;
+	            if("0".equals(status)){
+	            	video_status=2;
+	            }else{
+	            	video_status=3;
+	            }
+	            videoIdent.setAdd_time(new Date());
+	            videoIdent.setVideo_status(video_status);
 	            videoIdentService.insertVL(videoIdent);
 		   } catch (Exception e) {
 	                System.out.println(e.toString());
