@@ -136,7 +136,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Show">
 	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downLoadFiles?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
-	          <li><a id="btnDownExcel" href="tempUserAudit/downExcel?status=${status}&type=${type}"><i class="iconfont icon-list-txt"></i><span>Excel数据下载</span></a></li>
+	          <li><a id="btnDownExcel" href="tempUserAudit/downExcel?status=${status}&type=${type}"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
+	          <li><a id="btnUploadImg" href="tempUserAudit/UploadImg?status=${status}&type=${type}"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
           </shiro:hasPermission>
           
            

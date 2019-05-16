@@ -229,14 +229,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            		 <i class="iconfont icon-pencil"></i>
             </shiro:lacksPermission>
             </c:if>
-            
+     <%--        
             <shiro:hasPermission name="tempUser:Add">
           	 	 <a href="tempUser/toTempUserAdd?status=${status}&type=${type }" title="导入"><i class="iconfont icon-pic"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Add">
                <i class="iconfont icon-pic"></i>
             </shiro:lacksPermission>
-            
+             --%>
             
             <shiro:hasPermission name="tempUser:View">
           	 	 <a href="tempUser/tempUserDetial?status=${status}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 

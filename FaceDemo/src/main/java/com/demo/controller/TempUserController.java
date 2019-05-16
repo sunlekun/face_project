@@ -79,7 +79,7 @@ public class TempUserController {
 		{
 			type="Word";
 			modelAndView.setViewName("admin/tempUserList"); 
-		    }
+		 }
 	 
 		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.addObject("type", type);   

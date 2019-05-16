@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -28,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -36,14 +40,20 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import sun.misc.BASE64Encoder;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager; 
 import com.demo.model.TempUser;
+import com.demo.model.User;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.TempUserService;
+import com.demo.service.UserService;
 import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
 import com.demo.util.LoadProperties;
@@ -58,6 +68,9 @@ public class TempUserAuditController {
 	
 	@Autowired
 	private TempUserService tempUserService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private XzbService xzbService;
@@ -212,11 +225,115 @@ public class TempUserAuditController {
 		modelAndView.setViewName("redirect:/tempUserAudit/toTempUserAuditList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
 		return modelAndView;
 	}
+	@RequestMapping(value = "/uploadImgs")
+	@PermissionName("居民信息身份证图片上传")
+	public void uploadImgs(HttpServletRequest request, HttpServletResponse response) {
+		JSONObject object=new JSONObject(); 
+		String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
+		try {
+		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
+	    Map<String,MultipartFile> files=mul.getFileMap();
+	    
+	    List<List<String>> re=new ArrayList<List<String>>();
+	    for(MultipartFile file:files.values())
+	    {
+	
+	    List<String> r=new ArrayList<String>();
+		// 得到上传的文件名称，
+		String filename = file.getOriginalFilename();
+		System.out.println("filename:"+filename);
+		String idcard=filename.substring(0, filename.indexOf(".")) ;
+		
+		 
+		List<TempUser> tempUsers =tempUserService.findTempUserByUserIdcard(idcard);
+        if(tempUsers.size()>=1)
+		{
+        	List<User> olds=userService.findUserByUserIdcard(idcard);
+        	if(olds.size()>=1)
+        	{
+            	 
+        		 
+        		//重命名文件
+        		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
+        		file.transferTo(new File(idCardImgUploadSavePath + filename)); 
+        		
+        		r.add(idcard);
+            	r.add("替换成功");
+            	r.add("已存在该身份证的照片，已替换该");
+            }
+        	else{
+	        	User user =new User();
+	        	user.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+	    		user.setData_type(tempUsers.get(0).getData_type());
+	    		user.setMobile(tempUsers.get(0).getMobile());
+	    		user.setUser_idcard(tempUsers.get(0).getUser_idcard());
+	    		user.setUser_name(tempUsers.get(0).getUser_name());
+	    		user.setUser_township(tempUsers.get(0).getUser_township());
+	    		user.setUser_village(tempUsers.get(0).getUser_village());
+	    		 
+	    		//重命名文件
+	    		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
+	    		file.transferTo(new File(idCardImgUploadSavePath + filename));
+	    		user.setImg_url("/upload/"+filename);
+	    		userService.insertUser(user);
+	    		
+	    		r.add(idcard);
+	        	r.add("导入成功");
+	        	r.add("");
+        	}
+    		
+		}
+        else{
+        	r.add(idcard);
+        	r.add("未导入成功");
+        	r.add("没有该身份信息的信息");
+        }
+		
+		re.add(r);
+	    
+	    }
+		 
+		
+		response.setCharacterEncoding("utf-8");
+		
+		response.getWriter().write(object.toString());
+		} catch (IOException e) { 
+			e.printStackTrace();
+		}
+		}
+		 
+	public  void creatExcel(HttpServletRequest request, HttpServletResponse response){ 
+      
+ 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+ 		String fileName="图片信息导入结果"+df.format(System.currentTimeMillis());
+ 	     
+		try {
+			 // 设置请求
+ 			/*response.setContentType("application/application/vnd.ms-excel");
+ 			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));*/
+ 			
+ 			response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
+ 	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(fileName + ".xls", "UTF-8"));
+			
+			String[] excelHeader = {"身份证号码","导入结果","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+			HSSFWorkbook wb=ExcelUtils.export( fileName, excelHeader, null);//调用封装好的导出方法，具体方法在下面
+			 
+			OutputStream outputStream = response.getOutputStream();// 打开流
+			wb.write(outputStream);// HSSFWorkbook写入流
+			wb.close();// HSSFWorkbook关闭
+			outputStream.flush();// 刷新流
+			outputStream.close();// 关闭流	 
+			 } catch (Exception e) {
+			   e.printStackTrace();
+			}
+		
+		 //return response ;
+	}
+	
 	
 	@RequestMapping(value = "/downExcel")
 	 @RequiresPermissions("tempUserAudit:Show")	
-	public  void downExcel(HttpServletRequest request, HttpServletResponse response){
-		 List<File> files = new ArrayList<File>();
+	public  void downExcel(HttpServletRequest request, HttpServletResponse response){ 
      	Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
  		HashMap<String ,String > map=new HashMap<String ,String >(); 
  		map.put("data_type", manager.getUser_type());

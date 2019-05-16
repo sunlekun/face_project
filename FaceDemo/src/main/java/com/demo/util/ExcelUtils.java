@@ -132,8 +132,8 @@ public class ExcelUtils {
 	
 		return wb;
 	}
-	
-	public static <T> HSSFWorkbook export(String fileName, String[] excelHeader,  Collection<T>  dataList)throws Exception {
+	 
+public static <T> HSSFWorkbook export(String fileName, String[] excelHeader,  Collection<T>  dataList)throws Exception {
 		
 		// 创建一个Workbook，对应一个Excel文件
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -155,7 +155,7 @@ public class ExcelUtils {
 		titleStyle.setFont(titleFont);
 		// 在Workbook中添加一个sheet,对应Excel文件中的sheet
 		HSSFSheet sheet = wb.createSheet(fileName);
-		 
+		  
 		 
 		// 在sheet中添加标题行
 		HSSFRow row = sheet.createRow((int) 0);// 行数从0开始
