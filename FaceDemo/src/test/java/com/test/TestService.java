@@ -23,9 +23,9 @@ import com.demo.util.DateFormatUtil;
 
 /**
  * @author lekun.sun
- * @version ´´½¨Ê±¼ä£º2019Äê5ÔÂ10ÈÕ ÏÂÎç1:57:04
- * @ClassName ÀàÃû³Æ
- * @Description ÀàÃèÊö:²âÊÔÀà
+ * @version åˆ›å»ºæ—¶é—´ï¼š2019å¹´5æœˆ10æ—¥ ä¸‹åˆ1:57:04
+ * @ClassName ç±»åç§°
+ * @Description ç±»æè¿°:æµ‹è¯•ç±»
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:conf/spring-mybatis.xml","classpath:conf/application-context.xml"})
@@ -41,18 +41,12 @@ public class TestService {
 	private  TxFaceService txFaceService;
 	@Test
 	public void test() throws Exception{
-		
-		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
-		
-		/**
-		 * 
-		
 		List<TempUser> users = tempUserService.findTempUserByUserIdcard("411324198910014526");
 		System.out.println(users.size());
 		LocalDateTime time = LocalDateTime.now();
 //		LocalDateTime date= time.withDayOfMonth(1);
-//		LocalDate today = LocalDate.now();//È¡µ±Ç°Ê±¼ä
-//		LocalDate firstDate = today.withDayOfMonth(1);//µ±ÔÂµÚÒ»Ìì
+//		LocalDate today = LocalDate.now();//å–å½“å‰æ—¶é—´
+//		LocalDate firstDate = today.withDayOfMonth(1);//å½“æœˆç¬¬ä¸€å¤©
 		
 		
 		Date date = new Date();
@@ -65,14 +59,13 @@ public class TestService {
 		
 		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 		System.out.println(list.size());
-		 */
 	}
 	
 	@Test
 	public void test1() {
 		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
 		System.out.println(userId);
-		//ÑéÖ¤ÔÚ7200ÃëÄÚÊÇ»ò·ñµ÷ÓÃºËÉíÇ°ÖÃ½Ó¿Ú
+		//éªŒè¯åœ¨7200ç§’å†…æ˜¯æˆ–å¦è°ƒç”¨æ ¸èº«å‰ç½®æ¥å£
 		TempUser tempUser = new TempUser();
 		tempUser.setUser_idcard("340826198806280833");
 //		txFaceService.faceProcess(tempUser);
@@ -83,7 +76,7 @@ public class TestService {
 				System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 				List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(tempUser.getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
 				if(listDA!=null&&listDA.size()>0){
-					System.out.println("7200ÃëÄÚµ÷ÓÃ¹ı");
+					System.out.println("7200ç§’å†…è°ƒç”¨è¿‡");
 //					modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
 				}else{
 					txFaceService.faceProcess(tempUser);
@@ -94,37 +87,13 @@ public class TestService {
 //        da.setUrl("http://test");
 //        da.setCreate_time(new Date());
 //        da.setRequest_id("12");
-//        da.setUser_idcard("ÑîÎ°");
+//        da.setUser_idcard("æ¨ä¼Ÿ");
 //        detectAuthService.insertDA(da);
 	}
 	
 	@Test
 	public void test2() {
-		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
-//		System.out.println(userId);
-		List<TempUser> users = tempUserService.findTempUserByUserIdcard("411324198910014526");
-		System.out.println(users.size());
-		LocalDateTime time = LocalDateTime.now();
-//		LocalDateTime date= time.withDayOfMonth(1);
-//		LocalDate today = LocalDate.now();//È¡µ±Ç°Ê±¼ä
-//		LocalDate firstDate = today.withDayOfMonth(1);//µ±ÔÂµÚÒ»Ìì
-		
-		
-		Date date = new Date();
-		System.out.println(date);
-		long l = 7200*1000;
-		Date beforeDate = new Date(date .getTime() + l);
-		System.out.println(beforeDate);
-		System.out.println(DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
-		
-		
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(1,DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
-		System.out.println(list.size());
-	}
-	
-	
-	@Test
-	public void test3() {
-		txFaceService.notifyProcess("DDAFE2CA-11B0-4B73-BA3B-4408DA2B8CB2");
+		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
+		System.out.println(userId);
 	}
 }
