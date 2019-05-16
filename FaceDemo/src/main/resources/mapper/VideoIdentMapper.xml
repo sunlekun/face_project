@@ -40,8 +40,12 @@
 	
 		<result property="add_time" column="add_time" />
 		<result property="is_delete" column="is_delete" />
-		
-        <association property="user" column="user_id"     javaType="User" select="getUserById" />
+		<result property="user_name" column="user_name" />
+		<result property="user_idcard" column="user_idcard" />
+		<result property="user_township" column="user_township" />
+		<result property="user_village" column="user_village" />
+		<result property="user_img" column="user_img" />
+       <!--  <association property="user" column="user_id"     javaType="User" select="getUserById" /> -->
       
     </resultMap>
 	
@@ -68,16 +72,27 @@
 	</insert>
 	
 		<select id="findVideoListByMultiCondition" parameterType="java.util.HashMap"  resultType="videoIdent">
-			select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard  from video_ident r 
+			select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard,u.user_village as user_village,u.user_township as user_township,u.img_url as user_img from video_ident r 
 	   LEFT JOIN users u on u.id=r.user_id
 
-	 where r.is_delete=0   and v.is_delete=0 and u.is_delete=0
-		<if test="video_status != null and  video_status !='' ">  
+	 where r.is_delete=0    and u.is_delete=0
+		<if test="user_id != null and  user_id !=-1">  
         and r.video_status= #{video_status}   
         </if> 
-        <if test="status != null and  status !='' ">  
-       and r.status= #{status}   
-        </if>
+        
         </select>
+        
+        
+        <select id="findVideoListByUserId"    resultType="videoIdent">
+			select r.* ,u.user_name as user_name from video_ident r    LEFT JOIN users u on u.id=r.user_id 
+      	    where r.is_delete=0    and u.is_delete=0 and r.user_id=#{user_id} 
+        </select>
+        
+        <delete id="deleteVideoIdentBatch" parameterType="int">
+        update video_ident set is_delete=1  where id  in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 	
 </mapper>

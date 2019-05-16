@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,7 @@ import com.demo.service.TempUserService;
 import com.demo.service.UserService;
 import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
+import com.demo.util.ExportExcelUtils;
 import com.demo.util.LoadProperties;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -237,11 +241,10 @@ public class TempUserAuditController {
 	    List<List<String>> re=new ArrayList<List<String>>();
 	    for(MultipartFile file:files.values())
 	    {
-	
+	 
 	    List<String> r=new ArrayList<String>();
 		// 得到上传的文件名称，
-		String filename = file.getOriginalFilename();
-		System.out.println("filename:"+filename);
+		String filename = file.getOriginalFilename(); 
 		String idcard=filename.substring(0, filename.indexOf(".")) ;
 		
 		 
@@ -292,41 +295,75 @@ public class TempUserAuditController {
 		re.add(r);
 	    
 	    }
+	   
+	    //生成导入结果EXCel文件
+	    
+	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+ 		String fileName="图片信息导入结果"+df.format(System.currentTimeMillis());
+	    String[] excelHeader = {"身份证号码","导入结果","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+		 
+		ExportExcelUtils ee = new ExportExcelUtils("表格标题", Arrays.asList(excelHeader));
+
+		for (int i = 0; i < re.size(); i++) {
+			Row row = ee.addRow();
+			for (int j = 0; j < re.get(i).size(); j++) {
+				ee.addCell(row, j, re.get(i).get(j));
+			}
+		}
+		String zipFilePath=LoadProperties.loadProperties("common.properties", "tempFilePath");
+		ee.writeFile(zipFilePath+fileName + ".xlsx");
+		ee.dispose();
+		
+	
+		object.put("fileName",fileName + ".xlsx"); 
 		 
 		
-		response.setCharacterEncoding("utf-8");
-		
+		response.setCharacterEncoding("utf-8"); 
 		response.getWriter().write(object.toString());
 		} catch (IOException e) { 
 			e.printStackTrace();
 		}
 		}
-		 
-	public  void creatExcel(HttpServletRequest request, HttpServletResponse response){ 
-      
- 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
- 		String fileName="图片信息导入结果"+df.format(System.currentTimeMillis());
- 	     
-		try {
-			 // 设置请求
- 			/*response.setContentType("application/application/vnd.ms-excel");
- 			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));*/
- 			
- 			response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
- 	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(fileName + ".xls", "UTF-8"));
-			
-			String[] excelHeader = {"身份证号码","导入结果","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
-			HSSFWorkbook wb=ExcelUtils.export( fileName, excelHeader, null);//调用封装好的导出方法，具体方法在下面
-			 
-			OutputStream outputStream = response.getOutputStream();// 打开流
-			wb.write(outputStream);// HSSFWorkbook写入流
-			wb.close();// HSSFWorkbook关闭
-			outputStream.flush();// 刷新流
-			outputStream.close();// 关闭流	 
-			 } catch (Exception e) {
-			   e.printStackTrace();
-			}
-		
+	@RequestMapping(value = "/uploadImgsResultExcel")	 
+	public  void uploadImgsResultExcel(HttpServletRequest request, HttpServletResponse response){ 
+	
+	   String fileName = request.getParameter("fileName");
+	   String zipFilePath=LoadProperties.loadProperties("common.properties", "tempFilePath");
+       
+       try {
+ 	           response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
+ 	           response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(fileName, "UTF-8"));
+ 	   			 
+ 	            // 1.弹出下载框，并处理中文
+ 	            /** 如果是从jsp页面传过来的话，就要进行中文处理，在这里action里面产生的直接可以用
+ 	             * String filename = request.getParameter("filename");
+ 	             */
+ 	            /**
+ 	             if (request.getMethod().equalsIgnoreCase("GET")) {
+ 	             filename = new String(filename.getBytes("iso8859-1"), "utf-8");
+ 	             }
+ 	             */ 
+ 	            response.addHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
+
+ 	            // 2.下载
+ 	            OutputStream out = response.getOutputStream();
+ 	           
+ 	            // inputStream：读文件，前提是这个文件必须存在，要不就会报错
+ 	            InputStream is = new FileInputStream(zipFilePath+fileName );
+
+ 	            byte[] b = new byte[4096];
+ 	            int size = is.read(b);
+ 	            while (size > 0) {
+ 	                out.write(b, 0, size);
+ 	                size = is.read(b);
+ 	            }
+ 	            out.close();
+ 	            is.close();
+ 	        } catch (Exception e) {
+ 	            e.printStackTrace();
+ 	        }
+       new File(zipFilePath+fileName ).delete();
+        new File(zipFilePath+fileName ).deleteOnExit(); 
 		 //return response ;
 	}
 	
@@ -397,7 +434,7 @@ public class TempUserAuditController {
 	　　                                    * 这里的file路径发布到生产环境时可以改为
 	             */
 	    		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-	            String zipFilePath=LoadProperties.loadProperties("common.properties", "zipFilePath");
+	            String zipFilePath=LoadProperties.loadProperties("common.properties", "tempFilePath");
 	            
 	            
 	            

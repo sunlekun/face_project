@@ -18,5 +18,6 @@ public interface UserService {
 	 
 	public void insertUser(User user);
 	public void updateUser(User user);
+	public void updateUserName(User user);
 	public void deleteUserBatch(String[] ids);
 }

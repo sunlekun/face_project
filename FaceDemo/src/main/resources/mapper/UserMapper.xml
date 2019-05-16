@@ -24,11 +24,16 @@
 	 
 	 
 	 <select id="findAllUserByMultiCondition" parameterType="java.util.HashMap"  resultType="User">
-		select m.* from users m where m.is_delete=0 
+		select m.* ,v.add_time as add_time  from users m left join video_ident v on m.id=v.user_id  where m.is_delete=0  
 		
-		<if test="key!=null  and key!=''">   
-          and (m.user_name like '%#{key}%' or m.user_idcard like '%#{key}%' )
-        </if> 
+		 <if test="isHasVideo==1">   
+             and v.add_time is not null 
+        </if>
+        
+        <if test="isHasVideo==2">   
+             and v.add_time is null 
+        </if>
+        
         
          <if test="data_type!=null  and data_type!=''">   
           and m.data_type=#{data_type}
@@ -37,9 +42,14 @@
          <if test="user_township!=null  and user_township!=''">   
           and m.user_township=#{user_township}
         </if> 
-         <if test="status!=null  and status!=''">   
-          and m.status=#{status}
-        </if> 
+       
+        <if test="startTime != null and startTime != ''">
+		and unix_timestamp(v.add_time) &gt;= unix_timestamp(#{startTime})
+		</if>
+		<if test="endTime != null and endTime != ''">
+		and unix_timestamp(v.add_time) &lt;=  unix_timestamp(#{endTime})
+		</if>
+		
 		 
 		order by m.add_time  desc
 	 
@@ -54,10 +64,6 @@
 	     select m.* from users m   where m.id=#{0} and m.is_delete=0 
 	 </select>
 	 
-  
- 
-	  
-	 
 	 <update id="updateUser" parameterType="User">
 		update users  
 		<set>  
@@ -67,7 +73,13 @@
        where id=#{id}
 	</update>
 	
-	 
+	 <update id="updateUserName" parameterType="User">
+		update users  
+		<set>  
+         user_name=#{user_name} 
+        </set> 
+       where id=#{id} and user_idcard=#{user_idcard}  
+	</update>
 
 	<insert id="insertUser" parameterType="User">
 		insert into users (user_name, user_idcard, user_township,user_village,data_type,mobile,img_url,add_time,update_time) 

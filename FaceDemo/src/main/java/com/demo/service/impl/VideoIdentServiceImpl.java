@@ -1,5 +1,5 @@
 package com.demo.service.impl;
-
+ 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
  
+
+
 
 
 
@@ -51,7 +53,9 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 			return videoIdentDao.findVideoListByIdAndTime(id,date);
 			
 		}
-
+		public List<VideoIdent> findVideoListByUserId(Integer user_id){
+			return videoIdentDao.findVideoListByUserId(user_id);
+		}
 		@Override
 		public void insertVL(VideoIdent videoIdent) {
 			videoIdentDao.insertVideoIdent(videoIdent);
@@ -61,6 +65,11 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		public List<VideoIdent> findVideoListByMultiCondition(Map map) {
 			// TODO Auto-generated method stub
 			return videoIdentDao.findVideoListByMultiCondition(map);
+		}
+
+		@Override
+		public void deleteVideoIdentBatch(String[] ids) {
+			videoIdentDao.deleteVideoIdentBatch(ids);
 		}
 		
 	}

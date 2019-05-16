@@ -180,17 +180,10 @@ function strFormat(val) {
                 async: true,
                 dataType: "json",
              
-                success: function (data, status) {
-                
-                    if (data.status == 'false') {
-                        alert(data.msg);
-                        return;
-                    }
-                    else {
-                       alert(data.msg);
-                       window.location.href = '<%=path%>/'+data.url;
-                   }                
-                    
+                success: function (data, status) { 
+              
+               window.location.href = "tempUserAudit/uploadImgsResultExcel?status=${status}&type=${type}&fileName="+data.fileName;
+                  
                    
 		}
        })  

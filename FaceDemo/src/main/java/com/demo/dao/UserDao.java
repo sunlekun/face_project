@@ -21,5 +21,6 @@ public interface UserDao {
 	
 	public void insertUser(User user);
 	public void updateUser(User user);
+	public void updateUserName(User user);
 	public void deleteUserBatch(String[] ids);
 }

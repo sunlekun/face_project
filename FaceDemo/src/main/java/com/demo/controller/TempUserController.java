@@ -49,7 +49,7 @@ public class TempUserController {
 	
 	@RequestMapping(value = "/toTempUserList")
 	@RequiresPermissions("tempUser:Show")
-	@PermissionName("居民信息采集管理")
+	@PermissionName("居民信息采集列表")
 	public ModelAndView toTempUserList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -108,7 +108,7 @@ public class TempUserController {
 	
 	@RequestMapping(value = "/tempUserDetial")
 	@RequiresPermissions("tempUser:View")
-	@PermissionName("居民信息采集详情")
+	@PermissionName("居民采集信息详情")
 	public ModelAndView tempUserDetial(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -126,7 +126,7 @@ public class TempUserController {
 	
 	@RequestMapping(value = "/toTempUserEdit")
 	@RequiresPermissions("tempUser:Edit")
-	@PermissionName("居民信息采集修改")
+	@PermissionName("居民采集信息删除")
 	public ModelAndView toTempUserEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -186,7 +186,7 @@ public class TempUserController {
 	
 	@RequestMapping(value = "/toTempUserAdd")
 	@RequiresPermissions("tempUser:Add")
-	@PermissionName("居民信息采集新增")
+	@PermissionName("居民信息采集增加")
 	public ModelAndView toTempUserAdd(HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView(); 
 		
@@ -241,7 +241,7 @@ public class TempUserController {
 	        
 	 
     	/*object.put("status", false); 
-	    object.put("msg", "用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
+	    object.put("msg", "*友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
      
 	          */
 	 
@@ -269,20 +269,20 @@ public class TempUserController {
 	    {
 	
 		
-		// 得到上传的文件名称，
+		 
 		String filename = file.getOriginalFilename();
 		String fileExtName = filename.substring(filename.lastIndexOf("."));
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-		//重命名文件
+		 
 		filename = df.format(System.currentTimeMillis()) + fileExtName;
  
 		file.transferTo(new File(collectInfoUploadSavePath + filename));
   
 	 /*    String thumbnail =  request.getParameter("IsThumbnail");         
-                //生成缩略图
+                
                 if ("1".equals(thumbnail))
                 {
-                    String sFileName = "thumb_" + filename;//缩略图文件名
+                    String sFileName = "thumb_" + filename;//缂╃暐鍥炬枃浠跺悕
                      
                     Thumbnails.of(infoUpdateSavePath + filename) 
                     .size(112, 112)  
@@ -305,7 +305,7 @@ public class TempUserController {
 	}
 	@RequestMapping(value = "/tempUserDelete")
 	@RequiresPermissions("tempUser:Delete")
-	@PermissionName("居民信息采集删除")
+	@PermissionName("居民信息删除")
 	public ModelAndView tempUserDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");
