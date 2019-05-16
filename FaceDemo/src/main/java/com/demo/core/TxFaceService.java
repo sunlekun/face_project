@@ -162,7 +162,6 @@ public class TxFaceService {
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
 	            String  userId = detectAuthService.findUserId(BizToken);
 	            VideoIdent videoIdent = new VideoIdent();
-	            VideoIdent videoIdent = new VideoIdent();
 	            videoIdent.setUser_id(Integer.valueOf(userId));
 	            videoIdent.setImg_url(img);
 	            videoIdent.setAudio_url(audio);
