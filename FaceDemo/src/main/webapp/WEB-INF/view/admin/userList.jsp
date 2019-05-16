@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>居民信息采集列表</title>
+<title>居民信息列表</title>
   
 <link rel="stylesheet" type="text/css" href="js/admin/scripts/artdialog/ui-dialog.css" />
 <link rel="stylesheet" type="text/css" href="css/admin/skin/icon/iconfont.css" />
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "tempUserAudit/tempUserAuditList?status=${status}&type=${type}",
+            url: "user/userList",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -53,14 +53,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+$element.id;                  
+                       window.location.href = "user/userDetial?id="+$element.id;                  
                      
                    });
                    
 		}
        })
 
- 
    // 对Date的扩展，将 Date 转化为指定格式的String
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
@@ -86,10 +85,15 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUserAudit:Edit'><a class='detial'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
+ var s="<shiro:hasPermission name='user:Edit'><a class='detial'  href = 'user/toUserEdit?id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
-		"<shiro:lacksPermission name='tempUserAudit:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
-   
+		"<shiro:lacksPermission name='user:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+  
+  var a='居民信息采集审核已通过，不能修改！';
+  if(row['status']==2)
+  s="<shiro:hasPermission name='user:Edit'><a class='detial'  href = 'javascript:alert(&apos;"+a+"&apos;);' >"+row['user_name']+"</a></shiro:hasPermission>"+
+ 
+		"<shiro:lacksPermission name='user:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
  return s;
 }
 
@@ -102,6 +106,7 @@ function strFormat(val) {
            return "待审核";
          
 	}
+	
     function timeFormat(val) {
     if (val != null) {
             var date = new Date(val);
@@ -112,20 +117,22 @@ function strFormat(val) {
 	
 	
 	function actionFormatter(value, row, index) {  
-	
-      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
-  
+	var a='居民信息采集审核已通过，不能修改！';
+	if(row['status']==2) 
+       return "<shiro:hasPermission name='user:Edit'><a   href = 'javascript:alert(&apos;"+a+"&apos;);' >修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+    else
+     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id'];
+          window.location.href = "<user/toUserEdit?status=${status}&type=${type}&id="+row['id'];
       } 
      } 
      
-      function Search(){
-     document.getElementById("form1").action="tempUserAudit/toTempUserAuditList?type=${type}"; 
+function Search(){
+     document.getElementById("form1").action="user/toUserList?type=${type}"; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -149,59 +156,18 @@ function strFormat(val) {
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUserAudit/tempUserAuditDelete?status=${status}&type=${type}"; 
+        from.action="user/userDelete?status=${status}&type=${type}"; 
         from.submit();
        }  
      
     }
 }
-
- function upLoadFiles(){
-  
-       var files = document.getElementById("file_Import").files;
-    
-         if(files.length==0)
-         {
-               alert("请选择要导入的文件!(支持'png', 'img'格式)");
-               return;
-          }
-             
-      var con=confirm("请确保上传文件为图片格式且文件的命名为身份证号，确定上传吗？"); //在页面上弹出对话框 
-     if(con==true)
-     {       /*   $('#files').click(); */
-               var formData = new FormData($('#form1')[0]);//序列化表单，
-                 
-                $.ajax({
-                type: 'post',
-                url: "tempUserAudit/uploadImgs?status=${status}&type=${type}",
-                data: formData ,
-                processData: false,
-                contentType: false,
-                async: true,
-                dataType: "json",
-             
-                success: function (data, status) { 
-              
-               window.location.href = "tempUserAudit/uploadImgsResultExcel?status=${status}&type=${type}&fileName="+data.fileName;
-                  
-                   
-		}
-       })  
-       
-    /*  var from=  document.getElementById("form1");
-      if(from!=null){
-        from.action="tempUserAudit/uploadImgs?status=${status}&type=${type}"; 
-        from.submit();
-       } */
-    } 
-     
- }
 	  
 </script>
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUserAudit/totempUserAuditList?type=${type}"  id="form1" enctype="multipart/form-data">
+<form method="post"  action="user/toUserList?status=${status}&type=${type}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -221,24 +187,18 @@ function strFormat(val) {
       <a class="menu-btn"></a>
       <div class="l-list">
         <ul class="icon-list">
-          <shiro:hasPermission name="tempUserAudit:Add">
-               <li><a class="add" href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type}"><i iconfont icon-add></i><span>新增</span></a></li>
+          <shiro:hasPermission name="user:Add">
+               <li><a class="add" href="user/toUserAdd?status=${status}&type=${type}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
-          <shiro:hasPermission name="tempUserAudit:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+          <shiro:hasPermission name="user:Delete">
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
           </shiro:hasPermission>
-          <shiro:hasPermission name="tempUserAudit:Show">
-	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downLoadFiles?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
-	          <li><a id="btnDownExcel" href="tempUserAudit/downExcel?status=${status}&type=${type}"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
-	          <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
-	      </shiro:hasPermission>
-          
            
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="user/toUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="user/toUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
         </ul>
         
-            <shiro:hasPermission name="tempUserAudit:Show">
+         <shiro:hasPermission name="user:Show">
 	          <div class="menu-list">
 	          <div class="rule-single-select">
 	            <select name="status" onchange="Search()" id="status">
@@ -281,11 +241,11 @@ function strFormat(val) {
             <th data-sortable="true" data-field="user_name" data-align="center"
                 data-filter-control="input"  data-formatter="infoFormatter">姓名
             </th>
-              <th data-sortable="true"  data-field="status" data-align="center"
+            <th data-sortable="true"  data-field="status" data-align="center"
                 data-filter-control="input" data-formatter="strFormat">审核状态
             </th>
-            
-            <th data-sortable="true"  data-field="audit_time" data-align="center"
+             
+             <th data-sortable="true"  data-field="audit_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">审核时间
             </th>
             
@@ -301,23 +261,9 @@ function strFormat(val) {
 </table>
   
   
-  
 </div>
 
-<div  style="padding-top:40px;">
-  <div class="btn-wrap" >
-  <table>
-  <tr><td>
-    <input type="file" name="file_Import" id="file_Import" class="input normal upload-path" onchange="change(this) "  multiple="multiple" />
-    </td>
-  
-    <td> 
-    <input type="button" name="btnImport" value="导入图片" id="btnImport" class="btn"  style="margin-left:10px;" onclick="upLoadFiles()"/>
-    </td>
-    </tr>
-    </table>
-  </div>
-</div>
+
 <!--/列表-->
  
 </form>
