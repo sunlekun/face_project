@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
  
+
 
 
 
@@ -53,6 +55,12 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		@Override
 		public void insertVL(VideoIdent videoIdent) {
 			videoIdentDao.insertVideoIdent(videoIdent);
+		}
+
+		@Override
+		public List<VideoIdent> findVideoListByMultiCondition(Map map) {
+			// TODO Auto-generated method stub
+			return videoIdentDao.findVideoListByMultiCondition(map);
 		}
 		
 	}
