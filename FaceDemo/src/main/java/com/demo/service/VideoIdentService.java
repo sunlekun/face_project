@@ -3,6 +3,8 @@ package com.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.demo.model.VideoIdent;
 
  
@@ -19,6 +21,7 @@ public interface VideoIdentService {
 	public List<String>  findVidoIdentYears();
 	public VideoIdent findVideoIdentById(Integer id);
 	public List<VideoIdent> findVideoListByIdAndTime(int id, String time);
+	public List<VideoIdent> findVideoListByUserId( Integer user_id);
 	void insertVL(VideoIdent videoIdent);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map); 
 }

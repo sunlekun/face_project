@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 
 
+
 import com.demo.dao.VideoIdentDao; 
 import com.demo.model.VideoIdent;
 import com.demo.service.VideoIdentService;
@@ -51,7 +52,9 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 			return videoIdentDao.findVideoListByIdAndTime(id,date);
 			
 		}
-
+		public List<VideoIdent> findVideoListByUserId(Integer user_id){
+			return videoIdentDao.findVideoListByUserId(user_id);
+		}
 		@Override
 		public void insertVL(VideoIdent videoIdent) {
 			videoIdentDao.insertVideoIdent(videoIdent);

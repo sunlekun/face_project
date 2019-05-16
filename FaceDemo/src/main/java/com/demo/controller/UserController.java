@@ -3,6 +3,8 @@ package com.demo.controller;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,13 +29,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager; 
 import com.demo.model.User;
+import com.demo.model.VideoIdent;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.UserService;
+import com.demo.service.VideoIdentService;
 import com.demo.service.XzbService;
-import com.demo.util.LoadProperties;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.demo.util.LoadProperties; 
 
 @Controller
 @RequestMapping(value = "/user")
@@ -47,16 +49,21 @@ public class UserController {
 	@Autowired
 	private XzbService xzbService;
 	
+	@Autowired
+	private VideoIdentService videoIdentService;
+	
 	@RequestMapping(value = "/toUserList")
 	@RequiresPermissions("user:Show")
-	@PermissionName("居民信息采集管理")
+	@PermissionName("用户信息列表")
 	public ModelAndView toUserList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		 
 		modelAndView.setViewName("admin/userList"); 
 		 
-	 
+		List<Xzb> xzbs= xzbService.findAllXzb();
+		modelAndView.addObject("xzbs", xzbs); 
+		
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
@@ -65,7 +72,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/userList")	
-	public void userList(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void userList(HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
 		 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
@@ -77,8 +84,29 @@ public class UserController {
 		map.put("user_township", user_township);
 		
 		map.put("isHasVideo", request.getParameter("isHasVideo"));
-		map.put("startTime", request.getParameter("startTime"));  
-		map.put("endTime", request.getParameter("endTime"));  
+		
+		
+		
+		String startTime1=request.getParameter("startTime")==null?"":request.getParameter("startTime");
+		String endTime1=request.getParameter("endTime")==null?"":request.getParameter("endTime");
+
+		String startTime=startTime1;
+		String endTime=endTime1;
+		
+		
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		 
+		if(!("").equals(startTime1)&&!("").equals(endTime1))
+			 if(sdf.parse(startTime1).getTime()>sdf.parse(endTime1).getTime()){//转成long类型比较
+				 
+	        	startTime=endTime1;
+	        	endTime=startTime1;
+	         }
+            
+		 
+		
+		map.put("startTime", startTime);  
+		map.put("endTime", endTime);  
 		List<User> users=  userService.findAllUserByMultiCondition(map); 
  		 
 		String jsons = JSON.toJSONString(users); 
@@ -93,36 +121,51 @@ public class UserController {
 	
 	@RequestMapping(value = "/userDetial")
 	@RequiresPermissions("user:View")
-	@PermissionName("居民信息采集详情")
+	@PermissionName("用户信息详情")
 	public ModelAndView userDetial(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
-		
-		User user= userService.findUserById(id) ;
-		List<Xzb> xzbs= xzbService.findAllXzb();
-		modelAndView.addObject("xzbs", xzbs); 
+		User   user= userService.findUserById(id) ; 
 		modelAndView.addObject("user", user); 
 		
-		String type=request.getParameter("type");
-		modelAndView.addObject("type", type);  
-		modelAndView.addObject("status", request.getParameter("status"));   
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		
 		modelAndView.setViewName("admin/userDetial"); 
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/userVideoIdentList") 
+	@PermissionName("用户认证信息列表")
+	public void userVideoIdentList(Integer id,HttpServletRequest request,HttpServletResponse response) throws IOException {
+	 
+		List<VideoIdent> videoIdents=videoIdentService.findVideoListByUserId(id);
+		String jsons = JSON.toJSONString(videoIdents); 
+		JSONObject object = new JSONObject();
+
+		object.put("status", "true");
+		object.put("jsons", jsons);
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write(object.toString());
+		
+	  
+	}
+	
 	@RequestMapping(value = "/toUserEdit")
 	@RequiresPermissions("user:Edit")
-	@PermissionName("居民信息采集修改")
+	@PermissionName("用户信息编辑")
 	public ModelAndView toUserEdit(int id,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		User user= userService.findUserById(id) ;  
-		List<Xzb> xzbs= xzbService.findAllXzb();
-		modelAndView.addObject("xzbs", xzbs); 
+		User user= userService.findUserById(id) ;   
 		modelAndView.addObject("user", user); 
 		
-		String type=request.getParameter("type");
-		modelAndView.addObject("type", type);  
-		modelAndView.addObject("status", request.getParameter("status"));   
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		
 		modelAndView.setViewName("admin/userEdit");
 		
 		return modelAndView;
@@ -131,55 +174,32 @@ public class UserController {
 	public ModelAndView userEdit(User user ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView();
-			
-		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
-		    
-		    
-		if (hid_photo_names != null && hid_photo_names.length == 3)
-		{
-			String path = "";
-			for (int i = 0; i < hid_photo_names.length; i++) {
-				String[] name = hid_photo_names[i].split("\\|");
-				
-				/* if(name!=null) 
-				 { 
-					 String[]	 name1=name[1].split("\\/"); 
-					 System.out.println(name1[2]);
-				     path+=name[1]+";";
-				 }*/
-				 
-				path += name[1] + ";";
-			}
-
-			if (path.length() > 0)
-			{
-				path = path.substring(0, path.length() - 1);
-				/*user.setOriginal_path(path);
-				user.setOriginal_path(path);*/
-			}
-		}
-	 		
+			 
 		 
-		userService.updateUser(user);
+		userService.updateUserName(user);
 
-	
-		modelAndView.setViewName("redirect:/user/toUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status1"));
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township1"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.setViewName("redirect:/user/toUserList");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/toUserAdd")
 	@RequiresPermissions("user:Add")
-	@PermissionName("居民信息采集新增")
+	@PermissionName("用户信息增加")
 	public ModelAndView toUserAdd(HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView(); 
 		
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs); 
 		
-		String type=request.getParameter("type");
-		modelAndView.addObject("type", type);  
-		modelAndView.addObject("status", request.getParameter("status"));
-	 
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		
 		modelAndView.setViewName("admin/userAdd");
 		
 		return modelAndView;
@@ -189,7 +209,7 @@ public class UserController {
 		
 		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
 		    
-		  
+		 String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
 		
 			JSONObject object = new JSONObject();
 
@@ -198,40 +218,31 @@ public class UserController {
 		    ModelAndView modelAndView = new ModelAndView();
 	       
 		    user.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
-	 		 
-	 		if(hid_photo_names!=null&&hid_photo_names.length==3)
-	 		{
-	 		String path="";
-	        for(int i=0;i<hid_photo_names.length;i++)
-	        {    
-	        	String[] name=hid_photo_names[i].split("\\|"); 
-	        /*	if(name!=null&&name.length>=2) 
+	 		 String oldFileName="";
+	 		if(hid_photo_names!=null&&hid_photo_names.length==1)
+	 		{   
+	 			 
+	        	String[] name=hid_photo_names[0].split("\\|"); 
+	        	if(name!=null&&name.length>=2) 
 	        	{ 
 	        		String[] name1=name[1].split("\\/"); 
-	        		System.out.println(name1[3]);
-	        		path+=name[1]+";";
-	        	}*/
-	        	path+=name[1]+";";
-	        }
-	         
-	        if(path.length()>0)
-	       {
-	        	path=path.substring(0, path.length()-1);
-	        	/*user.setOriginal_path(path);
-	        	user.setOriginal_path(path);*/
-	       }
+	        		//System.out.println(name1[3]);
+	        		oldFileName=name1[3];
+	        	}
+	        	 
 	 		}
-	        
-	 
-    	/*object.put("status", false); 
-	    object.put("msg", "用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
+	 		String fileExtName = oldFileName.substring(oldFileName.lastIndexOf("."));
+	        new File(idCardImgUploadSavePath+oldFileName).renameTo(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName));
+	        user.setImg_url("/upload/" +user.getUser_idcard()+fileExtName);
      
-	          */
 	 
 		userService.insertUser(user);
 
-	 
-		modelAndView.setViewName("redirect:/user/toUserList?type="+request.getParameter("type"));
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township1"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.setViewName("redirect:/user/toUserList");
 
 		return modelAndView;
 	}
@@ -243,7 +254,7 @@ public class UserController {
 	public void upload( /*@RequestParam("file")  MultipartFile file,*/HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
 		JSONObject object=new JSONObject(); 
-		String collectInfoUploadSavePath = LoadProperties.loadProperties("common.properties", "collectInfoUploadSavePath");
+		String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
 		
 		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
 	    Map<String,MultipartFile> files=mul.getFileMap();
@@ -252,20 +263,20 @@ public class UserController {
 	    {
 	
 		
-		// 得到上传的文件名称，
+		 
 		String filename = file.getOriginalFilename();
 		String fileExtName = filename.substring(filename.lastIndexOf("."));
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-		//重命名文件
+		 
 		filename = df.format(System.currentTimeMillis()) + fileExtName;
  
-		file.transferTo(new File(collectInfoUploadSavePath + filename));
+		file.transferTo(new File(idCardImgUploadSavePath + filename));
   
 	 /*    String thumbnail =  request.getParameter("IsThumbnail");         
-                //生成缩略图
+                 
                 if ("1".equals(thumbnail))
                 {
-                    String sFileName = "thumb_" + filename;//缩略图文件名
+                    String sFileName = "thumb_" + filename;//缂╃暐鍥炬枃浠跺悕
                      
                     Thumbnails.of(infoUpdateSavePath + filename) 
                     .size(112, 112)  
@@ -274,9 +285,9 @@ public class UserController {
                 }*/
                
                 
-		object.put("name", "/collect_info/upload/" + filename);
-		object.put("path", "/collect_info/upload/" + filename );
-		object.put("thumb","/collect_info/upload/" + filename);
+		object.put("name", "/img_identity/upload/" + filename);
+		object.put("path", "/img_identity/upload/" + filename );
+		object.put("thumb","/img_identity/upload/" + filename);
 	    }
 		object.put("status", true);
 		
@@ -288,7 +299,7 @@ public class UserController {
 	}
 	@RequestMapping(value = "/userDelete")
 	@RequiresPermissions("user:Delete")
-	@PermissionName("居民信息采集删除")
+	@PermissionName("用户信息删除")
 	public ModelAndView userDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");
@@ -297,8 +308,12 @@ public class UserController {
 			if(ids.length>=1)
 				userService.deleteUserBatch(ids);
 		}
-		
-		modelAndView.setViewName("redirect:/user/toUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
+		 
+		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("startTime", request.getParameter("startTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.setViewName("redirect:/user/toUserList");
 		return modelAndView;
 	}
 	
@@ -309,7 +324,7 @@ public class UserController {
 		JSONObject object=new JSONObject(); 
 		if(users.size()!=0){		 
 			object.put("status", "false"); 
-		    object.put("msg", "用户身份信息已采集,请勿重复采集!"); 
+		    object.put("msg", "用户身份信息已存在,请勿重复增加!"); 
 		}
 		else { 
 			object.put("status", "true");   
@@ -318,8 +333,6 @@ public class UserController {
 		response.getWriter().write(object.toString()); 
 	  
 		} 
-	
-	
-		
+	 
 
 		} 

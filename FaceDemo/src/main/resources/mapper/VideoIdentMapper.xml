@@ -45,7 +45,7 @@
 		<result property="user_township" column="user_township" />
 		<result property="user_village" column="user_village" />
 		<result property="user_img" column="user_img" />
-        <association property="user" column="user_id"     javaType="User" select="getUserById" />
+       <!--  <association property="user" column="user_id"     javaType="User" select="getUserById" /> -->
       
     </resultMap>
 	
@@ -76,12 +76,16 @@
 	   LEFT JOIN users u on u.id=r.user_id
 
 	 where r.is_delete=0    and u.is_delete=0
-		<if test="video_status != null and  video_status !='' ">  
+		<if test="user_id != null and  user_id !=-1">  
         and r.video_status= #{video_status}   
         </if> 
-        <if test="status != null and  status !='' ">  
-       and r.status= #{status}   
-        </if>
+        
+        </select>
+        
+        
+        <select id="findVideoListByUserId"    resultType="videoIdent">
+			select r.* ,u.user_name as user_name from video_ident r    LEFT JOIN users u on u.id=r.user_id 
+      	    where r.is_delete=0    and u.is_delete=0 and r.user_id=#{user_id} 
         </select>
 	
 </mapper>

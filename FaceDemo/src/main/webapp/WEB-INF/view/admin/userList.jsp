@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -19,6 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/admin/pagination.css" />
 
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%=path%>/js/admin/scripts/datepicker/WdatePicker.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/artdialog/dialog-plus-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/layindex.js"></script>
@@ -38,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "user/userList",
+            url: "user/userList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -85,27 +87,40 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='user:Edit'><a class='detial'  href = 'user/toUserEdit?id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
- 
-		"<shiro:lacksPermission name='user:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+  var date = new Date(row['update_time']);
+   var d;
+  if(row['update_time']==null) 
+     d="暂无登录";
+  else
+    d=   date.Format("yyyy-MM-dd hh:mm:ss");
+   var s=  
+   '<div>'+
+	   '<div  style="float: left;">'+
+		   '<shiro:hasPermission name="user:View">'+
+		      '<a class="user-avatar" href="user/userDetial?id='+row['id']+'">'+
+		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
+		       '</a>' +
+		  '</shiro:hasPermission>'+
+		  '<shiro:lacksPermission name="user:View">'+
+		      '<a class="user-avatar" href="#" onclick="return false">'+
+		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
+		       '</a>' +
+		  '</shiro:lacksPermission>'+
+	   '</div>'+
+       '<div class="user-box" style="float: left;">'+ 
+          '<h4><b style="font-size:16px;" title="姓名：'+row['user_name']+'">'+row['user_name']+'</b></h4>'+
+          '<i>上次登录时间：'+d+'</i>'+
+          '<span>'+
+           ' 乡镇办：'+row['user_township']+'-'+row['user_village']+
+         ' </span>'+
+        ' </div>'+
+     ' </div>'; 
   
-  var a='居民信息采集审核已通过，不能修改！';
-  if(row['status']==2)
-  s="<shiro:hasPermission name='user:Edit'><a class='detial'  href = 'javascript:alert(&apos;"+a+"&apos;);' >"+row['user_name']+"</a></shiro:hasPermission>"+
- 
-		"<shiro:lacksPermission name='user:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+   
  return s;
 }
 
-function strFormat(val) { 
-         if (val == 3) 
-         return "审核未通过";
-        else  if (val == 2)  
-            return "审核通过";
-        else 
-           return "待审核";
-         
-	}
+ 
 	
     function timeFormat(val) {
     if (val != null) {
@@ -117,17 +132,14 @@ function strFormat(val) {
 	
 	
 	function actionFormatter(value, row, index) {  
-	var a='居民信息采集审核已通过，不能修改！';
-	if(row['status']==2) 
-       return "<shiro:hasPermission name='user:Edit'><a   href = 'javascript:alert(&apos;"+a+"&apos;);' >修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
-    else
-     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+	 
+     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<user/toUserEdit?status=${status}&type=${type}&id="+row['id'];
+          window.location.href = "<user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&id="+row['id'];
       } 
      } 
      
@@ -156,7 +168,7 @@ function Search(){
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="user/userDelete?status=${status}&type=${type}"; 
+        from.action="user/userDelete"; 
         from.submit();
        }  
      
@@ -167,7 +179,7 @@ function Search(){
  
 </head>
 <body class="mainbody">
-<form method="post"  action="user/toUserList?status=${status}&type=${type}"  id="form1">
+<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -176,7 +188,7 @@ function Search(){
   <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
   <a href="manager/center" class="home"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <span>居民信息采集列表</span>
+  <span>居民信息列表</span>
 </div>
 <!--/导航栏-->
 
@@ -188,27 +200,56 @@ function Search(){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="user:Add">
-               <li><a class="add" href="user/toUserAdd?status=${status}&type=${type}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
+               <li><a class="add" href="user/toUserAdd?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
-          <shiro:hasPermission name="user:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
+          <shiro:hasPermission name="user:Delete"> 
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+          	 
           </shiro:hasPermission>
            
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="user/toUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="user/toUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+           
         </ul>
         
+        
          <shiro:hasPermission name="user:Show">
-	          <div class="menu-list">
+         
+         
+         
+         
+	         <div class="menu-list">
+	         
 	          <div class="rule-single-select">
-	            <select name="status" onchange="Search()" id="status">
-		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
-		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
-	               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
-		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
-	        </select>
+	            <select name="isHasVideo" onchange="Search()" id="isHasVideo">
+					<option   value="">是否上传视频</option>
+					<option value="1"  ${isHasVideo==1?"selected='selected'":'' }>已上传</option>
+					<option value="2"  ${isHasVideo==2?"selected='selected'":'' }>未上传</option>
+	
+				</select>
+            </div>
+          
+          
+          
+	         <div class="rule-single-select">
+	            <select name="user_township" onchange="Search()"  id="user_township">
+	               <option   value="">所有乡镇办</option>
+		           <c:forEach items="${xzbs }" var="xzb"> 
+		              <option value="${xzb.title }"  ${user_township==xzb.title?"selected='selected'":'' }>${xzb.title }</option>
+		           </c:forEach>
+		        
+	            </select>
 	        </div>
 	        </div>
+	        
+		     <div class="menu-list">
+	          <input name="startTime" type="text" id="startTime" value="${startTime}" class="input rule-date-input"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"   />
+	          -
+	          <input name="endTime" type="text" id="endTime" value="${endTime}"  class="input rule-date-input"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  />
+	        </div>
+	        <ul class="icon-list">
+	           <li><a class="add" onclick="Search()"><i class="iconfont icon-search"></i><span></span></a></li>
+	           
+	        </ul>
+	        
         
       </shiro:hasPermission>
       </div>
@@ -238,19 +279,21 @@ function Search(){
             <th data-sortable="false" data-field="id"  data-visible="false"  data-align="center"
                 data-filter-control="input">选择
             </th>
-            <th data-sortable="true" data-field="user_name" data-align="center"
-                data-filter-control="input"  data-formatter="infoFormatter">姓名
-            </th>
-            <th data-sortable="true"  data-field="status" data-align="center"
-                data-filter-control="input" data-formatter="strFormat">审核状态
-            </th>
              
-             <th data-sortable="true"  data-field="audit_time" data-align="center"
-                data-filter-control="input" data-formatter="timeFormat">审核时间
+            <th data-sortable="true" data-field="title" data-align="left" 
+                data-filter-control="input" data-formatter="infoFormatter">用户信息
             </th>
             
+            <th data-sortable="true" data-field="user_idcard" data-align="center"
+                data-filter-control="input" >身份证号
+            </th>  
+            
+            <th data-sortable="true" data-field="data_type" data-align="center"
+                data-filter-control="input" >类型
+            </th>  
+                     
             <th data-sortable="true"  data-field="add_time" data-align="center"
-                data-filter-control="input" data-formatter="timeFormat">采集时间
+                data-filter-control="input" data-formatter="timeFormat">时间
             </th>
              <th data-field="id" data-formatter="actionFormatter" data-align="center"
                         data-events="actionEvents">操作

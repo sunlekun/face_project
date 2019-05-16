@@ -7,7 +7,7 @@ public class VideoIdent {
 	private int id;
 	private String year;
 	private int user_id;
-	private User user;
+	/*private User user;*/
 	private String video_url;
 	private String video_code;
 	private String img_url;
@@ -41,13 +41,13 @@ public class VideoIdent {
 		return id;
 	}
 
-	public User getUser() {
+/*	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
+	}*/
 
 	public void setId(int id) {
 		this.id = id;

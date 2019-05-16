@@ -50,6 +50,9 @@ public class UserServiceImpl implements UserService {
 	public void updateUser(User user){
 		userDao.updateUser(user);
 	}
+	public void updateUserName(User user){
+		userDao.updateUserName(user);
+	}
 	public void deleteUserBatch(String[] ids){
 		userDao.deleteUserBatch(ids);
 	}

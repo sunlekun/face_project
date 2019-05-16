@@ -20,6 +20,7 @@ public interface VideoIdentDao {
 	public List<String>  findVidoIdentYears( );
 	public VideoIdent findVideoIdentById( @Param("id") Integer id);
 	public List<VideoIdent> findVideoListByIdAndTime(@Param("id") Integer id, @Param("date") String date);
+	public List<VideoIdent> findVideoListByUserId(@Param("user_id") Integer user_id);
 	void insertVideoIdent(VideoIdent videoIdent);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 }
