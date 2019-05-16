@@ -57,7 +57,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {     
-                      window.location.href = "<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+$element.id+"&video_id="+$element.video_id;                  
+                      window.location.href = "<%=path%>/identityCheck/identityCheckDetial?status=${status}&video_status=${video_status}&id="+$element.id+"&video_id="+$element.video_id;                  
                      
                    });
                    
@@ -116,12 +116,12 @@ function infoFormatter( value, row, index){
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="randomCheck:Confirm">'+
-		      '<a class="user-avatar" href="randomCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id='+row['id']+'&video_id='+row['video_id']+'">'+
+		   '<shiro:hasPermission name="identityCheck:Confirm">'+
+		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="randomCheck:Confirm">'+
+		  '<shiro:lacksPermission name="identityCheck:Confirm">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
@@ -140,9 +140,9 @@ function infoFormatter( value, row, index){
  return s;
 }
 	function actionFormatter(value, row, index) { 
- <%--  return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
+<%--   return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
 <%--      return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";  --%>
-return "<shiro:hasPermission name='randomCheck:Confirm'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";
+return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?id="+row['id']+"'>详情</a>";
     } 
     
      

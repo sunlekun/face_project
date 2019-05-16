@@ -99,5 +99,14 @@
             #{id}
         </foreach>
     </delete>
-	
+    
+    
+    <select id="findVideoListByVideoIdentId"    resultType="videoIdent">
+			select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard,u.user_village as user_village,u.user_township as user_township,u.img_url as user_img,u.data_type as data_type,
+			u.mobile as mobile from video_ident r    LEFT JOIN users u on u.id=r.user_id 
+      	    where r.is_delete=0    and u.is_delete=0 and r.id=#{id} 
+        </select>
+	<update id="updateById" parameterType="videoIdent">
+		update video_ident set txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status} where id=#{id} 
+	</update>
 </mapper>

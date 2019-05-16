@@ -74,24 +74,24 @@ public class IdentityCheckController {
 	}
 	
 	
-	@RequestMapping(value = "/toIdentityCheckConfirm")
-	@RequiresPermissions("identityCheck:Confirm")
-	@PermissionName("抽查认证")
-	public ModelAndView toRandomCheckConfirm(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-//		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	
-		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id);
-		
-		modelAndView.addObject("videoIdent", videoIdent); 
-//		modelAndView.addObject("randomCheck", randomCheck); 
-		modelAndView.addObject("status", request.getParameter("status")); 
-		modelAndView.addObject("video_status", request.getParameter("video_status")); 
-		
-		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.setViewName("admin/randomCheckConfirm"); 
-		return modelAndView;
-	}
+//	@RequestMapping(value = "/toIdentityCheckConfirm")
+//	@RequiresPermissions("identityCheck:Confirm")
+//	@PermissionName("抽查认证")
+//	public ModelAndView toRandomCheckConfirm(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
+//		ModelAndView modelAndView = new ModelAndView();
+//		
+////		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	
+//		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id);
+//		
+//		modelAndView.addObject("videoIdent", videoIdent); 
+////		modelAndView.addObject("randomCheck", randomCheck); 
+//		modelAndView.addObject("status", request.getParameter("status")); 
+//		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+//		
+//		modelAndView.addObject("videoIdent", videoIdent); 
+//		modelAndView.setViewName("admin/randomCheckConfirm"); 
+//		return modelAndView;
+//	}
 	
 	
 	@RequestMapping(value = "/identityCheckDelete")
@@ -145,6 +145,50 @@ public class IdentityCheckController {
 			}
 		
 		 //return response ;
+	}
+	
+	
+	
+	@RequestMapping(value = "/identityCheckDetial")
+	public ModelAndView toIdentityCheckDetial(int id,HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		VideoIdent videoIdent=videoIdentService.findVideoListByVideoIdentId(id);
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.addObject("status", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		
+		modelAndView.setViewName("admin/identityCheckDetial"); 
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/identityCheckConfirm")
+	@RequiresPermissions("identityCheck:Confirm")
+	@PermissionName("认证审核")
+	public ModelAndView toIdentityCheckConfirm(int id, HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		VideoIdent videoIdent=videoIdentService.findVideoListByVideoIdentId(id);
+		
+		modelAndView.addObject("videoIdent", videoIdent); 
+		modelAndView.addObject("status", request.getParameter("status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		
+		modelAndView.setViewName("admin/identityCheckConfirm");  
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/identityCheckEdit")
+	public ModelAndView toIdentityCheckEdit(int id,String auditors_reason,String txt_remarks,int video_status,HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status);
+		
+		modelAndView.setViewName("admin/identityCheckList"); 
+		return modelAndView;
 	}
 	
 }

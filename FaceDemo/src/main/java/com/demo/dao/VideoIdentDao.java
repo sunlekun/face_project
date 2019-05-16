@@ -24,6 +24,9 @@ public interface VideoIdentDao {
 	void insertVideoIdent(VideoIdent videoIdent);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 	public void deleteVideoIdentBatch(String[] ids);
+	public VideoIdent findVideoListByVideoIdentId(@Param("id") Integer id);
+	public void updateById(@Param("id")Integer id,@Param("auditors_reason") String auditors_reason,@Param("txt_remarks") String txt_remarks,
+			@Param("video_status")int video_status);
 }
 
  
