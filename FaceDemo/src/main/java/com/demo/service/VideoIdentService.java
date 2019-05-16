@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.demo.model.VideoIdent;
 
@@ -19,4 +20,5 @@ public interface VideoIdentService {
 	public VideoIdent findVideoIdentById(Integer id);
 	public List<VideoIdent> findVideoListByIdAndTime(int id, String time);
 	void insertVL(VideoIdent videoIdent);
+	public List<VideoIdent> findVideoListByMultiCondition(Map map); 
 }

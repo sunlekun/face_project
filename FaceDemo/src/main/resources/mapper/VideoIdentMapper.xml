@@ -64,8 +64,20 @@
 
     insert into  video_ident (year, user_id, video_url, video_code, img_url, audio_url, audio_txt, video_num, face_score, video_status, audio_status, auditors_txt, auditors_reason, txt_remarks, txt_img, add_time)
         values (#{year},#{ user_id},#{ video_url},#{ video_code},#{ img_url},#{ audio_url},#{ audio_txt},#{ video_num},#{ face_score},#{ video_status},#{ audio_status},#{ auditors_txt},#{ auditors_reason},#{ txt_remarks},#{ txt_img},#{ add_time})
-
-	
 	
 	</insert>
+	
+		<select id="findVideoListByMultiCondition" parameterType="java.util.HashMap"  resultType="videoIdent">
+			select r.* ,u.user_name as user_name ,u.user_idcard as user_idcard  from video_ident r 
+	   LEFT JOIN users u on u.id=r.user_id
+
+	 where r.is_delete=0   and v.is_delete=0 and u.is_delete=0
+		<if test="video_status != null and  video_status !='' ">  
+        and r.video_status= #{video_status}   
+        </if> 
+        <if test="status != null and  status !='' ">  
+       and r.status= #{status}   
+        </if>
+        </select>
+	
 </mapper>
