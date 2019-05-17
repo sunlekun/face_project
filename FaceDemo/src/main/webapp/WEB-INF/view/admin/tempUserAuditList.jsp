@@ -113,7 +113,9 @@ function strFormat(val) {
 	
 	function actionFormatter(value, row, index) {  
 	
-      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+      return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
+      "<shiro:hasPermission name='tempUserAudit:Show'><a class='detial'  href = 'tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&type=${type}&id="+row['id']+"'>导入</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
+      "<shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>";
   
     } 
     //表格  - 操作 - 事件
@@ -308,11 +310,11 @@ function strFormat(val) {
   <div class="btn-wrap" >
   <table>
   <tr><td>
-    <input type="file" name="file_Import" id="file_Import" class="input normal upload-path" onchange="change(this) "  multiple="multiple" />
+    <input type="file" name="file_Import" id="file_Import" class="input normal upload-path" onchange="change(this) "  multiple="multiple" accept="image/*" />
     </td>
   
     <td> 
-    <input type="button" name="btnImport" value="导入图片" id="btnImport" class="btn"  style="margin-left:10px;" onclick="upLoadFiles()"/>
+    <input type="button" name="btnImport" value="导入图片" id="btnImport" class="btn"  style="margin-left:10px;" onclick="upLoadFiles()" />
     </td>
     </tr>
     </table>

@@ -1,28 +1,21 @@
 package com.demo.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
+import java.io.BufferedOutputStream; 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.OutputStream; 
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.Date; 
+import java.util.HashMap; 
+import java.util.List; 
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -31,10 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
+ 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -42,13 +32,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping; 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
-import sun.misc.BASE64Encoder;
-
+ 
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager; 
 import com.demo.model.TempUser;
@@ -115,6 +103,7 @@ public class TempUserAuditController {
 			type="Word";
 			modelAndView.setViewName("admin/tempUserAuditList"); 
 		    }
+		
 	 
 		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.addObject("type", type);   
@@ -235,6 +224,84 @@ public class TempUserAuditController {
 		modelAndView.setViewName("redirect:/tempUserAudit/toTempUserAuditList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "/toTempUserAuditImportIdCardImg") 
+	@PermissionName("居民信息图片导入")
+	public ModelAndView toTempUserAuditImportIdCardImg(int id,HttpServletRequest request,HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		TempUser tempUser= tempUserService.findTempUserById(id) ;  
+		List<Xzb> xzbs= xzbService.findAllXzb();
+		modelAndView.addObject("xzbs", xzbs); 
+		modelAndView.addObject("tempUser", tempUser); 
+		
+		String type=request.getParameter("type");
+		modelAndView.addObject("type", type);  
+		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.setViewName("admin/tempUserAuditImportIdCardImg");
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/tempUserAuditImportIdCardImg")
+	public void  tempUserAuditImportIdCardImg(User user ,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		
+		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
+		    
+		 String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
+		 String idcard=user.getUser_idcard();
+		
+		 JSONObject object = new JSONObject();
+		 
+		 String oldFileName="";
+	 		if(hid_photo_names!=null&&hid_photo_names.length==1)
+	 		{   
+	 			 
+	        	String[] name=hid_photo_names[0].split("\\|"); 
+	        	if(name!=null&&name.length>=2) 
+	        	{ 
+	        		String[] name1=name[1].split("\\/"); 
+	        		//System.out.println(name1[3]);
+	        		oldFileName=name1[3];
+	        	}
+	        	 
+	 		}
+	 	 String fileExtName = oldFileName.substring(oldFileName.lastIndexOf("."));
+	    
+	 	 
+		 
+		 if(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName).exists()) 
+			 new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName).delete();
+			 
+		 new File(idCardImgUploadSavePath+oldFileName).renameTo(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName));
+		 
+	 
+		 
+		 List<User> users =userService.findUserByUserIdcard(idcard);
+	      if(users.size()>=1)
+			{  
+	    	  
+	    	     
+	            	object.put("msg", "已存在该身份证的照片，已替替换");
+		        	object.put("status", "true");
+	        	 
+			}
+	        else{
+	        	user.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+	        	user.setImg_url("/upload/" +user.getUser_idcard()+fileExtName);
+	    		userService.insertUser(user);
+            	object.put("msg", "导入成功");
+	        	object.put("status", "true");
+	        }
+	        
+	      object.put("url", "tempUserAudit/toTempUserAuditList");
+	      object.put("status", "true"); 
+		  response.setCharacterEncoding("utf-8");
+		  response.getWriter().write(object.toString());
+ 
+	}
+	
+	
 	@RequestMapping(value = "/uploadImgs")
 	@PermissionName("居民信息身份证图片上传")
 	public void uploadImgs(HttpServletRequest request, HttpServletResponse response) {
@@ -242,10 +309,12 @@ public class TempUserAuditController {
 		String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
 		try {
 		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
-	    Map<String,MultipartFile> files=mul.getFileMap();
+	  
 	    
+	    List<MultipartFile> filelist = mul.getFiles("file_Import");//图片列表
+       System.out.println(filelist.size());
 	    List<List<String>> re=new ArrayList<List<String>>();
-	    for(MultipartFile file:files.values())
+	    for(MultipartFile file:filelist)
 	    {
 	 
 	    List<String> r=new ArrayList<String>();
@@ -253,50 +322,61 @@ public class TempUserAuditController {
 		String filename = file.getOriginalFilename(); 
 		String idcard=filename.substring(0, filename.indexOf(".")) ;
 		
-		 
-		List<TempUser> tempUsers =tempUserService.findTempUserByUserIdcard(idcard);
-        if(tempUsers.size()>=1)
-		{
-        	List<User> olds=userService.findUserByUserIdcard(idcard);
-        	if(olds.size()>=1)
-        	{
-            	 
-        		 
-        		//重命名文件
-        		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
-        		file.transferTo(new File(idCardImgUploadSavePath + filename)); 
-        		
-        		r.add(idcard);
-            	r.add("替换成功");
-            	r.add("已存在该身份证的照片，已替换该");
-            }
-        	else{
-	        	User user =new User();
-	        	user.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
-	    		user.setData_type(tempUsers.get(0).getData_type());
-	    		user.setMobile(tempUsers.get(0).getMobile());
-	    		user.setUser_idcard(tempUsers.get(0).getUser_idcard());
-	    		user.setUser_name(tempUsers.get(0).getUser_name());
-	    		user.setUser_township(tempUsers.get(0).getUser_township());
-	    		user.setUser_village(tempUsers.get(0).getUser_village());
-	    		 
-	    		//重命名文件
-	    		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
-	    		file.transferTo(new File(idCardImgUploadSavePath + filename));
-	    		user.setImg_url("/upload/"+filename);
-	    		userService.insertUser(user);
+		
+		String type=filename.indexOf(".")!=-1?filename.substring(filename.lastIndexOf(".")+1, filename.length()):null;
+		if (type!=null&&("PNG".equals(type.toUpperCase())||"JPG".equals(type.toUpperCase())))
+		{  
+			List<TempUser> tempUsers =tempUserService.findTempUserByUserIdcard(idcard);
+	        if(tempUsers.size()>=1)
+			{
+	        	List<User> olds=userService.findUserByUserIdcard(idcard);
+	        	if(olds.size()>=1)
+	        	{
+	            	 
+	        		 
+	        		//重命名文件
+	        		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
+	        		file.transferTo(new File(idCardImgUploadSavePath + filename)); 
+	        		
+	        		r.add(filename);
+	            	r.add("替换成功");
+	            	r.add("已存在该身份证的照片，已替换该");
+	            }
+	        	else{
+		        	User user =new User();
+		        	user.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+		    		user.setData_type(tempUsers.get(0).getData_type());
+		    		user.setMobile(tempUsers.get(0).getMobile());
+		    		user.setUser_idcard(tempUsers.get(0).getUser_idcard());
+		    		user.setUser_name(tempUsers.get(0).getUser_name());
+		    		user.setUser_township(tempUsers.get(0).getUser_township());
+		    		user.setUser_village(tempUsers.get(0).getUser_village());
+		    		 
+		    		//重命名文件
+		    		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
+		    		file.transferTo(new File(idCardImgUploadSavePath + filename));
+		    		user.setImg_url("/upload/"+filename);
+		    		userService.insertUser(user);
+		    		
+		    		r.add(filename);
+		        	r.add("导入成功");
+		        	r.add("");
+	        	}
 	    		
-	    		r.add(idcard);
-	        	r.add("导入成功");
-	        	r.add("");
-        	}
-    		
+			}
+	        else{
+	        	r.add(filename);
+	        	r.add("未导入成功");
+	        	r.add("没有该身份信息的信息");
+	        }
+		 }
+		else
+		{ 
+			r.add(filename);
+			r.add("未导入成功");
+        	r.add("非文件格式");  
+		
 		}
-        else{
-        	r.add(idcard);
-        	r.add("未导入成功");
-        	r.add("没有该身份信息的信息");
-        }
 		
 		re.add(r);
 	    
@@ -306,7 +386,7 @@ public class TempUserAuditController {
 	    
 	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
  		String fileName="图片信息导入结果"+df.format(System.currentTimeMillis());
-	    String[] excelHeader = {"身份证号码","导入结果","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+	    String[] excelHeader = {"文件名称","导入结果","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
 		 
 		ExportExcelUtils ee = new ExportExcelUtils("表格标题", Arrays.asList(excelHeader));
 

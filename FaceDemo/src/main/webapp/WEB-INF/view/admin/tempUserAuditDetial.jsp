@@ -150,12 +150,12 @@ function __doPostBack(eventTarget, eventArgument) {
     <dd>
       <div class="rule-single-select">
         <select name="ddlRoleType" id="ddlRoleType" datatype="*" errormsg="请选择所属类型！" sucmsg=" " disabled="false">
-	<option value="">请选择所属类型...</option>
-	<option value="机关事业养老保险" ${tempUser.data_type=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
-	<option value="城乡居民养老保险" ${tempUser.data_type=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
-	<option value="企业职工养老保险" ${tempUser.data_type=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
+			<option value="">请选择所属类型...</option>
+			<option value="机关事业养老保险" ${tempUser.data_type=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
+			<option value="城乡居民养老保险" ${tempUser.data_type=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
+			<option value="企业职工养老保险" ${tempUser.data_type=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
 
-</select>
+		</select>
       </div>
       <span class="Validform_checktip">*</span>
     </dd>

@@ -226,10 +226,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            		<a href="javascript:;" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:lacksPermission>
             
-            <shiro:hasPermission name="tempUserAudit:Add">
-          	 	 <a href="tempUserAudit/toTempUserAuditAdd?status=${status}&type=${type }" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+            <shiro:hasPermission name="tempUserAudit:Show">
+          	 	 <a href="tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&type=${type }&id=${ tempUser.id}" title="导入照片"><i class="iconfont icon-pic"></i></a> 
             </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUserAudit:Add">
+            <shiro:lacksPermission name="tempUserAudit:Show">
                 <a href="javascript:;" title="导入照片"><i class="iconfont icon-pic"></i></a> 
             </shiro:lacksPermission>
             
