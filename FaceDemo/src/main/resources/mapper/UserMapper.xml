@@ -39,6 +39,10 @@
           and m.data_type=#{data_type}
         </if> 
         
+        <if test="xzb!=null  and xzb!=''">   
+          and m.user_township=#{xzb}
+        </if> 
+        
          <if test="user_township!=null  and user_township!=''">   
           and m.user_township=#{user_township}
         </if> 

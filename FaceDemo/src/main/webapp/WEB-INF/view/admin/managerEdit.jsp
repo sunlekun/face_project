@@ -109,10 +109,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <option value=""  selected="selected">请选择角色...</option>
 				<c:forEach items="${roles }" var="role">
 				    <c:if test="${role.role_name!=managerDetial.role_name}">
-					    <option value="${role.id }">${role.role_name }</option>
+					    <option value="${role.id} ${role.role_type}">${role.role_name }</option> 
 				    </c:if>
 			    	<c:if test="${role.role_name==managerDetial.role_name}">
-				      <option value="${role.id }"  selected="selected" >${role.role_name }</option>
+				      <option value="${role.id} ${role.role_type}"  selected="selected" >${role.role_name }</option>
 				   </c:if>
 				</c:forEach>
 			</c:if>
@@ -120,7 +120,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <c:if test="${empty managerDetial}">
 			   <option value=""  selected="selected">请选择角色...</option>
 			   <c:forEach items="${roles }" var="role"> 
-				    <option value="${role.id }">${role.role_name }</option>
+				    <option value="${role.id} ${role.role_type}">${role.role_name }</option>
 				</c:forEach>
 		  </c:if>
 		  </c:if>

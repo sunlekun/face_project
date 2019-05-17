@@ -65,7 +65,10 @@ public class TempUserController {
 			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 			HashMap<String ,String > map=new HashMap<String ,String >();
 			map.put("key", key);
-			map.put("data_type", manager.getUser_type());
+			if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+			     map.put("data_type",null);
+			else  //其他用户只显示各自的类别的采集信息
+				map.put("data_type", manager.getUser_type());
 			map.put("user_township", manager.getXzb());
 			map.put("status", request.getParameter("status"));
 			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
@@ -91,7 +94,10 @@ public class TempUserController {
 		 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
-		map.put("data_type", manager.getUser_type());
+		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
 		map.put("user_township", manager.getXzb());
 		map.put("status", request.getParameter("status"));
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 

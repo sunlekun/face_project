@@ -78,8 +78,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <dd>
       <div class="rule-multi-radio">
         <span id="rblIsStatus">
-	        <input id="rblIsStatus_0" type="radio" name="rblIsStatus" value="2" ${randomCheck.status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">人工复查审核通过</label>
-	        <input id="rblIsStatus_1" type="radio" name="rblIsStatus" value="3" ${randomCheck.status==3?"checked='checked'":'' } /><label for="rblIsStatus_1">人工复查未通过</label>
+	        <input id="rblIsStatus_0" type="radio" name="rblIsStatus" value="2" ${rv_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">人工复查审核通过</label>
+	        <input id="rblIsStatus_1" type="radio" name="rblIsStatus" value="3" ${rv_status==3?"checked='checked'":'' } /><label for="rblIsStatus_1">人工复查未通过</label>
         </span>
       </div>
     </dd>
@@ -87,21 +87,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <dl>
     <dt>用户姓名：</dt>
     <dd>
-      <input name="txtTitle" type="text" readonly value="${videoIdent.user.user_name }" maxlength="100" id="txtTitle" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="txtTitle" type="text" readonly value="${videoIdent.user_name }" maxlength="100" id="txtTitle" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>身份证号码：</dt>
     <dd>
-      <input name="txtIdcard" type="text" readonly value="${videoIdent.user.user_idcard }" maxlength="18" id="txtIdcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="txtIdcard" type="text" readonly value="${videoIdent.user_idcard }" maxlength="18" id="txtIdcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>手机号码：</dt>
     <dd>
-      <input name="txtMobile" type="text" readonly value="${videoIdent.user.mobile }" id="txtMobile" class="input normal" />
+      <input name="txtMobile" type="text" readonly value="${videoIdent.user_mobile }" id="txtMobile" class="input normal" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
@@ -121,7 +121,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <dl>
     <dt>原始图片：</dt>
     <dd>
-      <a href="/img_identity${videoIdent.user.img_url}?w=220&h=165&mode=max" rel="lightbox"><img src="/img_identity${videoIdent.user.img_url}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
+      <a href="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" rel="lightbox"><img src="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
     </dd>
   </dl>
   <dl>
@@ -141,12 +141,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!--工具栏-->
-<!-- <div class="page-footer">
+
   <div class="btn-wrap">
-    <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" />
+   <!--  <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" /> -->
     <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
   </div>
-</div> -->
+</div>  
 <!--/工具栏-->
 
 </form>

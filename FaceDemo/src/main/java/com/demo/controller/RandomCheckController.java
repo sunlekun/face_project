@@ -81,7 +81,12 @@ public class RandomCheckController {
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("status", request.getParameter("status"));
-		map.put("data_type", manager.getUser_type());
+		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
+		
+		/*map.put("data_type", manager.getUser_type());*/
 		List<RandomCheck> randomChecks = randomCheckService.findRandomCheckByMultiCondition(map); 
 		 
 		String jsons = JSON.toJSONString(randomChecks);
@@ -123,7 +128,11 @@ public class RandomCheckController {
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
 		map.put("video_status", null);
 		map.put("status", "1");
-		map.put("data_type", manager.getUser_type());
+		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
+	/*	map.put("data_type", manager.getUser_type());*/
 		List<RandomCheck> randomChecks = randomCheckService.findRandomCheckByMultiCondition(map); 
 		 
 		/*List<RandomCheck> randomChecks  = randomCheckService.findRandomCheckByVideoStatusAndStatus(null,"1");*/	 
@@ -157,16 +166,18 @@ public class RandomCheckController {
 	@RequestMapping(value = "/toRandomCheckConfirm")
 	@RequiresPermissions("randomCheck:Confirm")
 	@PermissionName("抽查审核")
-	public ModelAndView toRandomCheckConfirm(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
+	public ModelAndView toRandomCheckConfirm(int id,int video_id, int rv_status ,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	
+	/*	RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	*/
 		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id);
 		
 		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.addObject("randomCheck", randomCheck); 
+		/*modelAndView.addObject("randomCheck", randomCheck); */
+		modelAndView.addObject("rv_status", rv_status); 
 		modelAndView.addObject("status", request.getParameter("status")); 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("id", id); 
 		
 		modelAndView.addObject("videoIdent", videoIdent); 
 		modelAndView.setViewName("admin/randomCheckConfirm"); 
@@ -192,12 +203,13 @@ public class RandomCheckController {
 	 
 	@RequestMapping(value = "/randomCheckDetial")
 	@PermissionName("视频详情")
-	public ModelAndView randomCheckDetial(int id,int video_id,HttpServletRequest request,HttpServletResponse response) {
+	public ModelAndView randomCheckDetial(int id,int video_id, int rv_status ,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
-		RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	 
+	/*	RandomCheck randomCheck  = randomCheckService.findRandomCheckById(id);	 */
 		VideoIdent videoIdent=videoIdentService.findVideoIdentById(video_id); 
 		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.addObject("randomCheck", randomCheck); 
+		/*modelAndView.addObject("randomCheck", randomCheck); */
+		modelAndView.addObject("rv_status", rv_status); 
 		modelAndView.addObject("status", request.getParameter("status")); 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.setViewName("admin/randomCheckDetial"); 

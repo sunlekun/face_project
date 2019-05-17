@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -103,12 +104,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   });
  
     });
+    
+ 
 </script>
 </head>
 <body class="mainbody">
 <form method="post" action="<%=path%>/manager/managerAdd" id="form1">
 <!--  <input type="hidden" name="is_lock" id="is_lock" value="0" /> -->
- <input type="hidden" name="flag" id="flag" value="1" />
+ <input type="hidden" name="flag" id="flag" value="1" /> 
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -169,12 +172,12 @@ function __doPostBack(eventTarget, eventArgument) {
     <dt>管理角色</dt>
     <dd>
       <div class="rule-single-select">
-         <select name="role_id"  id="role_id" datatype="*" errormsg="请选择管理员角色" sucmsg=" " > 
+         <select name="role_id"  id="role_id" datatype="*" errormsg="请选择管理员角色" sucmsg=" "> 
             <c:if test="${!empty roles }"> 
 			   <option value=""  selected="selected">请选择角色...</option>
-			   <c:forEach items="${roles }" var="role"> 
-				    <%-- <option value="${role.id },${role.role_type }">${role.role_name }</option> --%>
-				    <option value="${role.id }">${role.role_name }</option>
+			   <c:forEach items="${roles }" var="role">   
+				    <%-- <option value="${role.id }" onclick="setRoleType('${role.role_type }')">${role.role_name }</option> --%>
+				    <option value="${role.id} ${role.role_type}">${role.role_name }</option>
 			   </c:forEach> 
 		  </c:if>
         </select>

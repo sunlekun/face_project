@@ -62,7 +62,7 @@ public class UserController {
 		modelAndView.setViewName("admin/userList"); 
 		 
 		List<Xzb> xzbs= xzbService.findAllXzb();
-		modelAndView.addObject("xzbs", xzbs); 
+		modelAndView.addObject("xzbs", xzbs);  
 		
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
@@ -76,12 +76,23 @@ public class UserController {
 		 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
-		map.put("data_type", manager.getUser_type());
 		
-		String user_township=manager.getXzb();
-		if(manager.getXzb()==null||"".equals(manager.getXzb()))
-				user_township=request.getParameter("user_township");
-		map.put("user_township", user_township);
+		if(manager.getRole_type()==1)//超级用户，显示所有的。 
+			map.put("data_type", null);
+		else  //其他用户只显示各自的类别的用户信息
+			map.put("data_type", manager.getUser_type());
+		
+	 
+		
+		if(manager.getRole_type()==1)//超级用户，类别为城乡居民的，显示所有
+			map.put("xzb", null);
+		else //非系统用户只能按照自己的管理权限筛选
+			map.put("xzb", manager.getXzb());
+		
+		 
+		map.put("user_township", request.getParameter("user_township"));
+		 
+		
 		
 		map.put("isHasVideo", request.getParameter("isHasVideo"));
 		

@@ -30,6 +30,7 @@ public class VideoIdent {
 	private String user_idcard;
 	private String user_township;
 	private String user_village;
+	private String user_mobile;
 	private String user_img;
 
 	/*
@@ -232,5 +233,14 @@ public class VideoIdent {
 	public void setUser_img(String user_img) {
 		this.user_img = user_img;
 	}
+
+	public String getUser_mobile() {
+		return user_mobile;
+	}
+
+	public void setUser_mobile(String user_mobile) {
+		this.user_mobile = user_mobile;
+	}
+	
 
 }

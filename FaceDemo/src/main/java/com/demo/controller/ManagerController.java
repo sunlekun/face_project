@@ -124,14 +124,20 @@ public class ManagerController {
 			newManager.setPassword(null);
 		}
 		 
-		String cbIsLock=request.getParameter("cbIsLock"); 
-		System.out.println(cbIsLock);
+		String cbIsLock=request.getParameter("cbIsLock");  
 		String user_type = request.getParameter("user_type");
 		 
 		if("on".equals(cbIsLock))
 			newManager.setIs_lock(0);
 		else
 			newManager.setIs_lock(1);
+		
+		
+		String role_id=request.getParameter("role_id").split(" ")[0]; 
+		String role_type=request.getParameter("role_id").split(" ")[1]; 
+		newManager.setRole_id(Integer.parseInt(role_id));
+		newManager.setRole_type(Integer.parseInt(role_type));
+		
 		
 		if(!"城乡居民养老保险".equals(user_type))
 			newManager.setXzb(null);
@@ -158,8 +164,7 @@ public class ManagerController {
 	@RequestMapping(value = "/managerAdd")
 	public ModelAndView  managerAdd(Manager manager ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
-		String cbIsLock=request.getParameter("cbIsLock"); 
-		System.out.println(cbIsLock);
+		String cbIsLock=request.getParameter("cbIsLock");  
 		String user_type = request.getParameter("user_type");
 		ModelAndView modelAndView = new ModelAndView();
 		if("on".equals(cbIsLock))
@@ -167,13 +172,12 @@ public class ManagerController {
 		else
 			manager.setIs_lock(1);
 		
-		/*//${role.id },${role.role_type }
-		String role_id=request.getParameter("role_id").split(",")[0]; 
-		String role_type=request.getParameter("role_id").split(",")[1]; 
+		//${role.id },${role.role_type }
+		String role_id=request.getParameter("role_id").split(" ")[0]; 
+		String role_type=request.getParameter("role_id").split(" ")[1]; 
 		manager.setRole_id(Integer.parseInt(role_id));
 		manager.setRole_type(Integer.parseInt(role_type));
-		
-		*/
+		 
 		if(!"城乡居民养老保险".equals(user_type))
 			manager.setXzb(null);
 		

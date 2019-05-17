@@ -125,7 +125,7 @@
 	<insert id="creatRandomCheckByMultiCondition"  useGeneratedKeys="true" >
         insert into  random_check (video_id, user_id )  
         select v.id,v.user_id from video_ident v left join users u on u.id=user_id	WHERE		v.is_delete = 0  
-         And  NOT EXISTS (SELECT		id,user_id	FROM		random_check	WHERE		is_delete = 0) 
+         And  NOT EXISTS (SELECT	id,user_id	FROM	random_check r WHERE	r.is_delete = 0  and r.video_id=v.id and r.user_id=v.user_id) 
     
 	     <if test="year != null and  year !=''">  
 	      and v.year=#{year}

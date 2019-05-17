@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body class="mainbody">
 <form method="post" action="randomCheck/randomCheckConfirm?status1=${status}&video_status=${video_status}" id="form1">
 <input type="hidden" name="flag" id="flag" value="1" />
-<input type="hidden" name="id" id="id" value="${randomCheck.id }" />
+<input type="hidden" name="id" id="id" value="${id }" />
 
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
@@ -83,8 +83,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <dd>
       <div class="rule-multi-radio">
         <span id="rblIsStatus">
-	        <input id="rblIsStatus_0" type="radio" name="status" value="2" ${randomCheck.status==2?"checked='checked'":'' }/><label for="rblIsStatus_0">人工复查审核通过</label>
-	        <input id="rblIsStatus_1" type="radio" name="status" value="3" ${randomCheck.status==3?"checked='checked'":'' }/><label for="rblIsStatus_1">人工复查未通过</label>
+	        <input id="rblIsStatus_0" type="radio" name="status" value="2" ${rv_status==2?"checked='checked'":'' }/><label for="rblIsStatus_0">人工复查审核通过</label>
+	        <input id="rblIsStatus_1" type="radio" name="status" value="3" ${rv_status==3?"checked='checked'":'' }/><label for="rblIsStatus_1">人工复查未通过</label>
         </span>
       </div>
     </dd>
@@ -92,21 +92,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <dl>
     <dt>用户姓名：</dt>
     <dd>
-      <input name="txtTitle" type="text" readonly value="${videoIdent.user.user_name }" maxlength="100" id="txtTitle" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="txtTitle" type="text" readonly value="${videoIdent.user_name }" maxlength="100" id="txtTitle" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>身份证号码：</dt>
     <dd>
-      <input name="txtIdcard" type="text" readonly value="${videoIdent.user.user_idcard }" maxlength="18" id="txtIdcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="txtIdcard" type="text" readonly value="${videoIdent.user_idcard }" maxlength="18" id="txtIdcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>手机号码：</dt>
     <dd>
-      <input name="txtMobile" type="text" readonly value="${videoIdent.user.mobile }" id="txtMobile" class="input normal" />
+      <input name="txtMobile" type="text" readonly value="${videoIdent.user_mobile }" id="txtMobile" class="input normal" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
@@ -126,7 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <dl>
     <dt>原始图片：</dt>
     <dd>
-      <a href="/img_identity${videoIdent.user.img_url}?w=220&h=165&mode=max" rel="lightbox"><img src="/img_identity${videoIdent.user.img_url}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
+      <a href="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" rel="lightbox"><img src="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
     </dd>
   </dl>
   <dl>
