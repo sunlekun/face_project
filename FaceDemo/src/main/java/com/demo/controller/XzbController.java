@@ -114,6 +114,7 @@ public class XzbController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/xzbEdit")	
+	@PermissionName("乡镇办")
 	public ModelAndView xzbEdit(Xzb xzb ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView();
@@ -132,6 +133,7 @@ public class XzbController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/xzbAdd")
+	@PermissionName("乡镇办")
 	public ModelAndView xzbAdd(Xzb xzb ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView(); 
@@ -144,7 +146,7 @@ public class XzbController {
 	
 	@RequestMapping(value = "/xzbDelete")
 	@RequiresPermissions("xzb:Delete")
-	@PermissionName("乡镇办删除")
+	@PermissionName("乡镇办")
 	public ModelAndView xzbDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new  ModelAndView();
 		String  idss=request.getParameter("ids");

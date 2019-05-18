@@ -10,6 +10,8 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.demo.realm.PermissionName;
 /**
  * 
  * @author yangwei
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginController { 
 	public static Logger log= Logger.getLogger(LoginController.class);
 	@RequestMapping(value = "/login")
+	@PermissionName("用户登录")
 	public String login(ModelAndView modelAndView,HttpServletRequest request, HttpServletResponse response) { 
 		//此方法不处理登录成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
         

@@ -23,7 +23,7 @@
 	</select>
 	
 	<insert id="insertLog" parameterType="Log" useGeneratedKeys="true" keyProperty="id">
-		insert into xzb(user_id,user_name,action_type,remark,user_ip,add_time) 
+		insert into manager_log(user_id,user_name,action_type,remark,user_ip,add_time) 
 		values (#{user_id} ,#{user_name},#{action_type},#{remark},#{user_ip},#{add_time})
 	</insert>
 	 

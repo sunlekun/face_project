@@ -182,6 +182,7 @@ public class UserController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/userEdit")
+	@PermissionName("用户信息")
 	public ModelAndView userEdit(User user ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView();
@@ -216,6 +217,7 @@ public class UserController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/userAdd")
+	@PermissionName("用户信息")
 	public ModelAndView  userAdd(User user ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
 		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
@@ -310,7 +312,7 @@ public class UserController {
 	}
 	@RequestMapping(value = "/userDelete")
 	@RequiresPermissions("user:Delete")
-	@PermissionName("用户信息删除")
+	@PermissionName("用户信息")
 	public ModelAndView userDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");

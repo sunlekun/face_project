@@ -25,6 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
  
+
+
+
+
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -37,12 +42,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
  
+
+
+
+
+
 import com.alibaba.fastjson.JSON;
+import com.demo.aop.LogAspect;
+import com.demo.model.Log;
 import com.demo.model.Manager; 
 import com.demo.model.TempUser;
 import com.demo.model.User;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
+import com.demo.service.LogService;
 import com.demo.service.TempUserService;
 import com.demo.service.UserService;
 import com.demo.service.XzbService;
@@ -66,7 +79,8 @@ public class TempUserAuditController {
 	
 	@Autowired
 	private XzbService xzbService;
-	
+	@Autowired
+	private LogService logService;
 	@RequestMapping(value = "/toTempUserAuditList")
 	@RequiresPermissions("tempUserAudit:Show")
 	@PermissionName("居民信息采集审核")
@@ -211,7 +225,7 @@ public class TempUserAuditController {
 	}
 	@RequestMapping(value = "/tempUserAuditDelete")
 	@RequiresPermissions("tempUserAudit:Delete")
-	@PermissionName("居民信息采集审核删除")
+	@PermissionName("采集信息审核")
 	public ModelAndView tempUserAuditDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");
@@ -298,15 +312,35 @@ public class TempUserAuditController {
 	      object.put("status", "true"); 
 		  response.setCharacterEncoding("utf-8");
 		  response.getWriter().write(object.toString());
+		  
+		   
+		  // 创建日志对象
+	        Log log = new Log();
+	    	Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+			log.setUser_name(manager.getUser_name());
+			log.setUser_id(manager.getId());
+			String Ip = LogAspect.getIpAddress(request); //ip地址
+		    log.setUser_ip(Ip);
+		    log.setAction_type("Import");
+		     
+		    String opContent = "导入"+" "+ LogAspect.getInfo("TempUserAuditController")+"【用户名="+user.getUser_name()+" ；身份证号="+user.getUser_idcard()+"】【图片】";
+		   
+		    log.setRemark(opContent);
+		    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+		 
+		     logService.insertLog(log);
+	     
  
 	}
 	
 	
-	@RequestMapping(value = "/uploadImgs")
+	@RequestMapping(value = "/tempUserAuditImportIdCardImgs")
 	@PermissionName("居民信息身份证图片上传")
-	public void uploadImgs(HttpServletRequest request, HttpServletResponse response) {
+	public void tempUserAuditImportIdCardImgs(HttpServletRequest request, HttpServletResponse response) {
 		JSONObject object=new JSONObject(); 
 		String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
+		int success=0;
+		int error=0;
 		try {
 		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
 	  
@@ -337,7 +371,7 @@ public class TempUserAuditController {
 	        		//重命名文件
 	        		filename = idcard+ filename.substring(filename.lastIndexOf(".")); 
 	        		file.transferTo(new File(idCardImgUploadSavePath + filename)); 
-	        		
+	        		success++;
 	        		r.add(filename);
 	            	r.add("替换成功");
 	            	r.add("已存在该身份证的照片，已替换该");
@@ -357,7 +391,7 @@ public class TempUserAuditController {
 		    		file.transferTo(new File(idCardImgUploadSavePath + filename));
 		    		user.setImg_url("/upload/"+filename);
 		    		userService.insertUser(user);
-		    		
+		    		success++;
 		    		r.add(filename);
 		        	r.add("导入成功");
 		        	r.add("");
@@ -365,13 +399,14 @@ public class TempUserAuditController {
 	    		
 			}
 	        else{
+	        	error++;
 	        	r.add(filename);
 	        	r.add("未导入成功");
 	        	r.add("没有该身份信息的信息");
 	        }
 		 }
 		else
-		{ 
+		{   error++;
 			r.add(filename);
 			r.add("未导入成功");
         	r.add("非文件格式");  
@@ -382,6 +417,23 @@ public class TempUserAuditController {
 	    
 	    }
 	   
+	    
+	    // 创建日志对象
+        Log log = new Log();
+    	Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		log.setUser_name(manager.getUser_name());
+		log.setUser_id(manager.getId());
+		String Ip = LogAspect.getIpAddress(request); //ip地址
+	    log.setUser_ip(Ip);
+	    log.setAction_type("Import");
+	     
+	    String opContent = "导入"+" "+ LogAspect.getInfo("TempUserAuditController")+"【成功="+success+" ；失败="+error+"】【图片】";
+	   
+	    log.setRemark(opContent);
+	    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+	 
+	     logService.insertLog(log);
+	     
 	    //生成导入结果EXCel文件
 	    
 	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
@@ -409,6 +461,9 @@ public class TempUserAuditController {
 		} catch (IOException e) { 
 			e.printStackTrace();
 		}
+		
+		
+		
 		}
 	@RequestMapping(value = "/uploadImgsResultExcel")	 
 	public  void uploadImgsResultExcel(HttpServletRequest request, HttpServletResponse response){ 
@@ -488,9 +543,9 @@ public class TempUserAuditController {
 		
 		 //return response ;
 	}
-	@RequestMapping(value = "/downLoadFiles")
+	@RequestMapping(value = "/downImgs")
 	 @RequiresPermissions("tempUserAudit:Show")	
-	public  void downLoadFiles(HttpServletRequest request, HttpServletResponse response)	   throws Exception {
+	public  void downImgs(HttpServletRequest request, HttpServletResponse response)	   throws Exception {
 	        try {
 	            /**这个集合就是你想要打包的所有文件，
 	             * 这里假设已经准备好了所要打包的文件

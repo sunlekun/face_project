@@ -149,6 +149,7 @@ public class TempUserController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/tempUserEdit")
+	@PermissionName("采集信息")
 	public ModelAndView tempUserEdit(TempUser tempUser ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView();
@@ -208,6 +209,7 @@ public class TempUserController {
 		return modelAndView;
 	}
 	@RequestMapping(value = "/tempUserAdd")
+	@PermissionName("采集信息")
 	public ModelAndView  tempUserAdd(TempUser tempUser ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		
 		 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
@@ -311,7 +313,7 @@ public class TempUserController {
 	}
 	@RequestMapping(value = "/tempUserDelete")
 	@RequiresPermissions("tempUser:Delete")
-	@PermissionName("居民信息删除")
+	@PermissionName("采集信息")
 	public ModelAndView tempUserDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");

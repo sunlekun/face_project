@@ -211,7 +211,7 @@ public class ManagerController {
 	
 	@RequestMapping(value = "/managerDelete")
 	@RequiresPermissions("manager:Delete")
-	@PermissionName("管理员删除")
+	@PermissionName("管理员")
 	public ModelAndView managerDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");

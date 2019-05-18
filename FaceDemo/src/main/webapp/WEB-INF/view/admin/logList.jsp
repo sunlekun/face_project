@@ -54,12 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         data: tabledata
                     });
                     $('#table').bootstrapTable('load', tabledata);
-                     
-                    $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "<%=path%>/log/logDetial?id="+$element.id;                  
-                     
-                   });
-                   
+                    
 		}
        })
 
@@ -179,9 +174,6 @@ return fmt;
                 data-filter-control="input">用户IP
             </th>
             
-             <th data-sortable="true" data-field="action_type" data-align="center"
-                data-filter-control="input">操作类型
-            </th> 
             
             <th data-sortable="true"  data-field="add_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">操作时间

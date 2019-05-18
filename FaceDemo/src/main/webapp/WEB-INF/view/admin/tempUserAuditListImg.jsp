@@ -98,7 +98,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
      
 }
-	  
+	  function upLoadFiles(){
+  
+       var files = document.getElementById("file_Import").files;
+    
+         if(files.length==0)
+         {
+               alert("请选择要导入的文件!(支持'png', 'img'格式)");
+               return;
+          }
+             
+      var con=confirm("请确保上传文件为图片格式且文件的命名为身份证号，确定上传吗？"); //在页面上弹出对话框 
+     if(con==true)
+     {       /*   $('#files').click(); */
+               var formData = new FormData($('#form1')[0]);//序列化表单，
+                 
+                $.ajax({
+                type: 'post',
+                url: "tempUserAudit/tempUserAuditImportIdCardImgs?status=${status}&type=${type}",
+                data: formData ,
+                processData: false,
+                contentType: false,
+                async: true,
+                dataType: "json",
+             
+                success: function (data, status) { 
+              
+               window.location.href = "tempUserAudit/uploadImgsResultExcel?status=${status}&type=${type}&fileName="+data.fileName;
+                  
+                   
+		}
+       })  
+       
+    
+    } 
+     
+ }
 </script>
  
 </head>
@@ -135,9 +170,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Show">
-	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downLoadFiles?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downImgs?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
 	          <li><a id="btnDownExcel" href="tempUserAudit/downExcel?status=${status}&type=${type}"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
-	          <li><a id="btnUploadImg" href="tempUserAudit/UploadImg?status=${status}&type=${type}"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
+	       <%--    <li><a id="btnUploadImg" href="tempUserAudit/UploadImg?status=${status}&type=${type}"><i class="iconfont icon-file"></i><span>图片导入</span></a></li> --%>
           </shiro:hasPermission>
           
            
@@ -356,6 +391,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
   
   </div>
+  
+  
+  <div  style="padding-top:40px;">
+  <div class="btn-wrap" >
+  <table>
+  <tr><td>
+    <input type="file" name="file_Import" id="file_Import" class="input normal upload-path" onchange="change(this) "  multiple="multiple" accept="image/*" />
+    </td>
+  
+    <td> 
+    <input type="button" name="btnImport" value="导入图片" id="btnImport" class="btn"  style="margin-left:10px;" onclick="upLoadFiles()" />
+    </td>
+    </tr>
+    </table>
+  </div>
+</div>
 </div>
 <!--/内容底部-->
 

@@ -38,8 +38,7 @@
     <!-- 开启aop注解方式，此步骤不能少，这样java类中的aop注解才会生效 -->
     <aop:aspectj-autoproxy proxy-target-class="true"/> 
     <!-- 开启aop,对类代理 --> 
-    <aop:config proxy-target-class="true"></aop:config> 
-    
+    <aop:config proxy-target-class="true"></aop:config>  
     
    <!-- 避免IE在ajax请求时，返回json出现下载 -->
    <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">     

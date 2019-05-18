@@ -247,7 +247,7 @@ public class RoleController {
 	
 	@RequestMapping(value = "/roleDelete")
 	@RequiresPermissions("role:Delete")
-	@PermissionName("角色删除")
+	@PermissionName("角色")
 	public ModelAndView roleDelete(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		String  idss=request.getParameter("ids");

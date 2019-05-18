@@ -175,7 +175,7 @@ function strFormat(val) {
                  
                 $.ajax({
                 type: 'post',
-                url: "tempUserAudit/uploadImgs?status=${status}&type=${type}",
+                url: "tempUserAudit/tempUserAuditImportIdCardImgs?status=${status}&type=${type}",
                 data: formData ,
                 processData: false,
                 contentType: false,
@@ -190,11 +190,7 @@ function strFormat(val) {
 		}
        })  
        
-    /*  var from=  document.getElementById("form1");
-      if(from!=null){
-        from.action="tempUserAudit/uploadImgs?status=${status}&type=${type}"; 
-        from.submit();
-       } */
+    
     } 
      
  }
@@ -230,9 +226,9 @@ function strFormat(val) {
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUserAudit:Show">
-	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downLoadFiles?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	          <li><a id="btnDownLoadFiles" href="tempUserAudit/downImgs?status=${status}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
 	          <li><a id="btnDownExcel" href="tempUserAudit/downExcel?status=${status}&type=${type}"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
-	          <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
+	        <!--   <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li> -->
 	      </shiro:hasPermission>
           
            

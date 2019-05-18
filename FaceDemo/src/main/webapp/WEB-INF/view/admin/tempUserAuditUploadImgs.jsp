@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 </head>
 <body class="mainbody">
-<form method="post" action="tempUserAudit/uploadImgs" id="form1" enctype="multipart/form-data">
+<form method="post" action="tempUserAudit/tempUserAuditImportIdCardImgs" id="form1" enctype="multipart/form-data">
  
  <input type="hidden" name="flag" id="flag" value="1" />
  
