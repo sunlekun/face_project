@@ -95,6 +95,9 @@
 		<if test="video_status != null and  video_status !=''">
 			and r.video_status= #{video_status}
 		</if>
+		<if test="user_township != null and  user_township !=''">
+			and u.user_township= #{user_township}
+		</if>
 
 	</select>
 
