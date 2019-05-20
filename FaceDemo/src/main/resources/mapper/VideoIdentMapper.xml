@@ -92,7 +92,7 @@
 		LEFT JOIN users u on u.id=r.user_id
 
 		where r.is_delete=0 and u.is_delete=0
-		<if test="user_id != null and  user_id !=-1">
+		<if test="video_status != null and  video_status !=''">
 			and r.video_status= #{video_status}
 		</if>
 

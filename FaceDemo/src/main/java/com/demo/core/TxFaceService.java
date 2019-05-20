@@ -185,6 +185,7 @@ public class TxFaceService {
 	            }
 	            videoIdent.setAdd_time(new Date());
 	            videoIdent.setVideo_status(video_status);
+	            videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0,4));
 	            videoIdentService.insertVL(videoIdent);
 		   } catch (Exception e) {
 	                System.out.println(e.toString());

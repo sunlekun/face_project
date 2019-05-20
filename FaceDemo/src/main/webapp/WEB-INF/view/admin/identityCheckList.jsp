@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -42,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "<%=path%>/identityCheck/identityCheckList?status=${status}&video_status=${video_status}",
+            url: "<%=path%>/identityCheck/identityCheckList?video_status=${video_status}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -97,11 +98,13 @@ return fmt;
     
 	function strFormat(val) { 
          if (val == 3) 
-         return "认证未通过，详情请咨询当地乡镇办";
+         return "匹配失败";
         else  if (val == 2)  
             return "审核通过";
-        else 
-           return "等待人工抽查审核";
+        else  if (val == 4)  
+        	return "黑名单"
+        else	
+           return "待审核";
          
 	}
     function dataFormat(val) { 
@@ -147,8 +150,12 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?i
     
      
       function Search(){
-      
-     document.getElementById("form1").action="<%=path%>/identityCheck/toIdentityCheckList?video_status=${video_status}"; 
+    	  var myselect=document.getElementById("video_status");
+    	  var index=myselect.selectedIndex;
+    	 var  video_status= myselect.options[index].value;
+
+
+     document.getElementById("form1").action="<%=path%>/identityCheck/toIdentityCheckList?video_status="+video_status; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  

@@ -67,8 +67,9 @@ public class IdentityCheckController {
 	@PermissionName("身份认证审核")
 	public ModelAndView toIdentityCheckList(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		ModelAndView modelAndView = new ModelAndView();  
+		String video_status = request.getParameter("video_status");
 		modelAndView.addObject("status", request.getParameter("status")); 
-		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("video_status", video_status); 
 	    modelAndView.setViewName("admin/identityCheckList"); 
 	    return modelAndView;
 	}

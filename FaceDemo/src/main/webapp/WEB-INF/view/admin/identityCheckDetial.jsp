@@ -110,13 +110,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  <dl>
-    <dt>验证口令：</dt>
-    <dd>
-      <input name="txtCode" type="text" readonly value="${videoIdent.video_code}" id="txtCode" class="input small" datatype="n" sucmsg=" " />
-      <span class="Validform_checktip">*4位数字。</span>
-    </dd>
-  </dl>
+<!--   <dl> -->
+<!--     <dt>验证口令：</dt> -->
+<!--     <dd> -->
+<%--       <input name="txtCode" type="text" readonly value="${videoIdent.video_code}" id="txtCode" class="input small" datatype="n" sucmsg=" " /> --%>
+<!--       <span class="Validform_checktip">*4位数字。</span> -->
+<!--     </dd> -->
+<!--   </dl> -->
   <dl>
     <dt>视频截图：</dt>
     <dd>
