@@ -231,9 +231,7 @@ function strFormat(val) {
 	        <!--   <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li> -->
 	      </shiro:hasPermission>
           
-           
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+         
         </ul>
         
             <shiro:hasPermission name="tempUserAudit:Show">
@@ -249,6 +247,13 @@ function strFormat(val) {
 	        </div>
         
       </shiro:hasPermission>
+      
+       <ul class="icon-list"> 
+         <shiro:hasPermission name="tempUserAudit:Show">
+           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUserAudit/toTempUserAuditList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUserAudit/toTempUserAuditList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+         </shiro:hasPermission>
+        </ul>
       </div>
     
     </div>

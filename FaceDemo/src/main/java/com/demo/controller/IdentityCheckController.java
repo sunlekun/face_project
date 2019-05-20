@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,9 +27,13 @@ import com.demo.model.Manager;
 import com.demo.model.RandomCheck;
 import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
+import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.VideoIdentService; 
+import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author lekun.sun
@@ -42,13 +47,32 @@ public class IdentityCheckController {
 	public static Logger log= Logger.getLogger(IdentityCheckController.class);
 	@Autowired
 	private VideoIdentService videoIdentService;
+	
+	@Autowired
+	private XzbService xzbService;
+	
 	@RequestMapping(value = "/identityCheckList")	
 	public void identityCheckList(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
+		
+		 
+		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
+		
+		
+		if(manager.getRole_type()==1)//超级用户，类别为城乡居民的，显示所有
+			map.put("xzb", null);
+		else //非系统用户只能按照自己的管理权限筛选
+			map.put("xzb", manager.getXzb());
+		
+		//筛选条件
+		map.put("user_township", request.getParameter("user_township")); 
+		map.put("year", request.getParameter("year")); 
 		map.put("video_status", request.getParameter("video_status"));
-		map.put("status", request.getParameter("status"));
-		map.put("data_type", manager.getUser_type());
+		
 		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
 		String jsons = JSON.toJSONString(identityChecks);
 
@@ -58,6 +82,7 @@ public class IdentityCheckController {
 		object.put("jsons", jsons);
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
+		 
 		
 	}
 	
@@ -65,11 +90,64 @@ public class IdentityCheckController {
 	@RequestMapping(value = "/toIdentityCheckList")	
 	@RequiresPermissions("identityCheck:Show")
 	@PermissionName("身份认证审核")
-	public ModelAndView toIdentityCheckList(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public ModelAndView toIdentityCheckList(Integer pageSize,Integer pageNumber,String key, HttpServletRequest request,HttpServletResponse response) throws IOException {
 		ModelAndView modelAndView = new ModelAndView();  
-		modelAndView.addObject("status", request.getParameter("status")); 
+		
+		List<Xzb> xzbs= xzbService.findAllXzb();
+		modelAndView.addObject("xzbs", xzbs);  
+		
+		List<String> years  = videoIdentService.findVidoIdentYears();	 
+		modelAndView.addObject("years", years);   
+		
+        String type=request.getParameter("type");
+		
+		if("Img".equals(type))
+		{
+			if(pageSize==null)
+				pageSize=10;
+			if(pageNumber==null)
+				pageNumber =1;
+			PageHelper.startPage(pageNumber, pageSize);
+			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+			HashMap<String ,String > map=new HashMap<String ,String >();
+			map.put("key", key);
+			
+			if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+			     map.put("data_type",null);
+			else  //其他用户只显示各自的类别的采集信息
+				map.put("data_type", manager.getUser_type());
+			
+			if(manager.getRole_type()==1)//超级用户，类别为城乡居民的，显示所有
+				map.put("xzb", null);
+			else //非系统用户只能按照自己的管理权限筛选
+				map.put("xzb", manager.getXzb());
+			
+			//筛选条件
+			map.put("user_township", request.getParameter("user_township")); 
+			map.put("year", request.getParameter("year")); 
+			map.put("video_status", request.getParameter("video_status"));
+			
+			List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
+			PageInfo<VideoIdent> page = new PageInfo<>(identityChecks);
+			modelAndView.addObject("page", page); 
+			modelAndView.addObject("key", key); 
+            modelAndView.setViewName("admin/identityCheckListImg"); 
+            
+		}
+		else
+		{
+			type="Word";
+			modelAndView.setViewName("admin/identityCheckList"); 
+		}
+		
+		
+	 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
-	    modelAndView.setViewName("admin/identityCheckList"); 
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("type", type);  
+		
+		
 	    return modelAndView;
 	}
 	
@@ -106,6 +184,10 @@ public class IdentityCheckController {
 				videoIdentService.deleteVideoIdentBatch(ids);
 		}
 		
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("type", request.getParameter("type"));  
 		modelAndView.setViewName("redirect:/identityCheck/toIdentityCheckList");
 		return modelAndView;
 	}
@@ -115,9 +197,30 @@ public class IdentityCheckController {
 	public  void downExcel(HttpServletRequest request, HttpServletResponse response){ 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
+		
 		map.put("video_status", request.getParameter("video_status"));
 //		map.put("status", request.getParameter("status"));
-		map.put("data_type", manager.getUser_type());
+	//	map.put("data_type", manager.getUser_type());
+		
+		
+		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
+		
+		
+		if(manager.getRole_type()==1)//超级用户，类别为城乡居民的，显示所有
+			map.put("xzb", null);
+		else //非系统用户只能按照自己的管理权限筛选
+			map.put("xzb", manager.getXzb());
+		
+		//筛选条件
+		map.put("user_township", request.getParameter("user_township")); 
+		map.put("year", request.getParameter("year")); 
+		map.put("video_status", request.getParameter("video_status"));
+		
+		
+		
 		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
 //		String jsons = JSON.toJSONString(identityChecks);
 		
@@ -156,8 +259,10 @@ public class IdentityCheckController {
 		VideoIdent videoIdent=videoIdentService.findVideoListByVideoIdentId(id);
 		
 		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.addObject("status", request.getParameter("status")); 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("type", request.getParameter("type"));  
 		
 		modelAndView.setViewName("admin/identityCheckDetial"); 
 		return modelAndView;
@@ -173,8 +278,10 @@ public class IdentityCheckController {
 		VideoIdent videoIdent=videoIdentService.findVideoListByVideoIdentId(id);
 		
 		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.addObject("status", request.getParameter("status")); 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("type", request.getParameter("type"));  
 		
 		modelAndView.setViewName("admin/identityCheckConfirm");  
 		return modelAndView;
@@ -187,7 +294,12 @@ public class IdentityCheckController {
 		
 		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status);
 		
+		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("user_township", request.getParameter("user_township"));  
+		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("type", request.getParameter("type"));  
 		modelAndView.setViewName("admin/identityCheckList"); 
+		
 		return modelAndView;
 	}
 	

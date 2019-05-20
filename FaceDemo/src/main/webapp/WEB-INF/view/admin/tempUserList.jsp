@@ -193,9 +193,7 @@ function Search(){
           <shiro:hasPermission name="tempUser:Delete">
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
           </shiro:hasPermission>
-           
-           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+          
         </ul>
         
          <shiro:hasPermission name="tempUser:Show">
@@ -211,6 +209,15 @@ function Search(){
 	        </div>
         
       </shiro:hasPermission>
+      
+      
+       <ul class="icon-list">
+         
+          <shiro:hasPermission name="tempUser:Show">  
+           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+          </shiro:hasPermission>
+        </ul>
       </div>
     
     </div>

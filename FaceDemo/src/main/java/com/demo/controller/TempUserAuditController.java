@@ -516,6 +516,13 @@ public class TempUserAuditController {
  		HashMap<String ,String > map=new HashMap<String ,String >(); 
  		map.put("data_type", manager.getUser_type());
  		map.put("status", request.getParameter("status"));
+ 		
+ 		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
+		     map.put("data_type",null);
+		else  //其他用户只显示各自的类别的采集信息
+			map.put("data_type", manager.getUser_type());
+		 
+		
  		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		
  		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
