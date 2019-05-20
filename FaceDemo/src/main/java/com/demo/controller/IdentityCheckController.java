@@ -91,7 +91,7 @@ public class IdentityCheckController {
 	@RequiresPermissions("identityCheck:Show")
 	@PermissionName("身份认证审核")
 	public ModelAndView toIdentityCheckList(Integer pageSize,Integer pageNumber,String key, HttpServletRequest request,HttpServletResponse response) throws IOException {
-		ModelAndView modelAndView = new ModelAndView();  
+		ModelAndView modelAndView = new ModelAndView();   
 		
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs);  
@@ -145,9 +145,8 @@ public class IdentityCheckController {
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
-		modelAndView.addObject("type", type);  
-		
-		
+		modelAndView.addObject("type", type);   
+ 
 	    return modelAndView;
 	}
 	
