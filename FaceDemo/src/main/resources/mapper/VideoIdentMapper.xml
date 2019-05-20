@@ -41,12 +41,8 @@
 		<result property="user_idcard" column="user_idcard" />
 		<result property="user_township" column="user_township" />
 		<result property="user_village" column="user_village" />
-		<<<<<<< HEAD
 		<result property="user_mobile" column="user_mobile" />
-		=======
 		<result property="data_type" column="data_type" />
-		>>>>>>> branch 'master' of
-		https://github.com/sunlekun/face_project.git
 		<result property="user_img" column="user_img" />
 		<result property="mobile" column="mobile" />
 		<!-- <association property="user" column="user_id" javaType="User" select="getUserById" 
