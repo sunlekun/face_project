@@ -267,7 +267,13 @@ public class IdentityCheckController {
 		return modelAndView;
 	}
 	
-	
+	/**
+	 * 
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/identityCheckConfirm")
 	@RequiresPermissions("identityCheck:Audit")
 	@PermissionName("认证审核")
