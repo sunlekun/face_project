@@ -63,7 +63,7 @@ public class FaceDetectAuthController {
 			return modelAndView;
 		}
 		//验证是否人脸核身过
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.dayOfMonth());
+		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.getCurrentDT().substring(0,4));
 		if(list!=null&&list.size()>0){
 			modelAndView.addObject("error", "当月身份信息已经审核过，详情请咨询当地乡镇有关部门");
 			return modelAndView;

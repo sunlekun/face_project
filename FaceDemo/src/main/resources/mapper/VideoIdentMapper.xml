@@ -67,7 +67,7 @@
 
 	<select id="findVideoListByIdAndTime" resultMap="videoIdent">
 		select v.* from video_ident v where v.is_delete=0 and v.user_id= #{id}
-		and v.add_time>=STR_TO_DATE(#{date},'%Y%m%d %H')
+		and v.year>=#{date}
 	</select>
 
 
