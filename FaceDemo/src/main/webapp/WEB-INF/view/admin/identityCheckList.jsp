@@ -42,8 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript"> 
 	 
      $.ajax({
-            type: 'post',
-            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}",
+            type: 'post', 
+            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}", 
             async: true,
             type: 'post',
             dataType: 'text',
@@ -119,12 +119,12 @@ function infoFormatter( value, row, index){
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="identityCheck:Confirm">'+
+		   '<shiro:hasPermission name="identityCheck:Audit">'+
 		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="identityCheck:Confirm">'+
+		  '<shiro:lacksPermission name="identityCheck:Audit">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
@@ -148,11 +148,12 @@ function infoFormatter( value, row, index){
 return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id="+row['id']+"'>详情</a>";
     } 
     
-     
+ 
       function Search(){ 
      document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}"; 
-     document.getElementById("form1").submit(); 
- }
+     document.getElementById("form1").submit();  
+     }
+    
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  

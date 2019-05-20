@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 </head>
 <body class="mainbody">
-<form method="post" action="identityCheck/identityCheckEdit?video_status=${video_status}&auditors_reason=${auditors_reason}&txt_remarks=${txt_remarks}$id=${videoIdent.id}" id="form1">
+<form method="post" action="identityCheck/identityCheckEdit?id=${videoIdent.id}"+"&auditors_reason="+${auditors_reason}+"&txt_remarks="+${txt_remarks}+"&video_status="+${video_status}id="form1">
 <input type="hidden" name="flag" id="flag" value="1" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
@@ -75,25 +75,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div class="tab-content">
  <dl>
     <dt>备注说明：</dt>
-	    <dd><textarea name="txt_remarks" rows="2" cols="20" id="txtRemarks"  class="input" value="${videoIdent.txt_remarks }" >
-		</textarea></dd>
+	    <dd><textarea name="txt_remarks" rows="2" cols="20" id="txtRemarks"  class="input"  >${videoIdent.txt_remarks}</textarea></dd>
   </dl>
   
   <dl>
     <dt>审核状态：</dt>
     <dd>
       <div class="rule-multi-radio">
-        <span id="rblIsStatus">
-	        <input id="rblIsStatus_0" readonly type="radio" name="rblIsStatus" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">视频认证审核通过</label>
-	        <input id="rblIsStatus_1" readonly type="radio" name="rblIsStatus" value="3" ${videoIdent.video_status==4?"checked='checked'":'' } /><label for="rblIsStatus_1">拉入黑名单</label>
+        <span id="video_status">
+	        <input id="rblIsStatus_0"  type="radio" name="video_status" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">视频认证审核通过</label>
+	        <input id="rblIsStatus_1"  type="radio" name="video_status" value="4" ${videoIdent.video_status==4?"checked='checked'":'' } /><label for="rblIsStatus_1">拉入黑名单</label>
         </span>
       </div>
     </dd>
   </dl>
    <dl>
     <dt>未通过原因：</dt>
-	    <dd><textarea name="auditors_reason" rows="2" cols="20" id="auditors_reason"  class="input" value="${videoIdent.auditors_reason }" >
-		</textarea></dd>
+	    <dd><textarea name="auditors_reason" rows="2" cols="20" id="auditorsReason"  class="input">${videoIdent.auditors_reason}</textarea></dd>
   </dl>
   <dl>
     <dt>用户姓名：</dt>

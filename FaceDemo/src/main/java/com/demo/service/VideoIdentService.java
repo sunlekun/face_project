@@ -26,6 +26,6 @@ public interface VideoIdentService {
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 	public void deleteVideoIdentBatch(String[] ids);
 	VideoIdent findVideoListByVideoIdentId(Integer id);
-	public void updateById(int id, String auditors_reason,
-			String txt_remarks, int video_status); 
+	public void updateById(Integer id, String auditors_reason,
+			String txt_remarks, Integer video_status); 
 }

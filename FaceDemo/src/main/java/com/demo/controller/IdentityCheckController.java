@@ -91,7 +91,7 @@ public class IdentityCheckController {
 	@RequiresPermissions("identityCheck:Show")
 	@PermissionName("身份认证审核")
 	public ModelAndView toIdentityCheckList(Integer pageSize,Integer pageNumber,String key, HttpServletRequest request,HttpServletResponse response) throws IOException {
-		ModelAndView modelAndView = new ModelAndView();  
+		ModelAndView modelAndView = new ModelAndView();   
 		
 		List<Xzb> xzbs= xzbService.findAllXzb();
 		modelAndView.addObject("xzbs", xzbs);  
@@ -145,9 +145,8 @@ public class IdentityCheckController {
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
-		modelAndView.addObject("type", type);  
-		
-		
+		modelAndView.addObject("type", type);   
+ 
 	    return modelAndView;
 	}
 	
@@ -270,7 +269,7 @@ public class IdentityCheckController {
 	
 	
 	@RequestMapping(value = "/identityCheckConfirm")
-	@RequiresPermissions("identityCheck:Confirm")
+	@RequiresPermissions("identityCheck:Audit")
 	@PermissionName("认证审核")
 	public ModelAndView toIdentityCheckConfirm(int id, HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -278,10 +277,11 @@ public class IdentityCheckController {
 		VideoIdent videoIdent=videoIdentService.findVideoListByVideoIdentId(id);
 		
 		modelAndView.addObject("videoIdent", videoIdent); 
-		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+//		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
-		modelAndView.addObject("type", request.getParameter("type"));  
+		modelAndView.addObject("type", request.getParameter("type"));
+		modelAndView.addObject("userid", videoIdent.getId()); 
 		
 		modelAndView.setViewName("admin/identityCheckConfirm");  
 		return modelAndView;
@@ -289,9 +289,8 @@ public class IdentityCheckController {
 	
 	
 	@RequestMapping(value = "/identityCheckEdit")
-	public ModelAndView toIdentityCheckEdit(int id,String auditors_reason,String txt_remarks,int video_status,HttpServletRequest request,HttpServletResponse response) {
+	public ModelAndView toIdentityCheckEdit(Integer id,String auditors_reason,String txt_remarks,Integer  video_status,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
-		
 		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status);
 		
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
