@@ -48,7 +48,7 @@ public class FaceDetectAuthController {
 	@Autowired
 	private TxFaceService txFaceService;
 	
-	@RequestMapping(value = "/reqFaceDetectAuth")
+	@RequestMapping(value = "/reqFaceDetectAuth") 
 	public ModelAndView idToDAuthUrl(String user_idcard,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		ModelAndView modelAndView = new ModelAndView();
 		if(StringUtils.isEmpty(user_idcard)){
