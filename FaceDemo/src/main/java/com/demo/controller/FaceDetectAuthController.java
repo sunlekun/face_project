@@ -63,9 +63,9 @@ public class FaceDetectAuthController {
 			return modelAndView;
 		}
 		//验证是否人脸核身过
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.getCurrentDT().substring(0,4));
+		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.dayOfMonth());
 		if(list!=null&&list.size()>0){
-			modelAndView.addObject("error", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
+			modelAndView.addObject("error", "当月身份信息已经审核过，详情请咨询当地乡镇有关部门");
 			return modelAndView;
 		}
 		//验证在7200秒内是或否调用核身前置接口
