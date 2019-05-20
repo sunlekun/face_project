@@ -47,14 +47,7 @@ public class FaceDetectAuthController {
 	
 	@Autowired
 	private TxFaceService txFaceService;
-	/**
-	 * 人脸识别请求类
-	 * @param user_idcard
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
+	
 	@RequestMapping(value = "/reqFaceDetectAuth") 
 	public ModelAndView idToDAuthUrl(String user_idcard,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		ModelAndView modelAndView = new ModelAndView();
