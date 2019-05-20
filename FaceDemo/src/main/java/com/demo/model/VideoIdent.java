@@ -32,12 +32,14 @@ public class VideoIdent {
 	private String user_village;
 	private String user_mobile;
 	private String user_img;
+	private String data_type;
+	private String mobile;
 
 	/*
 	 * //为了显示使用 private String user_name; private String user_idcard; private
 	 * String mobile; private String img_url;
 	 */
-
+	
 	public int getId() {
 		return id;
 	}
@@ -49,6 +51,22 @@ public class VideoIdent {
 	public void setUser(User user) {
 		this.user = user;
 	}*/
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getData_type() {
+		return data_type;
+	}
+
+	public void setData_type(String data_type) {
+		this.data_type = data_type;
+	}
 
 	public void setId(int id) {
 		this.id = id;
