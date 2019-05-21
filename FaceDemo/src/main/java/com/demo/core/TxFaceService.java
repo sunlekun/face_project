@@ -110,7 +110,7 @@ public class TxFaceService {
         reqBean.setVersion(version);
         reqBean.setRegion(region);
         reqBean.setRuleId(ruleId);
-        reqBean.setImageBase64(tempUser.getOriginal_path());
+        reqBean.setImageBase64(Base64Utils.getImageStr(tempUser.getOriginal_path()));
         ObjectMapper mapper = new ObjectMapper();
         String mapJakcson = mapper.writeValueAsString(reqBean);
         log.info(mapJakcson);
