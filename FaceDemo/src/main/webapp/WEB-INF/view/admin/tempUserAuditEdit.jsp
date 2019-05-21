@@ -58,8 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         //初始化上传控件
         $(".upload-img").InitUploader({ sendurl: "tempUser/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
         $(".upload-album").InitUploader({
-        	btntext: "批量上传", 
-        	multiple: true, 
+        	btntext: "批量上传",  
         	water: true, 
         	thumbnail: true, 
         	filesize: "1024000", 

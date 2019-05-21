@@ -21,6 +21,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/Validform_v5.3.2_min.js"></script> 
+<script type="text/javascript" src="js/admin/scripts/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/admin/uploader.js"></script>
 <script type="text/javascript" src="js/admin/scripts/artdialog/dialog-plus-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/laymain.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/common.js"></script>
@@ -30,7 +32,59 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/admin/skin/picbox.css" />
 <link rel="stylesheet" type="text/css" href="js/admin/dist/plyr.css" rel="stylesheet" />
 
- 
+  <script type="text/javascript">
+    $(function () {
+        //初始化上传控件
+        $(".upload-img").InitUploader({ sendurl: "identityCheck/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
+        $(".upload-album").InitUploader({
+        	btntext: "图片上传", 
+        	multiple: true, 
+        	water: true, 
+        	thumbnail: true, 
+        	filesize: "1024000", 
+        	sendurl: "identityCheck/upload",
+        	swf: "js/admin/scripts/webuploader/uploader.swf",
+        	filetypes: "jpg,jpge,png,gif" 
+        	});
+        //创建上传附件
+        $(".attach-btn").click(function () {
+            showAttachDialog();
+        });
+    });
+    //初始化附件窗口
+    function showAttachDialog(obj) {
+        var objNum = arguments.length;
+        var attachDialog = top.dialog({
+            id: 'attachDialogId',
+            title: "上传附件",
+            url: 'dialog/dialog_article_attach.aspx',
+            width: 500,
+            height: 180,
+            onclose: function () {
+                var liHtml = this.returnValue; //获取返回值
+                if (liHtml.length > 0) {
+                    $("#showAttachList").children("ul").append(liHtml);
+                }
+            }
+        }).showModal();
+        //如果是修改状态，将对象传进去
+        if (objNum == 1) {
+            attachDialog.data = obj;
+        }
+    }
+    //删除附件节点
+    function delAttachNode(obj) {
+        $(obj).parent().remove();
+    }
+    function openWin(url, name, iWidth, iHeight) {
+        //获得窗口的垂直位置 
+        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        //获得窗口的水平位置 
+        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',status=no,toolbar=no,menubar=no,location=no,resizable=no,scrollbars=0,titlebar=no');
+    }
+    
+</script>
 </head>
 <body class="mainbody">
 <form method="post" action="randomCheck/randomCheckConfirm?status=${status}&video_status=${video_status}" id="form1">
@@ -72,12 +126,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <div class="tab-content">
+
+<dl>
+    <dt>审核人员：</dt>
+    <dd>
+      <input name="auditors_txt" type="text" value="${videoIdent.auditors_txt }" readonly maxlength="100" id="auditors_txt" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
+      <span class="Validform_checktip"></span>
+    </dd>
+  </dl>
+  
  <dl>
     <dt>备注说明：</dt>
 	    <dd><textarea name="txt_remarks" rows="2" cols="20" id="txtRemarks" readonly class="input" placeholder="审核未通过时填写" value="${videoIdent.txt_remarks }" >
 		</textarea></dd>
   </dl>
   
+  
+  <dl>
+    <dt>备注图片：</dt>
+    <dd>
+  
+      <div class="upload-box upload-album"></div>
+      <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
+      <div class="photo-list">
+         <ul id="img_ul">
+           
+            <c:forEach items="${videoIdent.txt_img.split(';')}" var="path" >
+            <li>
+              <input type="hidden" name="hid_photo_name" value="4211|${path}|${path}" />
+              <div class="img-box" onclick="setFocusImg(this);">
+                <img src="${path}" bigsrc="${path}" />
+              </div>
+              
+              <a href="javascript:;" onclick="javascript:openWin('${path}','','700','600');">预览</a>
+            <!--   <a href="javascript:;" onclick="delImg(this);">删除</a> -->
+            </li>
+           </c:forEach>
+            
+         </ul>
+      </div>
+     
+       </dd>
+  </dl>
   <dl>
     <dt>审核状态：</dt>
     <dd>

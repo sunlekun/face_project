@@ -143,9 +143,9 @@
 		u.mobile as mobile from video_ident r LEFT JOIN users u on u.id=r.user_id
 		where r.is_delete=0 and u.is_delete=0 and r.id=#{id}
 	</select>
-	<update id="updateById" parameterType="videoIdent">
+	<update id="updateById" parameterType="videoIdent"> 
 		update video_ident set
-		txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status}
+		txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status},auditors_txt=#{auditors_txt},txt_img=#{txt_img}
 		where id=#{id}
 	</update>
 </mapper>

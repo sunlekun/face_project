@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -7,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +22,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
@@ -32,6 +36,7 @@ import com.demo.realm.PermissionName;
 import com.demo.service.VideoIdentService; 
 import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
+import com.demo.util.LoadProperties;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -295,17 +300,94 @@ public class IdentityCheckController {
 	
 	
 	@RequestMapping(value = "/identityCheckEdit")
-	public ModelAndView toIdentityCheckEdit(Integer id,String auditors_reason,String txt_remarks,Integer  video_status,HttpServletRequest request,HttpServletResponse response) {
+	public ModelAndView identityCheckEdit(VideoIdent videoIdent,HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView modelAndView = new ModelAndView();
-		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status);
+		Integer id=videoIdent.getId();
+		String auditors_reason=videoIdent.getAuditors_reason();
+        String txt_remarks=videoIdent.getTxt_remarks();
+        String auditors_txt=videoIdent.getAuditors_txt();
+        String txt_img="";
+        Integer  video_status=videoIdent.getVideo_status();
+        
+        String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
+	    
+	    
+		if (hid_photo_names != null)
+		{
+			 
+			for (int i = 0; i < hid_photo_names.length; i++) {
+				String[] name = hid_photo_names[i].split("\\|");
+				
+				/* if(name!=null) 
+				 { 
+					 String[]	 name1=name[1].split("\\/"); 
+					 System.out.println(name1[2]);
+				     path+=name[1]+";";
+				 }*/
+				 
+				txt_img += name[1] + ";";
+			}
+
+			if (txt_img.length() > 0) 
+				txt_img =txt_img.substring(0, txt_img.length() - 1);  
+		}
+		 
+		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status, auditors_txt, txt_img);
 		
-		modelAndView.addObject("video_status", request.getParameter("video_status")); 
+		modelAndView.addObject("video_status", request.getParameter("video_status1")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
 		modelAndView.addObject("type", request.getParameter("type"));  
 		modelAndView.setViewName("admin/identityCheckList"); 
 		
 		return modelAndView;
+	}
+	@RequestMapping(value = "/upload")
+	public void upload( /*@RequestParam("file")  MultipartFile file,*/HttpServletRequest request,HttpServletResponse response) throws IOException {
+		
+		JSONObject object=new JSONObject(); 
+		String txtImgFilePath = LoadProperties.loadProperties("common.properties", "txtImgFilePath");
+		
+		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
+	    Map<String,MultipartFile> files=mul.getFileMap();
+	    
+	    for(MultipartFile file:files.values())
+	    {
+	
+		
+		 
+		String filename = file.getOriginalFilename();
+		String fileExtName = filename.substring(filename.lastIndexOf("."));
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+		 
+		filename = df.format(System.currentTimeMillis()) + fileExtName;
+ 
+		file.transferTo(new File(txtImgFilePath + filename));
+  
+	 /*    String thumbnail =  request.getParameter("IsThumbnail");         
+                
+                if ("1".equals(thumbnail))
+                {
+                    String sFileName = "thumb_" + filename;//缂╃暐鍥炬枃浠跺悕
+                     
+                    Thumbnails.of(infoUpdateSavePath + filename) 
+                    .size(112, 112)  
+                    .toFile(infoUpdateSavePath +"\\thumb\\"+ sFileName );
+                    object.put("thumb","/info_uploadfiles/retire/thumb/"+ sFileName);
+                }*/
+               
+                
+		object.put("name", "/txtImg_info/upload/" + filename);
+		object.put("path", "/txtImg_info/upload/" + filename );
+		object.put("thumb","/txtImg_info/upload/" + filename);
+	    }
+		object.put("status", true);
+		
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().write(object.toString()); 
+	   
+		
+          
 	}
 	
 }

@@ -47,17 +47,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  function Search(){
 
 	 var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
     function toPage(pageNumber){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&pageNumber="+pageNumber+"&pageSize="+pageSize;
      document.getElementById("form1").submit();
  }
   function setPageSize(){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -91,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="identityCheck/identityCheckDelete?status=${status}"; 
+        from.action="identityCheck/identityCheckDelete?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"; 
         from.submit();
        }  
      
@@ -103,7 +103,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 </head>
 <body class="mainbody">
-<form method="post"  action="identityCheck/toIdentityCheckList?type=${type}"  id="form1">
+<form method="post"  action="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -206,7 +206,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <h1>
 	          <span>
 	          <shiro:hasPermission name="identityCheck:Edit">
-	             	  <a href="identityCheck/toTempUserAuditEdit?status=${status}&type=${type }&id=${ videoIdent.id}" >${ videoIdent.user_name}</a>
+	             	  <a href="identityCheck/toTempUserAuditEdit?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id=${ videoIdent.id}" >${ videoIdent.user_name}</a>
 	            </shiro:hasPermission>
 	            <shiro:lacksPermission name="identityCheck:Edit">
 	           		  ${ videoIdent.user_name}
@@ -235,16 +235,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <div class="foot">
             <p class="time"> <fmt:formatDate  value="${ videoIdent.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/> </p>
             
-            <shiro:hasPermission name="identityCheck:Edit">
-             	  <a href="identityCheck/toTempUserAuditEdit?status=${status}&type=${type }&id=${ videoIdent.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
+            <shiro:hasPermission name="identityCheck:Audit">
+             	  <a href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id=${ videoIdent.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
-            <shiro:lacksPermission name="identityCheck:Edit">
+            <shiro:lacksPermission name="identityCheck:Audit">
            		<a href="javascript:;" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:lacksPermission>
             
           
             <shiro:hasPermission name="identityCheck:View">
-          	 	 <a href="identityCheck/identityCheckDetial?status=${status}&type=${type }&id=${ videoIdent.id}" title="详情"><i class="iconfont icon-eye"></i></a> 
+          	 	 <a href="identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id=${ videoIdent.id}" title="详情"><i class="iconfont icon-eye"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="identityCheck:View">
                 <a href="javascript:;" title="详情"><i class="iconfont icon-eye"></i></a> 

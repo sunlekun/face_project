@@ -532,7 +532,7 @@ public class LogAspect {
 		map.put("UserController",  "用户信息");
 		map.put("TempUserController", "采集信息");
 		map.put("TempUserAuditController", "采集信息审核");
-		map.put("VideoIdentController","认证"); 
+		map.put("IdentityCheckController","身份认证"); 
 		
 		return map.get(key);
 	}

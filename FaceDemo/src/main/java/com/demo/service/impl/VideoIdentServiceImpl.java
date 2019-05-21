@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
 import com.demo.dao.VideoIdentDao; 
 import com.demo.model.VideoIdent;
 import com.demo.service.VideoIdentService;
@@ -79,8 +81,8 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 
 		@Override
 		public void updateById(Integer id, String auditors_reason,
-				String txt_remarks, Integer video_status) {
-			videoIdentDao.updateById(id,auditors_reason,txt_remarks,video_status);
+				String txt_remarks, Integer video_status,String auditors_txt,String txt_img) {
+			videoIdentDao.updateById(id,auditors_reason,txt_remarks,video_status, auditors_txt, txt_img);
 			
 		}
 		
