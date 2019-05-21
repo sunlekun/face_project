@@ -151,7 +151,7 @@ public class TxFaceService {
 	            FaceidClient client = new FaceidClient(cred, region, clientProfile);
 	        	//请求参数
 		        GetDetectInfoReq reqBean = new GetDetectInfoReq();
-		        reqBean.setAction(action);
+		        reqBean.setAction("GetDetectInfo");
 		        reqBean.setVersion(version);
 		        reqBean.setRegion(region);
 		        reqBean.setRuleId(ruleId);
