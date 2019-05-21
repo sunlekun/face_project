@@ -57,6 +57,13 @@ public class ManagerController {
 	
 	@Autowired
 	private XzbService xzbService;
+	@RequestMapping(value = "/center")
+	@RequiresPermissions("manager:Show")
+	public ModelAndView center(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView(); 
+		modelAndView.setViewName("admin/center"); 
+		return modelAndView;
+	}
 	
 	@RequestMapping(value = "/toManagerList")
 	@RequiresPermissions("manager:Show")

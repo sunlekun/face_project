@@ -124,7 +124,7 @@ function __doPostBack(eventTarget, eventArgument) {
             </li>
            
             <li>
-              <a href="center.aspx" target="mainframe">管理中心</a>
+              <a href="manager/center" target="mainframe">管理中心</a>
             </li>
             <li>
               <a href="manager/toSetPwd" onclick="linkMenuTree(false, '');" target="mainframe">修改密码</a>
