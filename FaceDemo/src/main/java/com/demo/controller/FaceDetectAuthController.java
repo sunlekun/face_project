@@ -108,7 +108,7 @@ public class FaceDetectAuthController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/notify.do", method = RequestMethod.POST)
+	@RequestMapping(value="/notify", method = RequestMethod.POST)
 	@ResponseBody
 	public String notify(HttpServletRequest request,HttpServletResponse response) throws Exception{
 		

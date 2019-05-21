@@ -69,7 +69,7 @@ public class TestService {
 	}
 	
 	@Test
-	public void test1() {
+	public void test1() throws Exception {
 		String  userId = detectAuthService.findUserId("81E3A2A6-B223-414A-B5EA-7A0814BD601C");
 		System.out.println(userId);
 		//验证在7200秒内是或否调用核身前置接口

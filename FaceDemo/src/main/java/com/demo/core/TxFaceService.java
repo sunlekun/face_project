@@ -93,6 +93,12 @@ public class TxFaceService {
 	@Value("#{sysConfig.filePuth}")
     public String filePuth;
 	
+	/**
+	 * 回调地址
+	 */
+	@Value("#{sysConfig.redirectUrl}")
+    public String redirectUrl;
+	
 	public DetectAuthRespBean faceProcess(TempUser tempUser) throws Exception{
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
 		Credential cred = new Credential(secretId, secretKey);
@@ -112,6 +118,7 @@ public class TxFaceService {
         reqBean.setImageBase64(Base64Utils.getImageStr(tempUser.getOriginal_path()).replace("\r\n", ""));
         reqBean.setName(tempUser.getUser_name());
         reqBean.setIdCard(tempUser.getUser_idcard());
+        reqBean.setRedirectUrl(redirectUrl);
         ObjectMapper mapper = new ObjectMapper();
         String mapJakcson = mapper.writeValueAsString(reqBean);
         log.info(mapJakcson);
