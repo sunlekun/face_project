@@ -147,7 +147,17 @@ public class VideoIdent {
 	public int getVideo_status() {
 		return video_status;
 	}
+	public String getVideo_statuss() {
+		if (video_status == 3)
+			return "匹配失败";
+		else if (video_status == 2)
+			return "审核通过";
+		else if (video_status == 4)
+			return "黑名单";
+		else
+			return "待审核";
 
+	}
 	public void setVideo_status(int video_status) {
 		this.video_status = video_status;
 	}

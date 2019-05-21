@@ -95,9 +95,32 @@
 		<if test="video_status != null and  video_status !=''">
 			and r.video_status= #{video_status}
 		</if>
+<<<<<<< HEAD
 		<if test="user_township != null and  user_township !=''">
 			and u.user_township= #{user_township}
 		</if>
+=======
+		
+		<if test="key!=null  and key!=''">   
+          and (u.user_name like '%#{key}%' or u.user_idcard like '%#{key}%' )
+        </if> 
+        
+         <if test="data_type!=null  and data_type!=''">   
+          and u.data_type=#{data_type}
+        </if> 
+        
+        <if test="xzb!=null  and xzb!=''">   
+          and m.user_township=#{xzb}
+        </if> 
+        
+         <if test="user_township!=null  and user_township!=''">   
+          and u.user_township=#{user_township}
+        </if> 
+         <if test="year!=null  and year!=''">   
+          and r.year=#{year}
+        </if> 
+        
+>>>>>>> branch 'master' of https://github.com/sunlekun/face_project.git
 
 	</select>
 
@@ -126,9 +149,9 @@
 		u.mobile as mobile from video_ident r LEFT JOIN users u on u.id=r.user_id
 		where r.is_delete=0 and u.is_delete=0 and r.id=#{id}
 	</select>
-	<update id="updateById" parameterType="videoIdent">
+	<update id="updateById" parameterType="videoIdent"> 
 		update video_ident set
-		txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status}
+		txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status},auditors_txt=#{auditors_txt},txt_img=#{txt_img}
 		where id=#{id}
 	</update>
 </mapper>

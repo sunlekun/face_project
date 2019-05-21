@@ -22,6 +22,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/scripts/jquery/Validform_v5.3.2_min.js"></script> 
 <script type="text/javascript" src="js/admin/scripts/artdialog/dialog-plus-min.js"></script>
+<script type="text/javascript" src="js/admin/scripts/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/admin/uploader.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/laymain.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/common.js"></script>
  
@@ -30,10 +32,63 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="css/admin/skin/picbox.css" />
 <link rel="stylesheet" type="text/css" href="js/admin/dist/plyr.css" rel="stylesheet" />
 
+ <script type="text/javascript">
+    $(function () {
+        //初始化上传控件
+        $(".upload-img").InitUploader({ sendurl: "identityCheck/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
+        $(".upload-album").InitUploader({
+        	btntext: "图片上传", 
+        	multiple: true, 
+        	water: true, 
+        	thumbnail: true, 
+        	filesize: "1024000", 
+        	sendurl: "identityCheck/upload",
+        	swf: "js/admin/scripts/webuploader/uploader.swf",
+        	filetypes: "jpg,jpge,png,gif" 
+        	});
+        //创建上传附件
+        $(".attach-btn").click(function () {
+            showAttachDialog();
+        });
+    });
+    //初始化附件窗口
+    function showAttachDialog(obj) {
+        var objNum = arguments.length;
+        var attachDialog = top.dialog({
+            id: 'attachDialogId',
+            title: "上传附件",
+            url: 'dialog/dialog_article_attach.aspx',
+            width: 500,
+            height: 180,
+            onclose: function () {
+                var liHtml = this.returnValue; //获取返回值
+                if (liHtml.length > 0) {
+                    $("#showAttachList").children("ul").append(liHtml);
+                }
+            }
+        }).showModal();
+        //如果是修改状态，将对象传进去
+        if (objNum == 1) {
+            attachDialog.data = obj;
+        }
+    }
+    //删除附件节点
+    function delAttachNode(obj) {
+        $(obj).parent().remove();
+    }
+    function openWin(url, name, iWidth, iHeight) {
+        //获得窗口的垂直位置 
+        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        //获得窗口的水平位置 
+        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',status=no,toolbar=no,menubar=no,location=no,resizable=no,scrollbars=0,titlebar=no');
+    }
+    
+</script>
  
 </head>
 <body class="mainbody">
-<form method="post" action="identityCheck/identityCheckEdit?video_status=${video_status}&auditors_reason=${auditors_reason}&txt_remarks=${txt_remarks}$id=${videoIdent.id}" id="form1">
+<form method="post" action="identityCheck/identityCheckEdit?id=${videoIdent.id}"+"&auditors_reason="+${auditors_reason}+"&txt_remarks="+${txt_remarks}+"&video_status="+${video_status} id="form1">
 <input type="hidden" name="flag" id="flag" value="1" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
@@ -47,19 +102,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="32BA39F4" />
 	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAC5vyWlmQUu0Cd9FtVriJx2cJNc9N2sZRgHQr0c8oBmMvyWH/otKA12bY8M1IRpJFzJqLJF8libJlanDSMTb1QBbmeRr6sdoPfvU07H8WyTbFjME6pIn9WnRtxjmGK/dhhdHmpWCqiQHaqV6CesTm5TAUulrLCak5Mj7YLs4ipiyPRv17zoz/ce8CPYu9S1wFKrdXlr6cNp+xslLYi6qPAsxVTQNw6opmbFnWJIkOMENKtKfyRP3/LiVMTAKhP6tyKFJZ1CA8bio1bJF1jQrnTJWKyHkYGoNcPuUzEwnMvANO4pM2nK2tzkmLdcQfbfGGpANh3RJxEW3fTWy8IZuQlzOJ4Emua6MZ1GnVNCmHedF4PrZZGUDb3N6Z6Zixk9qr3ZlxFQlJwokHpX5h3o5nYSjw2VeZVkF8aidMAGvrRFFaRG2an6HkefDIPm7ZQQ1VxBYuW849pjo47duQ7gwnTre2kScC7G0slt0MOUGHziMnHF201SIPVMesNY/sh87E/Qr71LjrnEzL0aAxjRPH4O/Uv0cHECMKqswvkwl2lroe0Qrs+dAV2PcX19aAXg2flIt9dcsTxGIJC5Wlg69kvbYOC3NprCjrHA2Que5c8sOvBkDnmk7Nppid4T8yLo8JSrNvJyehZfdBe6pC78Zxlsue6tr7b+Jv+8WtDOL2GExI/Wpo66ce0uh9XXGyTafIUd1z/mwd7Q1gE8vVwRfh/BWJdtcfWu8XEd7YQFygcYSeDibdcEMRwMGYs8BoHQs7fMpx+8poDnFLfPrx3+IHYDtmvC5IRHJAl8BkDkwvjAC0Y0ujQmoDGeIZ7lMpFKi03z6HaaD64bAEKCq47uAqKpwY3plgk0YBAefRz3MyBlTcHY2+Mc6SrnAqio3oCKbxYZqqO2nsNYUtW1WH4d+mUfy7ZZzDRG/XNqDaJpblqPI6yB6zvk7EnSXkkh7ys8OfVs85pbWlDO2hADfoPXD/5tdwDwEJbfn2nrgkmxsNFF0UeMtWd3l0hZ+5/zmgtYLdVg=" />
 </div>
-<!--导航栏-->
+<!--导航栏--> 
+
 <div class="location">
-  <a href="identityCheck/toIdentityCheckList?status=${status}&video_status=${video_status}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="identityCheck/toIdentityCheckList?type=${type}&video_status1=${video_status}&user_township=${user_township}&year=${year}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <a href="identityCheck/toIdentityCheckList"><span>抽查记录</span></a>
+  <a href="identityCheck/identityCheckList?type=${type}"><span>身份认证审核列表</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <span>抽查审核</span>
 </div>
 
 <div class="line10"></div>
 <!--/导航栏-->
-
 <!--内容-->
 <div id="floatHead" class="content-tab-wrap">
   <div class="content-tab">
@@ -72,46 +127,104 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 
 <div class="tab-content">
+
+<dl>
+    <dt>审核人员：</dt>
+    <dd>
+      <input name="auditors_txt" type="text" value="<shiro:principal property="user_name"></shiro:principal>" readonly maxlength="100" id="auditors_txt" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
+      <span class="Validform_checktip"></span>
+    </dd>
+  </dl>
+
+
  <dl>
     <dt>备注说明：</dt>
-	    <dd><textarea name="txt_remarks" rows="2" cols="20" id="txtRemarks"  class="input" value="${videoIdent.txt_remarks }" >
-		</textarea></dd>
+	    <dd><textarea name="txt_remarks" rows="2" cols="20" id="txt_remarks"  class="input"  >${videoIdent.txt_remarks}</textarea></dd>
   </dl>
+  
+<!--   <dl>
+    <dt>备注图片：</dt>
+    <dd>
+      <input name="txt_img" type="text" id="txt_img" class="input normal upload-path" />
+      <div class="upload-box upload-img"></div><span class="Validform_checktip" style="position:relative; top:9px;"></span>
+    </dd>
+  </dl> -->
+ <!--  <dl>
+    <dt>备注图片：</dt>
+    <dd>
+      <div class="upload-box upload-album"></div>
+      <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
+      <div class="photo-list">
+        <ul id="img_ul">
+          
+        </ul>
+      </div>
+    </dd>
+  </dl> -->
+  
+  <dl>
+    <dt>备注图片：</dt>
+    <dd>
+  
+      <div class="upload-box upload-album"></div>
+      <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
+      <div class="photo-list">
+         <ul id="img_ul">
+        
+            <c:if test="${videoIdent.txt_img!='NULL'}">  
+            <c:forEach items="${videoIdent.txt_img.split(';')}" var="path" >
+            <li>
+              <input type="hidden" name="hid_photo_name" value="4211|${path}|${path}" />
+              <div class="img-box" onclick="setFocusImg(this);">
+                <img src="${path}" bigsrc="${path}" />
+              </div>
+              
+              <a href="javascript:;" onclick="javascript:openWin('${path}','','700','600');">预览</a>
+              <a href="javascript:;" onclick="delImg(this);">删除</a>
+            </li>
+           </c:forEach>
+           </c:if>
+            
+         </ul>
+      </div>
+     
+       </dd>
+  </dl>
+  
   
   <dl>
     <dt>审核状态：</dt>
     <dd>
       <div class="rule-multi-radio">
-        <span id="rblIsStatus">
-	        <input id="rblIsStatus_0" readonly type="radio" name="rblIsStatus" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">视频认证审核通过</label>
-	        <input id="rblIsStatus_1" readonly type="radio" name="rblIsStatus" value="3" ${videoIdent.video_status==4?"checked='checked'":'' } /><label for="rblIsStatus_1">拉入黑名单</label>
+        <span id="video_status">
+	        <input id="rblIsStatus_0"  type="radio" name="video_status" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">视频认证审核通过</label>
+	        <input id="rblIsStatus_1"  type="radio" name="video_status" value="4" ${videoIdent.video_status==4?"checked='checked'":'' } /><label for="rblIsStatus_1">拉入黑名单</label>
         </span>
       </div>
     </dd>
   </dl>
    <dl>
     <dt>未通过原因：</dt>
-	    <dd><textarea name="auditors_reason" rows="2" cols="20" id="auditors_reason"  class="input" value="${videoIdent.auditors_reason }" >
-		</textarea></dd>
+	    <dd><textarea name="auditors_reason" rows="2" cols="20" id="auditors_reason"  class="input">${videoIdent.auditors_reason}</textarea></dd>
   </dl>
   <dl>
     <dt>用户姓名：</dt>
     <dd>
-      <input name="txtTitle" type="text" readonly value="${videoIdent.user_name }" maxlength="100" id="txtTitle" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="user_name" type="text" readonly value="${videoIdent.user_name }" maxlength="100" id="user_name" class="input normal"  datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>身份证号码：</dt>
     <dd>
-      <input name="txtIdcard" type="text" readonly value="${videoIdent.user_idcard }" maxlength="18" id="txtIdcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
+      <input name="user_idcard" type="text" readonly value="${videoIdent.user_idcard }" maxlength="18" id="user_idcard" class="input normal" datatype="*1-100" sucmsg=" " minlength="2" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
     <dt>手机号码：</dt>
     <dd>
-      <input name="txtMobile" type="text" readonly value="${videoIdent.mobile }" id="txtMobile" class="input normal" />
+      <input name="mobile" type="text" readonly value="${videoIdent.mobile }" id="mobile" class="input normal" />
       <span class="Validform_checktip"></span>
     </dd>
   </dl>

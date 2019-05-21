@@ -2,7 +2,6 @@ package com.demo.realm;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -15,9 +14,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import com.demo.model.Manager; 
+import com.demo.service.LogService;
 import com.demo.service.ManagerService; 
 import com.demo.service.RoleNavigationService;
 import com.demo.service.RoleService;
@@ -30,7 +28,10 @@ public class ShiroRealm  extends AuthorizingRealm{
 	
 	@Autowired
 	private RoleService roleService;
-
+	
+	@Autowired
+	private LogService logService;
+	
 	
 	@Autowired
 	private RoleNavigationService roleNavigationService;
@@ -98,6 +99,7 @@ public class ShiroRealm  extends AuthorizingRealm{
 		}
 		 
 		SimpleAuthenticationInfo info =new SimpleAuthenticationInfo(manager,manager.getPassword(),ByteSource.Util.bytes(manager.getUser_name()),getName());
+	
 		return info;
 		
 		/*return null;*/
