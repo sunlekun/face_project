@@ -34,6 +34,7 @@ import com.demo.util.DateFormatUtil;
  * @Description 类描述:用户输入身份证号查询信息采集库并请求实名核身鉴权
  */
 @RestController
+@RequestMapping(value = "/faceDetectAuth")
 public class FaceDetectAuthController {
 	public static Logger log= Logger.getLogger(FaceDetectAuthController.class);
 	@Autowired

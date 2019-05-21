@@ -26,30 +26,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 $(function () {
 
 	if(localStorage.username!=undefined){
-		$("#username").val(localStorage.username);
-		$("#card").val(localStorage.card);
-		$("#mobile").val(localStorage.mobile);
+	/* 	$("#username").val(localStorage.username); */
+		$("#user_idcard").val(localStorage.user_idcard);
+	/* 	$("#mobile").val(localStorage.mobile); */
 	}
 });
 
 function renzheng(){
-	var username = $.trim($("#username").val());
-	var card = $.trim($("#card").val());
-	var mobile = $.trim($("#mobile").val());
-	if(username==""||card==""||mobile==""){
+	/* var username = $.trim($("#username").val()); */
+	var user_idcard = $.trim($("#user_idcard").val());
+/* 	var mobile = $.trim($("#mobile").val()); 
+	if(username==""||user_idcard==""||mobile==""){
+		swal("内容填写不完整。");
+		return;
+	}*/
+	if(user_idcard==""){
 		swal("内容填写不完整。");
 		return;
 	}
-	localStorage.username=username;
-	localStorage.card=card;
-	localStorage.mobile=mobile;
+/* 	localStorage.username=username; */
+	localStorage.user_idcard=user_idcard;
+	/* localStorage.mobile=mobile; */
 	$.ajax({
 		type : "POST",
-		url : "http://face.yzrszp.com:8080/sh_identity/login/toLogin.action",
-		data : {
-			username : username,
-			card : card,
-			mobile : mobile
+		url : "faceDetectAuth/reqFaceDetectAuth",
+		data : {user_idcard : user_idcard
+			/* username : username,
+			user_idcard : user_idcard,
+			mobile : mobile */
 		},
 		success : function(data) {
 			if (data.result == 3) {// 
@@ -83,18 +87,18 @@ function renzheng(){
 	
 </div>
 <div class="sminput">
-	<div class="sminput_xm">
+	<!-- <div class="sminput_xm">
      	<div class="sminput_xm01">真实姓名：</div>
 	    <div class="sminput_xm02"><input  name="username" id="username" type="text"></div>
-	</div>
+	</div> -->
 	<div class="sminput_sfz">
         <div class="sminput_sfz01">身份证号：</div>
-	    <div class="sminput_sfz02"><input name="card" id="card" type="text"></div>
+	    <div class="sminput_sfz02"><input name="user_idcard" id="user_idcard" type="text"></div>
 	</div>
-	<div class="sminput_sfz">
+	<!-- <div class="sminput_sfz">
         <div class="sminput_sfz01">手机号码：</div>
 	    <div class="sminput_sfz02"><input name="mobile" id="mobile" type="text"></div>
-	</div>
+	</div> -->
 	<div class="tiaok">
 	     <img src="http://face.yzrszp.com:8080/sh_identity/images/ico1.png" alt=""/>同意
   	     <a href = "JavaScript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">《我已认真阅读并同意全部协议》</a>
