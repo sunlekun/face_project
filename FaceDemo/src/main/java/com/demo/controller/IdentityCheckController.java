@@ -331,7 +331,8 @@ public class IdentityCheckController {
 			if (txt_img.length() > 0) 
 				txt_img =txt_img.substring(0, txt_img.length() - 1);  
 		}
-		 
+		else
+			txt_img=null;
 		videoIdentService.updateById(id,auditors_reason,txt_remarks,video_status, auditors_txt, txt_img);
 		
 		modelAndView.addObject("video_status", request.getParameter("video_status1")); 

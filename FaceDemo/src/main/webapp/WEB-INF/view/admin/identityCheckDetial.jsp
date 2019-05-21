@@ -141,7 +141,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</textarea></dd>
   </dl>
   
-  
+   <c:if test="${videoIdent.txt_img!='NULL'}">  
   <dl>
     <dt>备注图片：</dt>
     <dd>
@@ -150,8 +150,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
       <div class="photo-list">
          <ul id="img_ul">
-           
+     
+          
             <c:forEach items="${videoIdent.txt_img.split(';')}" var="path" >
+           
             <li>
               <input type="hidden" name="hid_photo_name" value="4211|${path}|${path}" />
               <div class="img-box" onclick="setFocusImg(this);">
@@ -161,13 +163,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a href="javascript:;" onclick="javascript:openWin('${path}','','700','600');">预览</a>
             <!--   <a href="javascript:;" onclick="delImg(this);">删除</a> -->
             </li>
+           
            </c:forEach>
-            
+         
          </ul>
       </div>
      
        </dd>
   </dl>
+  
+     </c:if>
+     
+      <c:if test="${videoIdent.txt_img=='NULL'}">
+	  <dl>
+	    <dt>备注图片：</dt>
+	    <dd><input name="txt"  value="无"  class="input normal"></dd>
+	  </dl>
+  
+     </c:if>
+     
   <dl>
     <dt>审核状态：</dt>
     <dd>

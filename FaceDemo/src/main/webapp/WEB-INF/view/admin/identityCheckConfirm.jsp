@@ -170,7 +170,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
       <div class="photo-list">
          <ul id="img_ul">
-           
+        
+            <c:if test="${videoIdent.txt_img!='NULL'}">  
             <c:forEach items="${videoIdent.txt_img.split(';')}" var="path" >
             <li>
               <input type="hidden" name="hid_photo_name" value="4211|${path}|${path}" />
@@ -182,6 +183,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
               <a href="javascript:;" onclick="delImg(this);">删除</a>
             </li>
            </c:forEach>
+           </c:if>
             
          </ul>
       </div>

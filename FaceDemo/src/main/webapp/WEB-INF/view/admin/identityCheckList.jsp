@@ -102,7 +102,7 @@ return fmt;
         else  if (val == 2)  
             return "审核通过";
         else  if (val == 4)  
-        	return "黑名单"
+        	return "黑名单";
         else	
            return "待审核";
          
