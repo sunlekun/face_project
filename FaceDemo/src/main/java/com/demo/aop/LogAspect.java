@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
  
-
-
-import java.net.URL;
+ 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect; 
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.demo.model.Log;
-import com.demo.model.Manager;
-import com.demo.model.User; 
+import com.demo.model.Manager; 
 import com.demo.realm.PermissionName;
 import com.demo.service.LogService;
 
@@ -44,7 +42,7 @@ public class LogAspect {
 	/**
      * 管理员登录方法的切入点
      */
-    @Pointcut("execution(* com.demo.controller..*.login(..))")
+    @Pointcut("execution(* com.demo.service.impl.ManagerServiceImpl.findUserByUsername(..))")
     public void login(){}
 	
 	/**
@@ -74,9 +72,39 @@ public class LogAspect {
     
     
 
-    @After(value = "login()")
-	public void doAfter(JoinPoint joinPoint){
-    	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+  /*  @After(value = "login()")*/
+    @AfterReturning(value = "login()", argNames = "joinPoint,object", returning = "object")
+	public void doAfter(JoinPoint joinPoint, Object object){
+    	
+    	/*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    	HttpServletRequest request= attributes.getRequest();
+    	 
+    	Manager manager=(Manager)object;
+         if (manager==null) {
+             return;
+         }
+         if (joinPoint.getArgs() == null) {// 没有参数
+             return;
+         }
+
+      
+       
+        String Ip = getIpAddress(request); //ip地址
+        
+        Log log = new Log();
+     
+		log.setUser_name(manager.getUser_name());
+		log.setUser_id(manager.getId());
+		
+	    log.setUser_ip(Ip);
+	    log.setAction_type("Login");
+	    log.setRemark("用户登录");
+	    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+	 
+	    logService.insertLog(log);*/
+	    
+	    
+    	/*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     	HttpServletRequest request= attributes.getRequest();
     	 
         if (SecurityUtils.getSubject().getPrincipals() == null) {// 没有登录
@@ -96,7 +124,7 @@ public class LogAspect {
 	    log.setRemark("用户登录");
 	    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
 	 
-	    logService.insertLog(log);
+	    logService.insertLog(log);*/
 	}
     
     
@@ -483,8 +511,8 @@ public class LogAspect {
 		map.put("Manager",  new String[]{"编号:getId","用户名:getUser_name"});
 		map.put("Xzb", new String[]{"编号:getId","名称:getTitle"});	
 		map.put("User",  new String[]{"编号:getIdd","用户名:getUser_name","身份证号:getUser_idcard"});
-		map.put("TempUser",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard","状态:getStatus"});
-		map.put("VideoIdent",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard"}); 
+		map.put("TempUser",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard","状态:getStatuss"});
+		map.put("VideoIdent",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard","状态:getVideo_statuss"}); 
 		
 		
 		return map.get(key);
@@ -497,14 +525,14 @@ public class LogAspect {
 		map.put("Xzb", "乡镇办");	
 		map.put("User",  "用户信息");
 		map.put("TempUser", "采集信息");
-		map.put("VideoIdent","认证"); 
+		map.put("VideoIdent","身份认证"); 
 		map.put("RoleController", "管理角色");
 		map.put("ManagerController", "管理员");
 		map.put("XzbController", "乡镇办");	
 		map.put("UserController",  "用户信息");
 		map.put("TempUserController", "采集信息");
 		map.put("TempUserAuditController", "采集信息审核");
-		map.put("VideoIdentController","认证"); 
+		map.put("IdentityCheckController","身份认证"); 
 		
 		return map.get(key);
 	}

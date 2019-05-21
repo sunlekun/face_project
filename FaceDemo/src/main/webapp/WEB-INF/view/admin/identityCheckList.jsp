@@ -12,7 +12,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>认证抽查列表</title>
+<title>身份认证审核列表</title>
   
 
 <link href="js/admin/scripts/artdialog/ui-dialog.css" rel="stylesheet" type="text/css" />
@@ -42,8 +42,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript"> 
 	 
      $.ajax({
-            type: 'post',
-            url: "<%=path%>/identityCheck/identityCheckList?video_status=${video_status}",
+            type: 'post', 
+            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}", 
             async: true,
             type: 'post',
             dataType: 'text',
@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {     
-                      window.location.href = "<%=path%>/identityCheck/identityCheckDetial?status=${status}&video_status=${video_status}&id="+$element.id+"&video_id="+$element.video_id;                  
+                      window.location.href = "<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id="+$element.id+"&video_id="+$element.video_id;                  
                      
                    });
                    
@@ -102,7 +102,7 @@ return fmt;
         else  if (val == 2)  
             return "审核通过";
         else  if (val == 4)  
-        	return "黑名单"
+        	return "黑名单";
         else	
            return "待审核";
          
@@ -119,12 +119,12 @@ function infoFormatter( value, row, index){
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="identityCheck:Confirm">'+
-		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?id='+row['id']+'">'+
+		   '<shiro:hasPermission name="identityCheck:Audit">'+
+		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="identityCheck:Confirm">'+
+		  '<shiro:lacksPermission name="identityCheck:Audit">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
 		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
 		       '</a>' +
@@ -145,19 +145,15 @@ function infoFormatter( value, row, index){
 	function actionFormatter(value, row, index) { 
 <%--   return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
 <%--      return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";  --%>
-return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?id="+row['id']+"'>详情</a>";
+return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id="+row['id']+"'>详情</a>";
     } 
     
-     
-      function Search(){
-    	  var myselect=document.getElementById("video_status");
-    	  var index=myselect.selectedIndex;
-    	 var  video_status= myselect.options[index].value;
-
-
-     document.getElementById("form1").action="<%=path%>/identityCheck/toIdentityCheckList?video_status="+video_status; 
-     document.getElementById("form1").submit();
- }
+ 
+      function Search(){ 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}"; 
+     document.getElementById("form1").submit();  
+     }
+    
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  
@@ -189,7 +185,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?i
 </script>
 </head>
 <body class="mainbody">
-<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList"  id="form1">
+<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
    
 
@@ -217,12 +213,22 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?i
         <shiro:hasPermission name="identityCheck:Delete">
             <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
         </shiro:hasPermission>
-         <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="/identityCheck/toIdentityCheckList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
-           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="/identityCheck/toIdentityCheckList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
-           <li><a id="btnDownExcel" href="identityCheck/downExcel?video_status=${video_status}&type=${type}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
+          <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
         </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
+          
+             <div class="rule-single-select">
+	            <select name="year" onchange="Search()" id="year">
+		           <option value="">请选择抽查年限</option>
+		           <c:forEach var="item" items="${years}">
+	                 <option  ${item==year?"selected='selected'":'' }   value="${item}">${item}</option>
+	              </c:forEach> 
+		          
+		        </select>
+	        </div>
+        
+        
         	  <div class="rule-single-select">
          		   <select name="video_status" onchange="Search()" id="video_status">
 			           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
@@ -233,11 +239,27 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?i
 		    	    </select>
         		
       		  </div>
+      		  
+      		   
+	         <div class="rule-single-select">
+	            <select name="user_township" onchange="Search()"  id="user_township">
+	               <option   value="">所有乡镇办</option>
+		           <c:forEach items="${xzbs }" var="xzb"> 
+		              <option value="${xzb.title }"  ${user_township==xzb.title?"selected='selected'":'' }>${xzb.title }</option>
+		           </c:forEach>
+		        
+	            </select>
+	        </div>
         </div>
         
         
       </shiro:hasPermission>
      
+      <ul class="icon-list">
+       
+           <li style="float:right;"> <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="identityCheck/toIdentityCheckList?type=Img"><i class="iconfont icon-list-img"></i></a></li>
+           <li> <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="identityCheck/toIdentityCheckList?type=Word"><i class="iconfont icon-list-txt"></i></a></li>
+          </ul>
       </div>
        
     </div>
@@ -283,45 +305,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?i
         </thead>
     
 </table>
-  <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
-    <tr>
-      <th width="6%">选择</th>
-      <th align="left" colspan="2">用户信息</th>
-      <th align="left" width="16%">人工复查状态</th>
-      <th width="10%">操作</th>
-    </tr>
-  
-    <tr>
-      <td align="center">
-        <span class="checkall" style="vertical-align:middle;"><input id="rptList_chkId_0" type="checkbox" name="rptList$ctl01$chkId" /></span>
-        <input type="hidden" name="rptList$ctl01$hidId" id="rptList_hidId_0" value="103155" />
-      </td>
-       
-      <td>
-       <div>
-       <div style="float: left;">
-        <a class="user-avatar" href="check_show.aspx?action=Show&id=103155">
-          <img width="64" height="64" src="http://face.yzrszp.com:8080/sh_identity/upload/2018/6/1528849367447.mp4.jpg" />
-        </a>
-       
-       </div>
-        <div class="user-box"   <div style="float: left;">
-       
-          <h4><b style="font-size:16px;" title="姓名：杨风仙">杨风仙</b> <y title="年份：2018">(采集年份：2018)</y></h4>
-          <i>采集时间：2018/6/13 8:22</i>
-          <span>
-            身份证号：411081193910271600
-          </span>
-        </div>
-        </div>
-      </td>      
-      <td>等待人工抽查审核</td>
-      <td align="center">
-        <a href="check_show.aspx?action=Show&id=103155">预览</a>
-      </td>
-    </tr>
-</table> 
-   -->
+
 </div>
 
 

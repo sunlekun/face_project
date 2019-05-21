@@ -66,6 +66,14 @@ public class TempUser {
 	public int getStatus() {
 		return status;
 	}
+	public String getStatuss() {
+		if (status == 3)
+			return "审核未通过";
+		else if (status == 2)
+			return "审核通过";
+		else
+			return "待审核";
+	}
 	public void setStatus(int status) {
 		this.status = status;
 	}
