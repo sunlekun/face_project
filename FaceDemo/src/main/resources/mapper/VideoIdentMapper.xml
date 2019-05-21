@@ -95,6 +95,9 @@
 		<if test="video_status != null and  video_status !=''">
 			and r.video_status= #{video_status}
 		</if>
+		<if test="user_township != null and  user_township !=''">
+			and u.user_township= #{user_township}
+		</if>
 		
 		<if test="key!=null  and key!=''">   
           and (u.user_name like '%#{key}%' or u.user_idcard like '%#{key}%' )
@@ -115,6 +118,7 @@
           and r.year=#{year}
         </if> 
         
+>>>>>>> branch 'master' of https://github.com/sunlekun/face_project.git
 
 	</select>
 

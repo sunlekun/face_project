@@ -2,7 +2,11 @@ package com.demo.util;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+
 import org.apache.commons.codec.binary.Base64;
+
+import sun.misc.BASE64Encoder;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -191,4 +195,50 @@ public class Base64Utils {
         }
         return false;
     }
+    
+    
+    /**
+     * @Description: 根据图片地址转换为base64编码字符串
+     * @Author:
+     * @CreateTime:
+     * @return
+     */
+    public static String getImageStr(String imgFile) {
+        InputStream inputStream = null;
+        byte[] data = null;
+        try {
+            inputStream = new FileInputStream(imgFile);
+            data = new byte[inputStream.available()];
+            inputStream.read(data);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 加密
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
+    }
+    
+    
+    /**
+     * 图片转base64字符串
+     * @param imgFile 图片路径
+     * @return
+     */
+    public static String imageToBase64Str(String imgFile) {
+      InputStream inputStream = null;
+      byte[] data = null;
+      try {
+        inputStream = new FileInputStream(imgFile);
+        data = new byte[inputStream.available()];
+        inputStream.read(data);
+        inputStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      // 加密
+      BASE64Encoder encoder = new BASE64Encoder();
+      return encoder.encode(data);
+    }
+
 }
