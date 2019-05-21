@@ -145,7 +145,6 @@ public class IdentityCheckController {
 			modelAndView.setViewName("admin/identityCheckList"); 
 		}
 		
-		
 	 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
