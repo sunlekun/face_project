@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 $(function () {
 
-	if(localStorage.username!=undefined){
+	if(localStorage.user_idcard!=undefined){
 	/* 	$("#username").val(localStorage.username); */
 		$("#user_idcard").val(localStorage.user_idcard);
 	/* 	$("#mobile").val(localStorage.mobile); */
