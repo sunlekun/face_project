@@ -61,7 +61,7 @@
 	           	/login_login	 			= anon
 	           	/app**/** 					= anon
 	           	/weixin/** 					= anon -->
-	           	/faceDetectAuth				= anon
+	           	/faceDetectAuth/*				= anon
 	           	/user/**		= anon
 	           	/js/** 			        	= anon
 	           	/css/** 			    	= anon

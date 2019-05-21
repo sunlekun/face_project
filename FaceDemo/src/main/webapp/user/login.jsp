@@ -49,7 +49,7 @@ function renzheng(){
 	/* localStorage.mobile=mobile; */
 	$.ajax({
 		type : "POST",
-		url : "faceDetectAuth/reqFaceDetectAuth",
+		url : "faceDetectAuth/reqFaceDetectAuth.do",
 		data : {user_idcard : user_idcard
 			/* username : username,
 			user_idcard : user_idcard,
