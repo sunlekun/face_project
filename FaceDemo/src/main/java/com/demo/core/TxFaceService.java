@@ -110,7 +110,9 @@ public class TxFaceService {
         reqBean.setVersion(version);
         reqBean.setRegion(region);
         reqBean.setRuleId(ruleId);
-        reqBean.setImageBase64(Base64Utils.getImageStr(tempUser.getOriginal_path()));
+        reqBean.setImageBase64(Base64Utils.getImageStr(tempUser.getOriginal_path()).replace("\r\n", ""));
+        reqBean.setName(tempUser.getUser_name());
+        reqBean.setIdCard(tempUser.getUser_idcard());
         ObjectMapper mapper = new ObjectMapper();
         String mapJakcson = mapper.writeValueAsString(reqBean);
         log.info(mapJakcson);
@@ -201,30 +203,28 @@ public class TxFaceService {
 	        ClientProfile clientProfile = new ClientProfile();
 	        clientProfile.setHttpProfile(httpProfile);            
 	        
-	        FaceidClient client = new FaceidClient(cred, "ap-beijing", clientProfile);
+	        FaceidClient client = new FaceidClient(cred, "ap-guangzhou", clientProfile);
 	        
-	       	//请求参数
-	        GetDetectInfoReq reqBean = new GetDetectInfoReq();
-	        reqBean.setAction("GetDetectInfo");
+	    	//请求参数
+	        DetectAuthReqBean reqBean = new DetectAuthReqBean();
+	        reqBean.setAction("DetectAuth");
 	        reqBean.setVersion("2018-03-01");
-	        reqBean.setRegion("ap-beijing");
+	        reqBean.setRegion("ap-guangzhou");
+	        reqBean.setIdCard("340826198806280833");
+	        reqBean.setName("孙乐焜");
 	        reqBean.setRuleId("1");
-	        reqBean.setInfoType("134");
-	        reqBean.setBizToken("119FB220-C657-4EB4-86F3-6E6AF5FB004F");
+	        String img = Base64Utils.imageToBase64Str("E://1//slk.jpg").replace("\r\n", "");
+//	        System.out.println(img);
+//	        Base64Utils.base64ToFile(img,"E://","111000000000.jpg");
+	        reqBean.setImageBase64(img);
 	        ObjectMapper mapper = new ObjectMapper();
 	        String mapJakcson = mapper.writeValueAsString(reqBean);
-	        GetDetectInfoRequest req = GetDetectInfoRequest.fromJsonString(mapJakcson, GetDetectInfoRequest.class);
-            
-            GetDetectInfoResponse resp = client.GetDetectInfo(req);
-            
-//            System.out.println(resp.getDetectInfo());
-            JsonParser jp = new JsonParser();
-    		//将json字符串转化成json对象
-                JsonObject jo = jp.parse(resp.getDetectInfo()).getAsJsonObject();
-                System.out.println("结果状态===="+jo.get("Text").getAsJsonObject().get("ErrCode"));
-                System.out.println("最佳照片===="+jo.get("BestFrame").getAsJsonObject().get("BestFrame"));
-                System.out.println("返回视频===="+jo.get("VideoData").getAsJsonObject().get("LivenessVideo"));
-//	        System.out.println(DetectAuthRequest.toJsonString(resp));
+	        System.out.println(mapJakcson);
+	        DetectAuthRequest req = DetectAuthRequest.fromJsonString(mapJakcson.toString(), DetectAuthRequest.class);
+	        
+	        DetectAuthResponse resp = client.DetectAuth(req);
+	        System.out.println(resp.getUrl());
+	        System.out.println(resp.getBizToken());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

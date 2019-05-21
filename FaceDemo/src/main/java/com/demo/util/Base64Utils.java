@@ -218,4 +218,27 @@ public class Base64Utils {
         BASE64Encoder encoder = new BASE64Encoder();
         return encoder.encode(data);
     }
+    
+    
+    /**
+     * 图片转base64字符串
+     * @param imgFile 图片路径
+     * @return
+     */
+    public static String imageToBase64Str(String imgFile) {
+      InputStream inputStream = null;
+      byte[] data = null;
+      try {
+        inputStream = new FileInputStream(imgFile);
+        data = new byte[inputStream.available()];
+        inputStream.read(data);
+        inputStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      // 加密
+      BASE64Encoder encoder = new BASE64Encoder();
+      return encoder.encode(data);
+    }
+
 }
