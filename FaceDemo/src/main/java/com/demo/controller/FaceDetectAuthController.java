@@ -63,7 +63,7 @@ public class FaceDetectAuthController {
 			}
 			//先去信息表里查询用户是否采集信息
 			List<TempUser> users = tempUserService.findTempUserByUserIdcard(user_idcard);
-			if(users==null&&users.size()==0){	
+			if(users.size()==0){	
 				map.put("status", "error");
 				map.put("msg", "用户身份信息未采集,请先去所属乡镇部门采集身份信息!");
 				return map;
