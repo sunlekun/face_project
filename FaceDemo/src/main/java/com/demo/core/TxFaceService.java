@@ -93,9 +93,8 @@ public class TxFaceService {
 	@Value("#{sysConfig.filePuth}")
     public String filePuth;
 	
-	public DetectAuthRespBean faceProcess(TempUser tempUser){
+	public DetectAuthRespBean faceProcess(TempUser tempUser) throws Exception{
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
-		try {
 		Credential cred = new Credential(secretId, secretKey);
 		HttpProfile httpProfile = new HttpProfile();
         httpProfile.setEndpoint(url);
@@ -130,11 +129,6 @@ public class TxFaceService {
         da.setRequest_id(resp.getRequestId());
         da.setUser_idcard(tempUser.getUser_idcard());
         detectAuthService.insertDA(da);
-		} catch (Exception e) {
-			log.error("请求实名核身接口失败",e);
-			respBean.setRespCode("error");
-			return respBean;
-		}
         
 		return respBean;
 	}

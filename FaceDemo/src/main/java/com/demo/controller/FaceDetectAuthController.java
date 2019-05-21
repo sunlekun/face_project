@@ -1,7 +1,9 @@
 package com.demo.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,38 +51,53 @@ public class FaceDetectAuthController {
 	@Autowired
 	private TxFaceService txFaceService;
 	
+	@SuppressWarnings({ "unchecked", "null", "rawtypes" })
 	@RequestMapping(value = "/reqFaceDetectAuth") 
-	public ModelAndView idToDAuthUrl(String user_idcard,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		ModelAndView modelAndView = new ModelAndView();
-		if(StringUtils.isEmpty(user_idcard)){
-			modelAndView.addObject("error", "请输入合法的身份证号");
-			return modelAndView; 
-		}
-		//先去信息表里查询用户是否采集信息
-		List<TempUser> users = tempUserService.findTempUserByUserIdcard(user_idcard);
-		JSONObject object=new JSONObject(); 
-		if(users==null&&users.size()==0){	
-			modelAndView.addObject("error", "用户身份信息未采集,请先去所属乡镇部门采集身份信息!");
-			return modelAndView;
-		}
-		//验证是否人脸核身过
-		List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.getCurrentDT().substring(0,4));
-		if(list!=null&&list.size()>0){
-			modelAndView.addObject("error", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
-			return modelAndView;
-		}
-		//验证在7200秒内是或否调用核身前置接口
-		Date date = new Date();
-		long l = 7200*1000;
-		Date beforeDate = new Date(date .getTime() - l);
-		List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(users.get(0).getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
-		if(listDA!=null&&listDA.size()>0){
-			modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
-			return modelAndView;
-		}else{
-			DetectAuthRespBean respBean = txFaceService.faceProcess(users.get(0));
-			modelAndView.setViewName("redirect:"+respBean.getUrl());
-			return modelAndView;
+	public Map idToDAuthUrl(String user_idcard,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		Map map = new HashMap<String, Object>();
+		try {
+			if(!cardCodeVerifySimple(user_idcard)){
+				map.put("status", "error");
+				map.put("msg", "请输入合法的身份证号");
+				return map; 
+			}
+			//先去信息表里查询用户是否采集信息
+			List<TempUser> users = tempUserService.findTempUserByUserIdcard(user_idcard);
+			if(users==null&&users.size()==0){	
+				map.put("status", "error");
+				map.put("msg", "用户身份信息未采集,请先去所属乡镇部门采集身份信息!");
+				return map;
+			}
+			//验证是否人脸核身过
+			List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.getCurrentDT().substring(0,4));
+			if(list!=null&&list.size()>0){
+//				modelAndView.addObject("error", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
+//				return modelAndView;
+				map.put("status", "error");
+				map.put("msg", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
+				return map;
+			}
+			//验证在7200秒内是或否调用核身前置接口
+			Date date = new Date();
+			long l = 7200*1000;
+			Date beforeDate = new Date(date .getTime() - l);
+			List<DetectAuth> listDA = detectAuthService.findDetectAuthByIdAndTime(users.get(0).getUser_idcard(),DateFormatUtil.getDTFormat(beforeDate, "yyyyMMddHHmmss"));
+			if(listDA!=null&&listDA.size()>0){
+				map.put("status", "sucess");
+				map.put("msg", listDA.get(0).getUrl());
+				return map;
+			}else{
+				
+				DetectAuthRespBean respBean = txFaceService.faceProcess(users.get(0));
+				map.put("status", "sucess");
+				map.put("msg", respBean.getUrl());
+				return map;
+			}
+		} catch (Exception e) {
+			map.put("status", "error");
+			map.put("msg", "系统错误");
+			return map; 
+
 		}
 	}
 	
@@ -101,5 +118,19 @@ public class FaceDetectAuthController {
 		}
 		return null;
 		
+	}
+	
+	
+	private boolean cardCodeVerifySimple(String cardcode) {
+	    //第一代身份证正则表达式(15位)
+	    String isIDCard1 = "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$";
+	    //第二代身份证正则表达式(18位)
+	    String isIDCard2 ="^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[A-Z])$";
+
+	    //验证身份证
+	    if (cardcode.matches(isIDCard1) || cardcode.matches(isIDCard2)) {
+	        return true;
+	    }
+	    return false;
 	}
 }
