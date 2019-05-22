@@ -15,7 +15,7 @@
 	</insert> 
 	
 	<select id="findUserId" resultType="String" > 
-	   select id from temp_users where 
-	   user_idcard = (select user_idcard from detectAuth where bizToken=#{bizToken})
+	   select id from users where 
+	   user_idcard = (select user_idcard from detectAuth where bizToken=#{bizToken}) and is_delete='0'
     </select> 
 </mapper>
