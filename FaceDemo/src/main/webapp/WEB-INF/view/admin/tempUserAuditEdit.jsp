@@ -123,6 +123,17 @@ function changes(obj){
       }
      
    }  
+   
+    $(document).ready(function(){ 
+    if('城乡居民养老保险'!='${tempUser.data_type}')   
+     {   
+    	 $("#div_xzb").hide();
+         $("#user_township").removeAttr("datatype");  
+         $("#div_village").hide();  
+         $("#user_village").removeAttr("datatype");  
+     }
+     
+    })
 
 </script>
 </head>

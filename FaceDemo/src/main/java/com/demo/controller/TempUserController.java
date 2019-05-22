@@ -252,7 +252,7 @@ public class TempUserController {
 	    object.put("msg", "*友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。"); 
      
 	          */
-	 
+	 	tempUser.setStatus(1);
 		tempUserService.insertTempUser(tempUser);
 
 	 
