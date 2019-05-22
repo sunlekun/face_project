@@ -15,6 +15,7 @@ import com.demo.bean.DetectAuthRespBean;
 import com.demo.bean.GetDetectInfoReq;
 import com.demo.model.DetectAuth;
 import com.demo.model.TempUser;
+import com.demo.model.User;
 import com.demo.model.VideoIdent;
 import com.demo.service.DetectAuthService;
 import com.demo.service.VideoIdentService;
@@ -100,7 +101,7 @@ public class TxFaceService {
 	@Value("#{sysConfig.redirectUrl}")
     public String redirectUrl;
 	
-	public DetectAuthRespBean faceProcess(TempUser tempUser) throws Exception{
+	public DetectAuthRespBean faceProcess(User user) throws Exception{
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
 		Credential cred = new Credential(secretId, secretKey);
 		HttpProfile httpProfile = new HttpProfile();
@@ -116,9 +117,9 @@ public class TxFaceService {
         reqBean.setVersion(version);
         reqBean.setRegion(region);
         reqBean.setRuleId(ruleId);
-        reqBean.setImageBase64(Base64Utils.getImageStr(tempUser.getOriginal_path()).replace("\r\n", ""));
-        reqBean.setName(tempUser.getUser_name());
-        reqBean.setIdCard(tempUser.getUser_idcard());
+        reqBean.setImageBase64(Base64Utils.getImageStr(user.getImg_url()).replace("\r\n", ""));
+        reqBean.setName(user.getUser_name());
+        reqBean.setIdCard(user.getUser_idcard());
         reqBean.setRedirectUrl(redirectUrl);
         ObjectMapper mapper = new ObjectMapper();
         String mapJakcson = mapper.writeValueAsString(reqBean);
@@ -135,7 +136,7 @@ public class TxFaceService {
         da.setUrl(resp.getUrl());
         da.setCreate_time(new Date());
         da.setRequest_id(resp.getRequestId());
-        da.setUser_idcard(tempUser.getUser_idcard());
+        da.setUser_idcard(user.getUser_idcard());
         detectAuthService.insertDA(da);
         
 		return respBean;

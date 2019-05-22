@@ -23,9 +23,11 @@ import com.demo.bean.DetectAuthRespBean;
 import com.demo.core.TxFaceService;
 import com.demo.model.DetectAuth;
 import com.demo.model.TempUser;
+import com.demo.model.User;
 import com.demo.model.VideoIdent;
 import com.demo.service.DetectAuthService;
 import com.demo.service.TempUserService;
+import com.demo.service.UserService;
 import com.demo.service.VideoIdentService;
 import com.demo.util.DateFormatUtil;
 
@@ -39,9 +41,11 @@ import com.demo.util.DateFormatUtil;
 @RequestMapping(value = "/faceDetectAuth")
 public class FaceDetectAuthController {
 	public static Logger log= Logger.getLogger(FaceDetectAuthController.class);
-	@Autowired
-	private TempUserService tempUserService;
+//	@Autowired
+//	private TempUserService tempUserService;
 	
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private VideoIdentService videoIdentService;
 	
@@ -62,7 +66,8 @@ public class FaceDetectAuthController {
 				return map; 
 			}
 			//先去信息表里查询用户是否采集信息
-			List<TempUser> users = tempUserService.findTempUserByUserIdcard(user_idcard);
+//			List<TempUser> users = tempUserService.findTempUserByUserIdcard(user_idcard);
+			List<User>  users=userService.findUserByUserIdcard(user_idcard);
 			if(users.size()==0){	
 				map.put("status", "error");
 				map.put("msg", "用户身份信息未采集,请先去所属乡镇部门采集身份信息!");
