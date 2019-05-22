@@ -42,7 +42,7 @@
 			<property name="securityManager" ref="securityManager" />
 			
 			<!-- 登录失败之后的跳转路径的配置  如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面 --> 
-			<property name="loginUrl" value="/login" />
+			<property name="loginUrl" value="/index.jsp" />
 			
 			<!-- 登录成功之后的跳转访问路径 --> 
 			<!-- <property name="successUrl" value="/main" /> 
