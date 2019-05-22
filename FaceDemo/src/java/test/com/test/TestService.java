@@ -86,7 +86,7 @@ public class TestService {
 					System.out.println("7200秒内调用过");
 //					modelAndView.setViewName("redirect:"+listDA.get(0).getUrl());
 				}else{
-					txFaceService.faceProcess(tempUser);
+//					txFaceService.faceProcess(tempUser);
 				}
 		
 //		DetectAuth da = new DetectAuth();
