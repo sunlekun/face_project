@@ -45,10 +45,10 @@
 			<property name="loginUrl" value="/login" />
 			
 			<!-- 登录成功之后的跳转访问路径 --> 
-			<property name="successUrl" value="/main" /> 
+			<!-- <property name="successUrl" value="/main" /> 
 			
-			<!-- 认证失败之后的跳转路径页面 -->
-			<property name="unauthorizedUrl" value="/login_toLogin" />
+			认证失败之后的跳转路径页面
+			<property name="unauthorizedUrl" value="/login_toLogin" /> -->
 			
 			<!-- shiro里面需要针对于所有的路径进行配置，所有的配置需要通过文本的形式设置 -->
 			<property name="filterChainDefinitions">
@@ -61,6 +61,7 @@
 	           	/login_login	 			= anon
 	           	/app**/** 					= anon
 	           	/weixin/** 					= anon -->
+	           	/login/*				= anon
 	           	/faceDetectAuth/*				= anon
 	           	/user/**		= anon
 	           	/js/** 			        	= anon

@@ -23,6 +23,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             window.location.href = 'ie6update.html';
         }
     });
+    
+     function  butClick(){  
+
+    var username = $("#username").val(); 
+    var password = $("#password").val(); 
+    if(username==""||password=="")//验证是否为空
+    { 
+	    alert("用户名/密码不能为空!");
+	    return ;
+    }
+     
+     $.ajax(
+            {
+                url:"login/valid",
+                data:{username:username,password:password},
+                type: "POST",
+                dataType:"json",
+                success: function(data)
+                {    
+                        if(data.status=='false')
+                            alert(data.msg); 
+                        else 
+                         window.location.href ="<%=basePath%>"+data.url;        
+                         
+                }
+            });
+      
+    
+  }
 </script>
 </head>
 <body class="loginbody">
@@ -49,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <label class="icon" for="txtPassword"><i class="iconfont icon-key"></i></label>
     </div>
     <div class="col">
-      <input type="submit" name="btnSubmit" value="登 录" id="btnSubmit" class="login-btn" />
+      <input type="button" name="btnSubmit" value="登 录" id="btnSubmit" class="login-btn" onclick="butClick()" />
     </div>
   </div>
   
@@ -62,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
 </div>
 <div class="copy-right">
-  <p>版权所有 禹州智慧人社身份核实系统 Copyright © 2017 - 2019 yzrszp.com Inc. All Rights Reserved.</p>
+  <p>版权所有  智慧人社身份核实系统 Copyright © 2017 - 2019 yzrszp.com Inc. All Rights Reserved.</p>
 </div>
 </form>
 </body>

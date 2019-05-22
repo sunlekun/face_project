@@ -1,105 +1,105 @@
 package com.demo.controller;
 
+import java.io.IOException; 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.LockedAccountException; 
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+ 
+
+
+
+
+
+import com.demo.aop.LogAspect;
+import com.demo.model.Log;
+import com.demo.model.Manager;
 import com.demo.realm.PermissionName;
+import com.demo.service.LogService;
 /**
  * 
  * @author yangwei
  *
  */
-@Controller
+@Controller 
+@RequestMapping(value = "/login")
 public class LoginController { 
 	public static Logger log= Logger.getLogger(LoginController.class);
-	@RequestMapping(value = "/login")
-	@PermissionName("用户登录")
-	public String login(ModelAndView modelAndView,HttpServletRequest request, HttpServletResponse response) { 
-		//此方法不处理登录成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
-        
-		//如果登录失败从request中获取认证异常信息，shiroLoginFailure就是shiro异常类的全限定名
-		String exceptionClassName=(String) request.getAttribute("shiroLoginFailure");
-		//根据shiro返回的异常类路径判断，抛出指定异常信息
-		if(exceptionClassName!=null)
-		{
-			if(UnknownAccountException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "账号不存在");
-				request.setAttribute("error", "账号不存在");
-			}
-			else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "用户名/密码错误");
-				request.setAttribute("error", "用户名/密码错误");
-			}
-			else if(LockedAccountException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "该账号被锁定");
-				request.setAttribute("error", "账号被锁定");
-			}
-			else
-			{
-				modelAndView.addObject("error", "其他异常信息");
-				request.setAttribute("error", "其他异常信息");
-			}
-			 
-		}
-		 
-		//此方法不处理登录成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
-		//登录失败到login页面
-		return "forward:index.jsp";
-
-	}
-
 	
-	/*public ModelAndView login(ModelAndView modelAndView,HttpServletRequest request, HttpServletResponse response) { 
-		//此方法不处理登录成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
-        
-		//如果登录失败从request中获取认证异常信息，shiroLoginFailure就是shiro异常类的全限定名
-		String exceptionClassName=(String) request.getAttribute("shiroLoginFailure");
-		//根据shiro返回的异常类路径判断，抛出指定异常信息
-		if(exceptionClassName!=null)
-		{
-			if(UnknownAccountException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "账号不存在");
-				request.setAttribute("error", "账号不存在");
-			}
-			else if(IncorrectCredentialsException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "用户名/密码错误");
-				request.setAttribute("error", "用户名/密码错误");
-			}
-			else if(LockedAccountException.class.getName().equals(exceptionClassName))
-			{
-				modelAndView.addObject("error", "该账号被锁定");
-				request.setAttribute("error", "账号被锁定");
-			}
-			else
-			{
-				modelAndView.addObject("error", "其他异常信息");
-				request.setAttribute("error", "其他异常信息");
-			}
-			modelAndView.setViewName("forward:index.jsp");
-			
-		}
-		else	
-			modelAndView.setViewName("redirect:/main");
-		
-		
-		return modelAndView;
-		//此方法不处理登录成功（认证成功），shiro认证成功会自动跳转到上一个请求路径
-		//登录失败到login页面
-		//return "forward:index.jsp";
+	@Autowired
+	private LogService logService;	  //自己创建，用来保存日志信息
+	@RequestMapping(value = "/valid")
+	@PermissionName("用户登录")	
+	public void login(ModelAndView modelAndView,HttpServletRequest request, HttpServletResponse response) throws IOException{ 
 
-	}*/
+		JSONObject object = new JSONObject(); 
+		String username=request.getParameter("username");
+		String password=request.getParameter("password"); 
+		UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+		
+		Subject subject=SecurityUtils.getSubject();
+		try {
+		subject.login(token);   
+		} 
+		catch (UnknownAccountException e) {
+			object.put("msg", "账号不存在"); 
+			object.put("status", "false"); 
+		}
+		catch (IncorrectCredentialsException e) {
+			object.put("msg", "用户名/密码错误"); 
+			object.put("status", "false"); ;
+		}
+		catch (LockedAccountException e) {
+			object.put("msg", "该账号被锁定");
+			object.put("status", "false"); 
+		}
+		catch (Exception e) {
+			object.put("msg", "其他异常信息"); 
+			object.put("status", "false"); 
+			object.put("url","forward:index.jsp");
+		}
+		
+     if(subject.isAuthenticated())//是否认证通过
+		{   object.put("status", "true"); 
+			object.put("msg", "登录成功");
+			object.put("url","main");
+		    
+			
+			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
+		    String Ip = LogAspect.getIpAddress(request); //ip地址
+	        
+	        Log log = new Log();
+	     
+			log.setUser_name(manager.getUser_name());
+			log.setUser_id(manager.getId());
+			
+		    log.setUser_ip(Ip);
+		    log.setAction_type("Login");
+		    log.setRemark("用户登录");
+		    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
+		 
+		    logService.insertLog(log);
+		}
+  
+	    response.setCharacterEncoding("utf-8"); 
+		response.getWriter().write(object.toString());
 
 	}
+
+}

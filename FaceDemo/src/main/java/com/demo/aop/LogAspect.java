@@ -42,8 +42,8 @@ public class LogAspect {
 	/**
      * 管理员登录方法的切入点
      */
-    @Pointcut("execution(* com.demo.service.impl.ManagerServiceImpl.findUserByUsername(..))")
-    public void login(){}
+	/*@Pointcut("execution(* execution(* com.demo.controller..*.*Add(..))")
+    public void login(){}*/
 	
 	/**
      * 添加业务逻辑方法切入点
@@ -73,10 +73,10 @@ public class LogAspect {
     
 
   /*  @After(value = "login()")*/
-    @AfterReturning(value = "login()", argNames = "joinPoint,object", returning = "object")
+  /*  @AfterReturning(value = "login()", argNames = "joinPoint,object", returning = "object")
 	public void doAfter(JoinPoint joinPoint, Object object){
     	
-    	/*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     	HttpServletRequest request= attributes.getRequest();
     	 
     	Manager manager=(Manager)object;
@@ -101,10 +101,10 @@ public class LogAspect {
 	    log.setRemark("用户登录");
 	    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
 	 
-	    logService.insertLog(log);*/
+	    logService.insertLog(log);
 	    
 	    
-    	/*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     	HttpServletRequest request= attributes.getRequest();
     	 
         if (SecurityUtils.getSubject().getPrincipals() == null) {// 没有登录
@@ -124,9 +124,9 @@ public class LogAspect {
 	    log.setRemark("用户登录");
 	    log.setAdd_time(new Timestamp(new Date(System.currentTimeMillis()).getTime())); 
 	 
-	    logService.insertLog(log);*/
+	    logService.insertLog(log);
 	}
-    
+    */
     
     /**
      * 添加操作日志(后置通知)

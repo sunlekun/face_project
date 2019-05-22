@@ -121,12 +121,12 @@ function infoFormatter( value, row, index){
 	   '<div  style="float: left;">'+
 		   '<shiro:hasPermission name="identityCheck:Audit">'+
 		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id='+row['id']+'">'+
-		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
+		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
 		  '<shiro:lacksPermission name="identityCheck:Audit">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
-		          '<img width="64" height="64" src="/video_identity'+row['user_img']+'" />'+
+		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:lacksPermission>'+
 	   '</div>'+

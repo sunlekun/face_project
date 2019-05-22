@@ -34,8 +34,8 @@ public class MainController {
 	public ModelAndView main(HttpServletRequest request, HttpServletResponse response) { 
 	 
 		ModelAndView modelAndView=new ModelAndView (); 
-		/*if(SecurityUtils.getSubject().getPrincipals()!=null)
-		{*/
+		if(SecurityUtils.getSubject().getPrincipals()!=null)
+		{
 			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 			if(manager!=null)
 			{
@@ -45,9 +45,9 @@ public class MainController {
 			
 			}
 			modelAndView.setViewName("admin/main");
-		/*}
+		}
 		else
-			modelAndView.setViewName("redirect:/login");*/
+			modelAndView.setViewName("redirect:/login");
 				
 				
 		return modelAndView;
