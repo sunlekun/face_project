@@ -357,10 +357,15 @@ public class LogAspect {
         	   rs.append(getInfo(className)+"【");
         	   String[]  ms=getMethodInfo(className);
         	   for(String s:ms)
-        	   {
+        	   {  
 	        	  String[] ff=s.split(":");
-	        	  Method method=  info.getClass().getMethod(ff[1]); 
-	        	  rs.append(ff[0]+"="+ method.invoke(info)+" ；");
+	        	  if("新增".equals(flag)&&"getId".equals(ff[1])){
+	        		  ;
+	        	  }
+	        	  else{
+		        	  Method method=  info.getClass().getMethod(ff[1]); 
+		        	  rs.append(ff[0]+"="+ method.invoke(info)+" ；");
+		        	  }
         	   }
         	   if (ms.length>0) {
         		   rs.deleteCharAt(rs.length()-1);

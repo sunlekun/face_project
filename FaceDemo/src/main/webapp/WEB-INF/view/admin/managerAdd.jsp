@@ -238,11 +238,11 @@ function __doPostBack(eventTarget, eventArgument) {
 
   <dl>
     <dt>姓名</dt>
-    <dd><input name="realName" type="text" id="realName" class="input normal" /></dd>
+    <dd><input name="real_name" type="text" id="real_name" class="input normal" /></dd>
   </dl>
   <dl>
     <dt>电话</dt>
-    <dd><input name="mobile" type="text" id="mobile" class="input normal" /></dd>
+    <dd><input name="mobile" type="text" id="mobile" class="input normal" maxlength="11" /></dd>
   </dl>
 
 </div>

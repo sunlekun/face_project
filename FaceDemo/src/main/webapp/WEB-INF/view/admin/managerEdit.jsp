@@ -179,7 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
   <dl>
     <dt>用户名</dt>
-    <dd><input name="txtUserName" type="text" value="${managerDetial.user_name }" readonly="readonly" id="txtUserName" class="input normal" datatype="/^[a-zA-Z0-9\-\_]{2,50}$/" sucmsg=" " /> <span class="Validform_checktip">*字母、下划线，不可修改，注册后不可修改</span></dd>
+    <dd><input name="user_name" type="text" value="${managerDetial.user_name }" readonly="readonly" id="user_name" class="input normal" datatype="/^[a-zA-Z0-9\-\_]{2,50}$/" sucmsg=" " /> <span class="Validform_checktip">*字母、下划线，不可修改，注册后不可修改</span></dd>
   </dl> 
   
   <dl>
@@ -197,7 +197,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <dl>
     <dt>电话</dt>
-    <dd><input name="mobile" type="text" value="${managerDetial.mobile }"id="mobile" class="input normal" /></dd>
+    <dd><input name="mobile" type="text" value="${managerDetial.mobile }"id="mobile" class="input normal" maxlength="11" /></dd>
   </dl>
   
 </div>
