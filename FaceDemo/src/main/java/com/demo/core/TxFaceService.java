@@ -100,6 +100,11 @@ public class TxFaceService {
 	 */
 	@Value("#{sysConfig.redirectUrl}")
     public String redirectUrl;
+	/**
+	 * 照片路径
+	 */
+	@Value("#{sysConfig.imgPuth}")
+    public String imgPuth;
 	
 	public DetectAuthRespBean faceProcess(User user) throws Exception{
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
@@ -117,7 +122,7 @@ public class TxFaceService {
         reqBean.setVersion(version);
         reqBean.setRegion(region);
         reqBean.setRuleId(ruleId);
-        reqBean.setImageBase64(Base64Utils.getImageStr(user.getImg_url()).replace("\r\n", ""));
+        reqBean.setImageBase64(Base64Utils.getImageStr(imgPuth+user.getImg_url()).replace("\r\n", ""));
         reqBean.setName(user.getUser_name());
         reqBean.setIdCard(user.getUser_idcard());
         reqBean.setRedirectUrl(redirectUrl);
@@ -176,6 +181,7 @@ public class TxFaceService {
 	    		//将json字符串转化成json对象
 	            JsonObject jo = jp.parse(resp.getDetectInfo()).getAsJsonObject();
 	            String status = jo.get("Text").getAsJsonObject().get("ErrCode").toString();
+	            String msg = jo.get("Text").getAsJsonObject().get("ErrMsg").toString();
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
 	            String idCard = jo.get("Text").getAsJsonObject().get("IdCard").toString();
@@ -188,6 +194,7 @@ public class TxFaceService {
 	            videoIdent.setUser_id(Integer.valueOf(userId));
  	            videoIdent.setImg_url("/upload/"+DateFormatUtil.getCurrentDT()+"/"+imgName);
 	            videoIdent.setVideo_url("/upload/"+DateFormatUtil.getCurrentDT()+"/"+audioName);
+	            videoIdent.setAuditors_reason(msg);
  	            int video_status;
 	            if("0".equals(status)){
 	            	video_status=2;

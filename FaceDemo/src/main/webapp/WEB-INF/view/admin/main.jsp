@@ -143,7 +143,7 @@ function __doPostBack(eventTarget, eventArgument) {
   
   
   <div class="main-left">
-    <a href="center.aspx" target="mainframe"><h1 class="logo"></h1></a>
+    <a href="manager/center" target="mainframe"><h1 class="logo"></h1></a>
     <div id="sidebar-nav" class="sidebar-nav"></div>
     <%--<div id="sidebar-nav" class="sidebar-nav">
     <div class="list-group">
@@ -194,7 +194,7 @@ function __doPostBack(eventTarget, eventArgument) {
   </div>
   
   <div class="main-container">
-    <iframe id="mainframe" name="mainframe" frameborder="0"  allowfullscreen="true" src="center.jsp"></iframe>
+    <iframe id="mainframe" name="mainframe" frameborder="0"  allowfullscreen="true" src="manager/center"></iframe>
   </div>
 </form>
 </body>
