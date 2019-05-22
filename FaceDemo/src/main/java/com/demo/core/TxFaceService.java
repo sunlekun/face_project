@@ -177,15 +177,17 @@ public class TxFaceService {
 	            String status = jo.get("Text").getAsJsonObject().get("ErrCode").toString();
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
-	            String imgName = userId+".jpg";
-	            String audioName = userId+".mp4";
+	            String idCard = jo.get("Text").getAsJsonObject().get("IdCard").toString();
+	            String imgName = idCard.replace("\"", "")+".jpg";
+	            String audioName = idCard.replace("\"", "")+".mp4";
+ 
 	            Base64Utils.base64ToFile(img,filePuth+DateFormatUtil.getCurrentDT()+"//",imgName);
 	            Base64Utils.base64ToFile(audio,filePuth+DateFormatUtil.getCurrentDT()+"//",audioName);
 	            VideoIdent videoIdent = new VideoIdent();
 	            videoIdent.setUser_id(Integer.valueOf(userId));
-	            videoIdent.setImg_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+imgName);
-	            videoIdent.setVideo_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+audioName);
-	            int video_status;
+ 	            videoIdent.setImg_url("/upload/"+DateFormatUtil.getCurrentDT()+"/"+imgName);
+	            videoIdent.setVideo_url("/upload/"+DateFormatUtil.getCurrentDT()+"/"+audioName);
+ 	            int video_status;
 	            if("0".equals(status)){
 	            	video_status=2;
 	            }else{
