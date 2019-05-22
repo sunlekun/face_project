@@ -175,19 +175,16 @@ public class TxFaceService {
 	    		//将json字符串转化成json对象
 	            JsonObject jo = jp.parse(resp.getDetectInfo()).getAsJsonObject();
 	            String status = jo.get("Text").getAsJsonObject().get("ErrCode").toString();
-	            String errMsg = jo.get("Text").getAsJsonObject().get("ErrMsg").toString();
-	            String idCard = jo.get("Text").getAsJsonObject().get("IdCard").toString();
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
-	            String imgName = idCard+".jpg";
-	            String audioName = idCard+".mp4";
+	            String imgName = userId+".jpg";
+	            String audioName = userId+".mp4";
 	            Base64Utils.base64ToFile(img,filePuth+DateFormatUtil.getCurrentDT()+"//",imgName);
 	            Base64Utils.base64ToFile(audio,filePuth+DateFormatUtil.getCurrentDT()+"//",audioName);
 	            VideoIdent videoIdent = new VideoIdent();
 	            videoIdent.setUser_id(Integer.valueOf(userId));
 	            videoIdent.setImg_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+imgName);
 	            videoIdent.setVideo_url(filePuth+DateFormatUtil.getCurrentDT()+"//"+audioName);
-	            videoIdent.setAuditors_reason(errMsg);
 	            int video_status;
 	            if("0".equals(status)){
 	            	video_status=2;
