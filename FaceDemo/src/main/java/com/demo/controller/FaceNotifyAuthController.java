@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.druid.util.StringUtils;
 import com.demo.core.TxFaceService;
@@ -21,8 +20,10 @@ import com.demo.util.ApplicationContextUtil;
  * @Description 类描述
  */
 public class FaceNotifyAuthController extends HttpServlet{
-//	@Autowired
-//	private TxFaceService txFaceService;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TxFaceService txFaceService = ApplicationContextUtil.getBean(TxFaceService.class);
 	public void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
 		String BizToken = request.getParameter("BizToken");

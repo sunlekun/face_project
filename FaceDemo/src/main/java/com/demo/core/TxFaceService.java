@@ -3,6 +3,7 @@ package com.demo.core;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,14 +165,18 @@ public class TxFaceService {
 	            GetDetectInfoRequest req = GetDetectInfoRequest.fromJsonString(mapJakcson, GetDetectInfoRequest.class);
 	            
 	            GetDetectInfoResponse resp = client.GetDetectInfo(req);
+	            String  userId = detectAuthService.findUserId(BizToken);
 	            
+	            List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(Integer.valueOf(userId),DateFormatUtil.getCurrentDT().substring(0,4));
+	            if(list.size()>0){
+	            	return;
+	            }
 	            JsonParser jp = new JsonParser();
 	    		//将json字符串转化成json对象
 	            JsonObject jo = jp.parse(resp.getDetectInfo()).getAsJsonObject();
 	            String status = jo.get("Text").getAsJsonObject().get("ErrCode").toString();
 	            String img =jo.get("BestFrame").getAsJsonObject().get("BestFrame").toString();
 	            String audio = jo.get("VideoData").getAsJsonObject().get("LivenessVideo").toString();
-	            String  userId = detectAuthService.findUserId(BizToken);
 	            String imgName = userId+".jpg";
 	            String audioName = userId+".mp4";
 	            Base64Utils.base64ToFile(img,filePuth+DateFormatUtil.getCurrentDT()+"//",imgName);
@@ -191,7 +196,7 @@ public class TxFaceService {
 	            videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0,4));
 	            videoIdentService.insertVL(videoIdent);
 		   } catch (Exception e) {
-	                System.out.println(e.toString());
+			   log.error(e);
 	        }
 	}
 	
