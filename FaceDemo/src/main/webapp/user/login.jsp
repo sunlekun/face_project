@@ -47,6 +47,7 @@ function renzheng(){
 /* 	localStorage.username=username; */
 	localStorage.user_idcard=user_idcard;
 	/* localStorage.mobile=mobile; */
+// 	var data_ = {status:status,msg:msg};
 	$.ajax({
 		type : "POST",
 		url : "faceDetectAuth/reqFaceDetectAuth.do",
@@ -55,23 +56,25 @@ function renzheng(){
 			user_idcard : user_idcard,
 			mobile : mobile */
 		},
-		success : function(data) {
-			if (data.result == 3) {// 
-				if(data.strTxt!=null&&data.strTxt!=""){
-					swal({title: "提示",text: data.strTxt},
-						  function(){
- 						      location.href="http://face.yzrszp.com:8080/sh_identity/out/shuoming.action";
-					      }
-					);
-				}else{
-					location.href="http://face.yzrszp.com:8080/sh_identity/out/shuoming.action";
-				}
-			
-			} else {
-				swal({title: "提示",text: data.strTxt});
+		datatype:"json",
+		success : function(resp) {
+			var s = resp["status"];
+			if("error"==s){
+				alert(resp["msg"]);
+			}else if("sucess"==s){
+				window.location.href=resp["msg"]; 
 			}
 		},
+		
 	});
+}
+window.alert = function(name){
+    var iframe = document.createElement("IFRAME");
+    iframe.style.display="none";
+    iframe.setAttribute("src", 'data:text/plain,');
+    document.documentElement.appendChild(iframe);
+    window.frames[0].window.alert(name);
+    iframe.parentNode.removeChild(iframe);
 }
 
 </script>
