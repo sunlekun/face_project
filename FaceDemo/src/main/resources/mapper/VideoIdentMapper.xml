@@ -118,7 +118,6 @@
           and r.year=#{year}
         </if> 
         
->>>>>>> branch 'master' of https://github.com/sunlekun/face_project.git
 
 	</select>
 
