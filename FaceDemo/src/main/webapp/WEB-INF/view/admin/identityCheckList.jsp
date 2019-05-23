@@ -116,6 +116,12 @@ function infoFormatter( value, row, index){
  
    var date = new Date(row['vadd_time']);
    var d=   date.Format("yyyy-MM-dd hh:mm:ss");
+   var te;
+  if(row['data_type']=="城乡居民养老保险")
+    te="乡镇办："+row['user_township']+'-'+row['user_village'];
+  else 
+    te="所属单位："+row['user_township'];
+    
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
@@ -132,7 +138,7 @@ function infoFormatter( value, row, index){
 	   '</div>'+
        '<div class="user-box" style="float: left;">'+ 
           '<h4><b style="font-size:16px;" title="姓名：'+row['user_name']+'">'+row['user_name']+'</b> <y title="年份：'+row['year']+'">(采集年份：'+row['year']+')</y></h4>'+
-          '<i>所属乡镇：'+row['user_township']+'-'+row['user_village']+'</i>'+
+          '<i>'+te+'</i>'+
           '<span>'+
            ' 身份证号：'+row['user_idcard']+
          ' </span>'+
@@ -220,7 +226,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
           
              <div class="rule-single-select">
 	            <select name="year" onchange="Search()" id="year">
-		           <option value="">请选择抽查年限</option>
+		           <option value="">请选择认证年限</option>
 		           <c:forEach var="item" items="${years}">
 	                 <option  ${item==year?"selected='selected'":'' }   value="${item}">${item}</option>
 	              </c:forEach> 

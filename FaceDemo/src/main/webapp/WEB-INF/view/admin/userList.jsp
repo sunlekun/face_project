@@ -88,11 +88,19 @@ return fmt;
 function infoFormatter( value, row, index){ 
  
   var date = new Date(row['update_time']);
-   var d;
+  var d;
   if(row['update_time']==null) 
      d="暂无登录";
   else
-    d=   date.Format("yyyy-MM-dd hh:mm:ss");
+     d= date.Format("yyyy-MM-dd hh:mm:ss");
+  
+  var te;
+  if(row['data_type']=="城乡居民养老保险")
+    te="乡镇办："+row['user_township']+'-'+row['user_village'];
+  else 
+    te="所属单位："+row['user_township'];
+ 
+   
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
@@ -110,9 +118,7 @@ function infoFormatter( value, row, index){
        '<div class="user-box" style="float: left;">'+ 
           '<h4><b style="font-size:16px;" title="姓名：'+row['user_name']+'">'+row['user_name']+'</b></h4>'+
           '<i>上次登录时间：'+d+'</i>'+
-          '<span>'+
-           ' 乡镇办：'+row['user_township']+'-'+row['user_village']+
-         ' </span>'+
+          '<span>'+ te+ ' </span>'+
         ' </div>'+
      ' </div>'; 
   
