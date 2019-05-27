@@ -172,7 +172,9 @@ function changes(obj){
 <body class="mainbody">
 <form method="post" action="tempUser/tempUserAdd?type=${type}" id="form1" enctype="multipart/form-data">
  
- <input type="hidden" name="flag" id="flag" value="1" />
+ <input type="hidden" name="flag" id="flag" value="1" /> 
+<input type="hidden" name="status1" id="status1" value="${status }" />
+<input type="hidden" name="dataType" id="dataType" value="${dataType }" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -205,7 +207,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 <!--导航栏-->
 <div class="location">
-  <a href="tempUser/toTempUserList?status=${status}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="tempUser/toTempUserList?status=${status}&dataType=${dataType}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>

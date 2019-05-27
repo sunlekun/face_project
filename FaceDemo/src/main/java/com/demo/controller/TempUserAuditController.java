@@ -105,6 +105,7 @@ public class TempUserAuditController {
 				map.put("data_type", manager.getUser_type());
 			map.put("user_township", manager.getXzb());
 			map.put("status", request.getParameter("status"));
+			map.put("dataType", request.getParameter("dataType"));
 			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
 			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
 			modelAndView.addObject("page", page); 
@@ -118,7 +119,8 @@ public class TempUserAuditController {
 			modelAndView.setViewName("admin/tempUserAuditList"); 
 		    }
 		
-	 
+		 
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.addObject("status", request.getParameter("status"));   
 		modelAndView.addObject("type", type);   
 		return modelAndView;
@@ -136,6 +138,7 @@ public class TempUserAuditController {
 			map.put("data_type", manager.getUser_type());
 		map.put("user_township", manager.getXzb());
 		map.put("status", request.getParameter("status"));
+		map.put("dataType", request.getParameter("dataType"));
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
 		String jsons = JSON.toJSONString(tempUsers); 
@@ -163,6 +166,7 @@ public class TempUserAuditController {
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
 		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.setViewName("admin/tempUserAuditDetial"); 
 		return modelAndView;
 	}
@@ -181,6 +185,7 @@ public class TempUserAuditController {
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
 		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.setViewName("admin/tempUserAuditEdit");
 		
 		return modelAndView;
@@ -219,7 +224,7 @@ public class TempUserAuditController {
 			tempUser.setAudit_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
 		tempUserService.updateTempUser(tempUser);
 
-	
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.setViewName("redirect:/tempUserAudit/toTempUserAuditList?type="+request.getParameter("type")+"&status="+request.getParameter("status1"));
 		return modelAndView;
 	}
@@ -234,7 +239,7 @@ public class TempUserAuditController {
 			if(ids.length>=1)
 				tempUserService.deleteTempUserBatch(ids);
 		}
-		
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.setViewName("redirect:/tempUserAudit/toTempUserAuditList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
 		return modelAndView;
 	}
@@ -252,6 +257,7 @@ public class TempUserAuditController {
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
 		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		modelAndView.setViewName("admin/tempUserAuditImportIdCardImg");
 		
 		return modelAndView;
@@ -516,7 +522,7 @@ public class TempUserAuditController {
  		HashMap<String ,String > map=new HashMap<String ,String >(); 
  		map.put("data_type", manager.getUser_type());
  		map.put("status", request.getParameter("status"));
- 		
+ 		map.put("dataType", request.getParameter("dataType")); 
  		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
 		     map.put("data_type",null);
 		else  //其他用户只显示各自的类别的采集信息
@@ -563,6 +569,7 @@ public class TempUserAuditController {
 	    		HashMap<String ,String > map=new HashMap<String ,String >(); 
 	    		map.put("data_type", manager.getUser_type());
 	    		map.put("status", request.getParameter("status"));
+	    		map.put("dataType", request.getParameter("dataType")); 
 	    		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
 	     
 	    		

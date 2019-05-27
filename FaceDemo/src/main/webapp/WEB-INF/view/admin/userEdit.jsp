@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <input type="hidden" name="user_township1" id="user_township1" value="${user_township}" />
  <input type="hidden" name="startTime" id="startTime" value="${startTime}" />
  <input type="hidden" name="endTime" id="endTime" value="${endTime}" />
-
+ <input type="hidden" name="dataType" id="dataType" value="${dataType}" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -81,7 +81,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 <!--导航栏-->
 <div class="location">
-  <a href="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="user/toUserList"><span>居民信息列表</span></a>

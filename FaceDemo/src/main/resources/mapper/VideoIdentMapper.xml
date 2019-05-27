@@ -107,6 +107,10 @@
           and u.data_type=#{data_type}
         </if> 
         
+        <if test="dataType!=null  and dataType!=''">   
+          and u.data_type=#{dataType}
+        </if>
+        
         <if test="xzb!=null  and xzb!=''">   
           and m.user_township=#{xzb}
         </if> 

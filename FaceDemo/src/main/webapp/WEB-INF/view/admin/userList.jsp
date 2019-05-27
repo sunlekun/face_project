@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post',
-            url: "user/userList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}",
+            url: "user/userList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}",
             async: true,
             type: 'post',
             dataType: 'text',
@@ -104,12 +104,12 @@ function infoFormatter( value, row, index){
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="user:View">'+
-		      '<a class="user-avatar" href="user/userDetial?id='+row['id']+'">'+
+		   '<shiro:hasPermission name="user:Edit">'+
+		      '<a class="user-avatar" href="user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="user:View">'+
+		  '<shiro:lacksPermission name="user:Edit">'+
 		      '<a class="user-avatar" href="#" onclick="return false">'+
 		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
 		       '</a>' +
@@ -139,13 +139,13 @@ function infoFormatter( value, row, index){
 	
 	function actionFormatter(value, row, index) {  
 	 
-     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&id="+row['id'];
+          window.location.href = "<user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id'];
       } 
      } 
      
@@ -185,7 +185,7 @@ function Search(){
  
 </head>
 <body class="mainbody">
-<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}"  id="form1">
+<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -206,7 +206,7 @@ function Search(){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="user:Add">
-               <li><a class="add" href="user/toUserAdd?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
+               <li><a class="add" href="user/toUserAdd?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
           <shiro:hasPermission name="user:Delete"> 
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
@@ -224,6 +224,8 @@ function Search(){
          
 	         <div class="menu-list">
 	         
+	        
+	         
 	          <div class="rule-single-select">
 	            <select name="isHasVideo" onchange="Search()" id="isHasVideo">
 					<option   value="">是否上传视频</option>
@@ -231,7 +233,7 @@ function Search(){
 					<option value="2"  ${isHasVideo==2?"selected='selected'":'' }>未上传</option>
 	
 				</select>
-            </div>
+             </div>
           
           
           
@@ -243,6 +245,15 @@ function Search(){
 		           </c:forEach>
 		        
 	            </select>
+	        </div>
+	        
+	         <div class="rule-single-select">
+	            <select name="dataType" onchange="Search()"  id="dataType">
+	                  <option   value="">所有数据类别</option> 
+		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
+		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
+		              <option value="城乡居民养老保险"  ${dataType=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
+		        </select>
 	        </div>
 	        </div>
 	        

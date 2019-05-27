@@ -515,7 +515,7 @@ public class LogAspect {
 		map.put("Role",  new String[]{"编号:getId","角色名:getRole_name"});
 		map.put("Manager",  new String[]{"编号:getId","用户名:getUser_name"});
 		map.put("Xzb", new String[]{"编号:getId","名称:getTitle"});	
-		map.put("User",  new String[]{"编号:getIdd","用户名:getUser_name","身份证号:getUser_idcard"});
+		map.put("User",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard"});
 		map.put("TempUser",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard","状态:getStatuss"});
 		map.put("VideoIdent",  new String[]{"编号:getId","用户名:getUser_name","身份证号:getUser_idcard","状态:getVideo_statuss"}); 
 		

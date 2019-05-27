@@ -124,13 +124,25 @@ function changes(obj){
       }
      
    }  
+   
+       $(document).ready(function(){ 
+    if('城乡居民养老保险'!='${tempUser.data_type}')   
+     {   
+    	 $("#div_xzb").hide();
+         $("#user_township").removeAttr("datatype");  
+         $("#div_village").hide();  
+         $("#user_village").removeAttr("datatype");  
+     }
+     
+    })
 
 </script>
 </head>
 <body class="mainbody">
-<form method="post" action="tempUser/tempUserEdit?status1=${status}&type=${type}" id="form1" enctype="multipart/form-data"> 
- <input type="hidden" name="id" id="id" value="${tempUser.id }" />
-
+<form method="post" action="tempUser/tempUserEdit?type=${type}" id="form1" enctype="multipart/form-data"> 
+<input type="hidden" name="id" id="id" value="${tempUser.id }" />
+<input type="hidden" name="status1" id="status1" value="${status }" />
+<input type="hidden" name="dataType" id="dataType" value="${dataType }" />
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
@@ -163,7 +175,7 @@ function __doPostBack(eventTarget, eventArgument) {
 </div>
 <!--导航栏-->
 <div class="location">
-  <a href="tempUser/toTempUserList?status=${status}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="tempUser/toTempUserList?status=${status}&dataType=${dataType}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUser/toTempUserList?type=${type}"><span>居民信息采集列表</span></a>

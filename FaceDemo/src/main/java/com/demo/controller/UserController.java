@@ -67,7 +67,8 @@ public class UserController {
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
-		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime")); 
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		return modelAndView;
 	}
 	
@@ -91,12 +92,10 @@ public class UserController {
 		
 		 
 		map.put("user_township", request.getParameter("user_township"));
-		 
-		
-		
+		  		
 		map.put("isHasVideo", request.getParameter("isHasVideo"));
 		
-		
+		map.put("dataType", request.getParameter("dataType"));
 		
 		String startTime1=request.getParameter("startTime")==null?"":request.getParameter("startTime");
 		String endTime1=request.getParameter("endTime")==null?"":request.getParameter("endTime");
@@ -142,7 +141,7 @@ public class UserController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
 		modelAndView.addObject("endTime", request.getParameter("endTime"));  
-		
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("admin/userDetial"); 
 		return modelAndView;
 	}
@@ -176,7 +175,7 @@ public class UserController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
 		modelAndView.addObject("endTime", request.getParameter("endTime"));  
-		
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("admin/userEdit");
 		
 		return modelAndView;
@@ -193,7 +192,8 @@ public class UserController {
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township1"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
-		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.addObject("endTime", request.getParameter("endTime")); 
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("redirect:/user/toUserList");
 		return modelAndView;
 	}
@@ -211,6 +211,7 @@ public class UserController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
 		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType"));   
 		
 		modelAndView.setViewName("admin/userAdd");
 		
@@ -255,6 +256,7 @@ public class UserController {
 		modelAndView.addObject("user_township", request.getParameter("user_township1"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
 		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("redirect:/user/toUserList");
 
 		return modelAndView;
@@ -326,6 +328,7 @@ public class UserController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("startTime", request.getParameter("startTime"));  
 		modelAndView.addObject("endTime", request.getParameter("endTime"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("redirect:/user/toUserList");
 		return modelAndView;
 	}

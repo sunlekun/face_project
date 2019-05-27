@@ -77,6 +77,7 @@ public class IdentityCheckController {
 		map.put("user_township", request.getParameter("user_township")); 
 		map.put("year", request.getParameter("year")); 
 		map.put("video_status", request.getParameter("video_status"));
+		map.put("dataType", request.getParameter("dataType"));
 		
 		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
 		String jsons = JSON.toJSONString(identityChecks);
@@ -131,6 +132,7 @@ public class IdentityCheckController {
 			map.put("user_township", request.getParameter("user_township")); 
 			map.put("year", request.getParameter("year")); 
 			map.put("video_status", request.getParameter("video_status"));
+			map.put("dataType", request.getParameter("dataType"));
 			
 			List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
 			PageInfo<VideoIdent> page = new PageInfo<>(identityChecks);
@@ -150,7 +152,7 @@ public class IdentityCheckController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
 		modelAndView.addObject("type", type);   
- 
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 	    return modelAndView;
 	}
 	
@@ -191,6 +193,7 @@ public class IdentityCheckController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
 		modelAndView.addObject("type", request.getParameter("type"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		modelAndView.setViewName("redirect:/identityCheck/toIdentityCheckList");
 		return modelAndView;
 	}
@@ -221,7 +224,7 @@ public class IdentityCheckController {
 		map.put("user_township", request.getParameter("user_township")); 
 		map.put("year", request.getParameter("year")); 
 		map.put("video_status", request.getParameter("video_status"));
-		
+		map.put("dataType", request.getParameter("dataType"));
 		
 		
 		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
@@ -266,6 +269,7 @@ public class IdentityCheckController {
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
 		modelAndView.addObject("type", request.getParameter("type"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		
 		modelAndView.setViewName("admin/identityCheckDetial"); 
 		return modelAndView;
@@ -292,6 +296,7 @@ public class IdentityCheckController {
 		modelAndView.addObject("year", request.getParameter("year"));  
 		modelAndView.addObject("type", request.getParameter("type"));
 		modelAndView.addObject("userid", videoIdent.getId()); 
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		
 		modelAndView.setViewName("admin/identityCheckConfirm");  
 		return modelAndView;
@@ -337,7 +342,8 @@ public class IdentityCheckController {
 		modelAndView.addObject("video_status", request.getParameter("video_status1")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
-		modelAndView.addObject("type", request.getParameter("type"));  
+		modelAndView.addObject("type", request.getParameter("type"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		modelAndView.setViewName("admin/identityCheckList"); 
 		
 		return modelAndView;

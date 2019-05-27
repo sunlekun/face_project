@@ -30,9 +30,14 @@
           and (m.user_name like '%#{key}%' or m.user_idcard like '%#{key}%' )
         </if> 
         
+         <if test="dataType!=null  and dataType!=''">   
+          and m.data_type=#{dataType}
+        </if> 
+        
          <if test="data_type!=null  and data_type!=''">   
           and m.data_type=#{data_type}
         </if> 
+        
         
          <if test="user_township!=null  and user_township!=''">   
           and m.user_township=#{user_township}

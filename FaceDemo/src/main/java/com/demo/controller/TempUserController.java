@@ -71,6 +71,8 @@ public class TempUserController {
 				map.put("data_type", manager.getUser_type());
 			map.put("user_township", manager.getXzb());
 			map.put("status", request.getParameter("status"));
+			map.put("dataType", request.getParameter("dataType")); 
+			
 			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
 			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
 			modelAndView.addObject("page", page); 
@@ -85,6 +87,7 @@ public class TempUserController {
 		 }
 	 
 		modelAndView.addObject("status", request.getParameter("status"));   
+		modelAndView.addObject("dataType", request.getParameter("dataType"));  
 		modelAndView.addObject("type", type);   
 		return modelAndView;
 	}
@@ -100,6 +103,7 @@ public class TempUserController {
 			map.put("data_type", manager.getUser_type());
 		map.put("user_township", manager.getXzb());
 		map.put("status", request.getParameter("status"));
+		map.put("dataType", request.getParameter("dataType")); 
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
 		String jsons = JSON.toJSONString(tempUsers); 
@@ -125,7 +129,8 @@ public class TempUserController {
 		
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
-		modelAndView.addObject("status", request.getParameter("status"));   
+		modelAndView.addObject("status", request.getParameter("status"));  
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("admin/tempUserDetial"); 
 		return modelAndView;
 	}
@@ -143,7 +148,8 @@ public class TempUserController {
 		
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
-		modelAndView.addObject("status", request.getParameter("status"));   
+		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.addObject("dataType", request.getParameter("dataType")); 
 		modelAndView.setViewName("admin/tempUserEdit");
 		
 		return modelAndView;
@@ -186,8 +192,10 @@ public class TempUserController {
 		tempUser.setAudit_time(null);
 		tempUserService.updateTempUser(tempUser);
 
-	
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status1"));
+		modelAndView.addObject("status", request.getParameter("status1"));   
+		modelAndView.addObject("dataType", request.getParameter("dataType"));  
+		modelAndView.addObject("type", request.getParameter("type"));   
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
 		return modelAndView;
 	}
 	
@@ -203,7 +211,7 @@ public class TempUserController {
 		String type=request.getParameter("type");
 		modelAndView.addObject("type", type);  
 		modelAndView.addObject("status", request.getParameter("status"));
-	 
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		modelAndView.setViewName("admin/tempUserAdd");
 		
 		return modelAndView;
@@ -254,7 +262,10 @@ public class TempUserController {
 	          */
 	 	tempUser.setStatus(1);
 		tempUserService.insertTempUser(tempUser);
-
+		String s=request.getParameter("dataType");
+		System.out.println(request.getParameter("dataType"));
+		modelAndView.addObject("status", request.getParameter("status1"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
 	 
 		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type"));
 
@@ -322,8 +333,10 @@ public class TempUserController {
 			if(ids.length>=1)
 				tempUserService.deleteTempUserBatch(ids);
 		}
-		
-		modelAndView.setViewName("redirect:/tempUser/toTempUserList?type="+request.getParameter("type")+"&status="+request.getParameter("status"));
+		modelAndView.addObject("type", request.getParameter("type"));
+		modelAndView.addObject("status", request.getParameter("status"));
+		modelAndView.addObject("dataType", request.getParameter("dataType"));
+		modelAndView.setViewName("redirect:/tempUser/toTempUserList");
 		return modelAndView;
 	}
 	

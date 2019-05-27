@@ -178,6 +178,7 @@ function changes(obj){
  <input type="hidden" name="user_township1" id="user_township1" value="${user_township}" />
  <input type="hidden" name="startTime" id="startTime" value="${startTime}" />
  <input type="hidden" name="endTime" id="endTime" value="${endTime}" /> 
+ <input type="hidden" name="dataType" id="dataType" value="${dataType}" />  
 <div class="aspNetHidden">
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />

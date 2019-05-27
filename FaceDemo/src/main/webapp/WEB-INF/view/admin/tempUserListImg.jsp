@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete?status=${status}"; 
+        from.action="tempUser/tempUserDelete?status=${status}&dataType=${dataType}"; 
         from.submit();
        }  
      
@@ -118,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
           
            <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?status=${status}&type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
+               <li><a class="add" href="tempUser/toTempUserAdd?status=${status}&dataType=${dataType}&type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
           </shiro:hasPermission>
           
          
@@ -136,6 +136,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
 	        </select>
 	        </div>
+	        
+	          <div class="rule-single-select">
+	            <select name="dataType" onchange="Search()"  id="dataType">
+	                  <option   value="">所有数据类别</option> 
+		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
+		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
+		              <option value="城乡居民养老保险"  ${dataType=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
+		        </select>
+	       		</div>
 	        </div>
         
         </shiro:hasPermission>
@@ -185,7 +194,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
            <c:if test="${ tempUser.status!=2}">
             <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?status=${status}&type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
+             	  <a href="tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		  ${ tempUser.user_name}
@@ -223,7 +232,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
              <c:if test="${ tempUser.status!=2}">
             <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="tempUser/toTempUserEdit?status=${status}&type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
+             	  <a href="tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		 <i class="iconfont icon-pencil"></i>
@@ -239,7 +248,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              --%>
             
             <shiro:hasPermission name="tempUser:View">
-          	 	 <a href="tempUser/tempUserDetial?status=${status}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 
+          	 	 <a href="tempUser/tempUserDetial?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:View">
                <i class="iconfont icon-copy"></i>

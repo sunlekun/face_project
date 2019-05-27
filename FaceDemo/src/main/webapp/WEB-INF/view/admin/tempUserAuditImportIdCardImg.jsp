@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              
                 success: function (data, status) { 
                alert(data.msg);
-               window.location.href = data.url+"?status=${status}&type=${type}";
+               window.location.href = data.url+"?status=${status}&dataType=${dataType}&type=${type}";
                   
                    
 		     }
@@ -150,7 +150,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 <!--导航栏-->
 <div class="location">
-  <a href="tempUserAudit/toTempUserAuditList?status=${status}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
+  <a href="tempUserAudit/toTempUserAuditList?status=${status}&dataType=${dataType}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <a href="tempUserAudit/toTempUserAuditList?type=${type}"><span>居民信息审核列表</span></a>

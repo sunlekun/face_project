@@ -43,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
      $.ajax({
             type: 'post', 
-            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}", 
+            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}", 
             async: true,
             type: 'post',
             dataType: 'text',
@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $('#table').bootstrapTable('load', tabledata);
                      
                     $('#table').on('dbl-click-row.bs.table',function(row, $element) {     
-                      window.location.href = "identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id="+$element.id;                  
+                      window.location.href = "identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id="+$element.id;                  
                      
                    });
                    
@@ -126,7 +126,7 @@ function infoFormatter( value, row, index){
    '<div>'+
 	   '<div  style="float: left;">'+
 		   '<shiro:hasPermission name="identityCheck:Audit">'+
-		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id='+row['id']+'">'+
+		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
@@ -151,7 +151,7 @@ function infoFormatter( value, row, index){
 	function actionFormatter(value, row, index) { 
 <%--   return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
 <%--      return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";  --%>
-return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&id="+row['id']+"'>详情</a>";
+return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id="+row['id']+"'>详情</a>";
     } 
     
  
@@ -191,7 +191,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
 </script>
 </head>
 <body class="mainbody">
-<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"  id="form1">
+<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
    
 
@@ -219,7 +219,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
         <shiro:hasPermission name="identityCheck:Delete">
             <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
         </shiro:hasPermission>
-          <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
+          <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
         </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
@@ -255,6 +255,16 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
 		           </c:forEach>
 		        
 	            </select>
+	        </div>
+	        
+	        
+	         <div class="rule-single-select">
+	            <select name="dataType" onchange="Search()"  id="dataType">
+	                  <option   value="">所有数据类别</option> 
+		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
+		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
+		              <option value="城乡居民养老保险"  ${dataType=='城乡居民养老保险'?"selected='selected'":'' }>城乡居民养老保险</option>
+		        </select>
 	        </div>
         </div>
         
