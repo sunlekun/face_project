@@ -281,6 +281,13 @@ public class TempUserController {
 		JSONObject object=new JSONObject(); 
 		String collectInfoUploadSavePath = LoadProperties.loadProperties("common.properties", "collectInfoUploadSavePath");
 		
+		SimpleDateFormat dfs = new SimpleDateFormat("yyyyMM");
+		  
+		File dirFile = new File(collectInfoUploadSavePath+dfs.format(System.currentTimeMillis()) +"/");
+        if (!dirFile.exists()) {
+        	dirFile.mkdirs();
+        }
+        
 		MultipartHttpServletRequest mul=(MultipartHttpServletRequest)request;  
 	    Map<String,MultipartFile> files=mul.getFileMap();
 	    
@@ -295,7 +302,7 @@ public class TempUserController {
 		 
 		filename = df.format(System.currentTimeMillis()) + fileExtName;
  
-		file.transferTo(new File(collectInfoUploadSavePath + filename));
+		file.transferTo(new File(collectInfoUploadSavePath+dfs.format(System.currentTimeMillis()) +"/" + filename));
   
 	 /*    String thumbnail =  request.getParameter("IsThumbnail");         
                 
@@ -309,10 +316,12 @@ public class TempUserController {
                     object.put("thumb","/info_uploadfiles/retire/thumb/"+ sFileName);
                 }*/
                
-                
-		object.put("name", "/collect_info/upload/" + filename);
-		object.put("path", "/collect_info/upload/" + filename );
-		object.put("thumb","/collect_info/upload/" + filename);
+            
+		
+        
+		object.put("name", "/collect_info/upload/" +dfs.format(System.currentTimeMillis()) +"/"+ filename);
+		object.put("path", "/collect_info/upload/" +dfs.format(System.currentTimeMillis()) +"/"+ filename );
+		object.put("thumb","/collect_info/upload/" +dfs.format(System.currentTimeMillis()) +"/"+ filename);
 	    }
 		object.put("status", true);
 		
