@@ -197,7 +197,7 @@ function infoFormatter( value, row, index){
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id'];
+          window.location.href = "user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id'];
       } 
      } 
      

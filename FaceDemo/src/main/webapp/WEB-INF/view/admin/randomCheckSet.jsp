@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     }
                     else { 
                    
-                        window.location.href =data.url;                     
+                        window.location.href ="<%=path%>/"+data.url;                     
                     }
                 } 
             });

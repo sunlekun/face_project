@@ -179,7 +179,7 @@ function strFormat(val) {
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "<tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id'];
+          window.location.href = "tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id'];
       } 
      } 
      
