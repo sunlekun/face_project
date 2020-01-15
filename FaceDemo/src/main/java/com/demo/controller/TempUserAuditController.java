@@ -579,8 +579,13 @@ public class TempUserAuditController {
 	    			if(tempUsers.get(i).getOriginal_path()!=null)
 		    		{
 		    			String[] filenames=tempUsers.get(i).getOriginal_path().split(";");
+		    			
 		    			for(int j=0;j<filenames.length;j++)
-		    			    files.add(new File(collectInfoUploadSavePath +filenames[j].split("\\/")[3] ));
+		    			{   
+		    				String[] ss=filenames[j].split("\\/");
+		    				if(ss.length>=5)
+		    					files.add(new File(collectInfoUploadSavePath +ss[3]+"/"+ss[4] ));
+		    			}
 		    		}
 	    		}
 	            /**创建一个临时压缩文件，
