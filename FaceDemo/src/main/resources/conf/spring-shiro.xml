@@ -65,6 +65,7 @@
 	           	/faceDetectAuth/*				= anon
 	           	/user/**		= anon
 	           	/js/** 			        	= anon
+	            /images/** 			        = anon
 	           	/css/** 			    	= anon
 	           	/logout                     = logout
 	           	/**							= authc

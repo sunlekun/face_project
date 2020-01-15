@@ -147,7 +147,8 @@ public class TxFaceService {
 		return respBean;
 	}
 	
-	public void notifyProcess(String BizToken){
+	public String notifyProcess(String BizToken){
+		String rs="";
 		   try{
 
 			   Credential cred = new Credential(secretId, secretKey);
@@ -175,7 +176,7 @@ public class TxFaceService {
 	            
 	            List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(Integer.valueOf(userId),DateFormatUtil.getCurrentDT().substring(0,4));
 	            if(list.size()>0){
-	            	return;
+	            	return rs;
 	            }
 	            JsonParser jp = new JsonParser();
 	    		//将json字符串转化成json对象
@@ -202,13 +203,17 @@ public class TxFaceService {
 	            }else{
 	            	video_status=3;
 	            }
+	            rs=status;
 	            videoIdent.setAdd_time(new Date());
 	            videoIdent.setVideo_status(video_status);
 	            videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0,4));
 	            videoIdentService.insertVL(videoIdent);
-		   } catch (Exception e) {
+	            
+	           } catch (Exception e) {
 			   log.error(e);
 	        }
+		   
+		   return rs;
 	}
 	
 	public static void main(String[] args) throws JsonProcessingException {

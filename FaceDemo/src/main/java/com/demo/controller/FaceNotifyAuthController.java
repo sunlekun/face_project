@@ -27,13 +27,26 @@ public class FaceNotifyAuthController extends HttpServlet{
 	private TxFaceService txFaceService = ApplicationContextUtil.getBean(TxFaceService.class);
 	public void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
 		String BizToken = request.getParameter("BizToken");
+		String status = "";
 		if(!StringUtils.isEmpty(BizToken)){
-			txFaceService.notifyProcess(BizToken);
+			status=txFaceService.notifyProcess(BizToken);
 			
 		}
-		response.setContentType("text/html;charset=UTF-8");
+		/*response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		out.println("<h1>认证完成，详细认证结果请咨询当地乡镇部门</h1>");
+		out.println("<h1>认证完成，详细认证结果请咨询当地乡镇部门</h1>");*/
+		String message="";
+		String img="";
+		if("0".equals(status)){
+        	message="验证成功";
+        	img="ok.jpg";
+        }else{
+        	message="验证失败";
+        	img="err.jpg";
+        }
+		request.setAttribute("message",message);
+		request.setAttribute("img",img);
+		response.sendRedirect("FaceDemo/user/result.jsp");
 	}
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
 		doGet(request,response);
