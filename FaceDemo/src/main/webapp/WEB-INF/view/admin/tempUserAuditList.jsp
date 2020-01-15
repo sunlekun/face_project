@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 <script type="text/javascript"> 
 	 
-     $.ajax({
+   /*   $.ajax({
             type: 'post',
             url: "tempUserAudit/tempUserAuditList?status=${status}&dataType=${dataType}&type=${type}",
             async: true,
@@ -59,8 +59,61 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    
 		}
        })
-
+ */
  
+  $(document).ready(function () { 
+    $('#table').bootstrapTable({
+                        
+                        url: "tempUserAudit/tempUserAuditList?status=${status}&dataType=${dataType}&type=${type}",
+						dataType : "json", 
+						contentType : "application/x-www-form-urlencoded;charset=utf-8", // 如果是post必须定义
+						method : 'get',
+						striped: true,                      //是否显示行间隔色 
+                        pagination: true,                   //是否显示分页（*）
+						dataField : "data",
+                        queryParams: queryParams,//传递参数（*）
+                        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                        pageNumber:1,                       //初始化加载第一页，默认第一页
+                        pageSize: 10,                       //每页的记录行数（*）
+                        pageList: [10,25,50,100,500,1000],        //可供选择的每页的行数（*）
+                        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                        formatter:timeFormat,      
+                        responseHandler:responseHandler    //请求数据成功后，渲染表格前的方法
+                     
+                 }); 
+                     
+                 
+                      $('#table').on('dbl-click-row.bs.table',function(row, $element) {
+                       window.location.href = "tempUserAudit/tempUserAuditDetial?status=${status}&dataType=${dataType}&type=${type}&id="+$element.id;           
+                     
+                   });
+              
+         }  );    
+      
+      
+ //得到查询的参数
+  function queryParams(params) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            limit: params.limit,   //页面大小
+            offset: params.offset,  //页码
+            pageSize : params.limit, //每一页的数据行数，默认是上面设置的10(pageSize)
+            pageNumber : params.offset/params.limit+1, //当前页面,默认是上面设置的1(pageNumber)
+            key: $("#key").val()
+        };
+        
+        return temp;
+    } 
+
+ function responseHandler(result){ 
+ 
+// alert(result.rows[1].add_time);
+    //如果没有错误则返回数据，渲染表格
+    return {
+        total : result.total, //总页数,前面的key必须为"total"
+        data : result.rows //行数据，前面的key要与之前设置的dataField的值一致.
+    };
+}
+
    // 对Date的扩展，将 Date 转化为指定格式的String
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)

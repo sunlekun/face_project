@@ -24,7 +24,7 @@
 	 
 	 
 	 <select id="findAllUserByMultiCondition" parameterType="java.util.HashMap"  resultType="User">
-		select m.* ,v.add_time as add_time  from users m left join video_ident v on m.id=v.user_id  where m.is_delete=0  
+		select m.id,m.user_name,m.user_idcard,m.user_township ,m.user_village ,m.img_url,m.data_type ,m.add_time  ,v.add_time as add_time  from users m left join video_ident v on m.id=v.user_id  where m.is_delete=0  
 		
 		 <if test="isHasVideo==1">   
              and v.add_time is not null 
@@ -58,6 +58,9 @@
 		and unix_timestamp(v.add_time) &lt;=  unix_timestamp(#{endTime})
 		</if>
 		
+		<if test="key!=null  and key!=''">  
+          and ( m.user_name  like '%${key}%' or  m.data_type  like '%${key}%'  or m.user_township  like '%${key}%' or m.user_idcard like '%${key}%' )
+        </if> 
 		 
 		order by m.add_time  desc
 	 

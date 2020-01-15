@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.demo.model.Manager; 
+import com.demo.model.Manager;  
 import com.demo.model.User;
 import com.demo.model.VideoIdent;
 import com.demo.model.Xzb;
@@ -36,6 +36,8 @@ import com.demo.service.UserService;
 import com.demo.service.VideoIdentService;
 import com.demo.service.XzbService;
 import com.demo.util.LoadProperties; 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -73,10 +75,17 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/userList")	
-	public void userList(HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
+	public void userList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
 		 
+		if(pageSize==null)
+			pageSize=10;
+		if(pageNumber==null)
+			pageNumber =1;
+		PageHelper.startPage(pageNumber, pageSize);
+		
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
+		map.put("key", key);
 		
 		if(manager.getRole_type()==1)//超级用户，显示所有的。 
 			map.put("data_type", null);
@@ -119,14 +128,16 @@ public class UserController {
 		map.put("endTime", endTime);  
 		List<User> users=  userService.findAllUserByMultiCondition(map); 
  		 
-		String jsons = JSON.toJSONString(users); 
+		
+		PageInfo<User> pageInfo = new PageInfo<>(users);
+		String jsons = JSON.toJSONString(pageInfo.getList());
+		 
 		JSONObject object = new JSONObject();
-
-		object.put("status", "true");
-		object.put("jsons", jsons);
+		object.put("total", pageInfo.getTotal()); 
+		object.put("rows",jsons );   
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
-			
+		 
 	}
 	
 	@RequestMapping(value = "/userDetial")

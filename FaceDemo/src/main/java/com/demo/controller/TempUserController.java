@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager; 
 import com.demo.model.TempUser;
+import com.demo.model.User;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.TempUserService;
@@ -93,10 +94,21 @@ public class TempUserController {
 	}
 	
 	@RequestMapping(value = "/tempUserList")	
-	public void tempUserList(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void tempUserList(Integer pageSize,Integer pageNumber,String key, HttpServletRequest request,HttpServletResponse response) throws IOException {
 		 
+		if(pageSize==null)
+			pageSize=10;
+		if(pageNumber==null)
+			pageNumber =1;
+		PageHelper.startPage(pageNumber, pageSize);
+		
+		
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
+		map.put("key", key);
+		
+	 
+		
 		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
 		     map.put("data_type",null);
 		else  //其他用户只显示各自的类别的采集信息
@@ -106,13 +118,23 @@ public class TempUserController {
 		map.put("dataType", request.getParameter("dataType")); 
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
-		String jsons = JSON.toJSONString(tempUsers); 
+		/*String jsons = JSON.toJSONString(tempUsers); 
 		JSONObject object = new JSONObject();
 
 		object.put("status", "true");
 		object.put("jsons", jsons);
 		response.setCharacterEncoding("utf-8");
+		response.getWriter().write(object.toString());*/
+		
+		PageInfo<TempUser> pageInfo = new PageInfo<>(tempUsers);
+		String jsons = JSON.toJSONString(pageInfo.getList());
+		 
+		JSONObject object = new JSONObject();
+		object.put("total", pageInfo.getTotal()); 
+		object.put("rows",jsons );   
+		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
+		
 			
 	}
 	

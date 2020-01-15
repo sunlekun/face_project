@@ -30,6 +30,7 @@ import net.sf.json.JSONObject;
 
 
 
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -42,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
  
+
 
 
 
@@ -128,10 +130,18 @@ public class TempUserAuditController {
 	
 	@RequestMapping(value = "/tempUserAuditList")	
 	@RequiresPermissions("tempUserAudit:Show")
-	public void tempUserAuditList(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void tempUserAuditList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		 
+		if(pageSize==null)
+			pageSize=10;
+		if(pageNumber==null)
+			pageNumber =1;
+		PageHelper.startPage(pageNumber, pageSize);
+		
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,String > map=new HashMap<String ,String >(); 
+		map.put("key", key);
+		
 		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
 		     map.put("data_type",null);
 		else  //其他用户只显示各自的类别的采集信息
@@ -141,13 +151,15 @@ public class TempUserAuditController {
 		map.put("dataType", request.getParameter("dataType"));
 		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
  		 
-		String jsons = JSON.toJSONString(tempUsers); 
+		PageInfo<TempUser> pageInfo = new PageInfo<>(tempUsers);
+		String jsons = JSON.toJSONString(pageInfo.getList());
+		 
 		JSONObject object = new JSONObject();
-
-		object.put("status", "true");
-		object.put("jsons", jsons);
+		object.put("total", pageInfo.getTotal()); 
+		object.put("rows",jsons );   
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
+	 
 			
 	}
 	

@@ -57,10 +57,17 @@ public class IdentityCheckController {
 	private XzbService xzbService;
 	
 	@RequestMapping(value = "/identityCheckList")	
-	public void identityCheckList(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void identityCheckList(Integer pageSize,Integer pageNumber,String key, HttpServletRequest request,HttpServletResponse response) throws IOException {
+		
+		if(pageSize==null)
+			pageSize=10;
+		if(pageNumber==null)
+			pageNumber =1;
+		PageHelper.startPage(pageNumber, pageSize);
+		
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
-		
+		 map.put("key",key);
 		 
 		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
 		     map.put("data_type",null);
@@ -80,15 +87,16 @@ public class IdentityCheckController {
 		map.put("dataType", request.getParameter("dataType"));
 		
 		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
-		String jsons = JSON.toJSONString(identityChecks);
-
+		 
+		 
+		PageInfo<VideoIdent> pageInfo = new PageInfo<>(identityChecks);
+		String jsons = JSON.toJSONString(pageInfo.getList());
+		 
 		JSONObject object = new JSONObject();
-
-		object.put("status", "true");
-		object.put("jsons", jsons);
+		object.put("total", pageInfo.getTotal()); 
+		object.put("rows",jsons );   
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
-		 
 		
 	}
 	
