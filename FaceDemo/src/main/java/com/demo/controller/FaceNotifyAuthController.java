@@ -42,7 +42,7 @@ public class FaceNotifyAuthController extends HttpServlet{
         	img="ok.jpg";
         }else{
         	message="验证失败";
-        	img="err.jpg";
+        	img="err.png";
         }
 		request.setAttribute("message",message);
 		request.setAttribute("img",img);
