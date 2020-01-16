@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="DetectAuth" type="com.demo.model.DetectAuth" />
 		<typeAlias alias="Log" type="com.demo.model.Log" />
 		<typeAlias alias="User" type="com.demo.model.User" />
+		<typeAlias alias="SysConfig" type="com.demo.model.SysConfig" />
 	</typeAliases>
 	
 	<!-- 配置分页插件 PageHelper -->  

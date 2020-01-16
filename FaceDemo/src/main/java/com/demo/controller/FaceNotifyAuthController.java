@@ -35,18 +35,14 @@ public class FaceNotifyAuthController extends HttpServlet{
 		/*response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println("<h1>认证完成，详细认证结果请咨询当地乡镇部门</h1>");*/
-		String message="";
-		String img="";
-		if("0".equals(status)){
-        	message="验证成功";
-        	img="ok.jpg";
-        }else{
-        	message="验证失败";
-        	img="err.png";
-        }
-		request.setAttribute("message",message);
-		request.setAttribute("img",img);
-		response.sendRedirect("result.jsp");
+		 
+		String url="";
+		if("0".equals(status)){ 
+        	url="ok.jsp";
+        }else{ 
+        	url="error.jsp";
+        } 
+		response.sendRedirect(url);
 	}
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
 		doGet(request,response);
