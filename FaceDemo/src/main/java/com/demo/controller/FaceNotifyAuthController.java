@@ -46,7 +46,7 @@ public class FaceNotifyAuthController extends HttpServlet{
         }
 		request.setAttribute("message",message);
 		request.setAttribute("img",img);
-		response.sendRedirect("FaceDemo/user/result.jsp");
+		response.sendRedirect("result.jsp");
 	}
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
 		doGet(request,response);

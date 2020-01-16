@@ -81,7 +81,7 @@ window.alert = function(name){
   </head>
   <body>
 <div class="top">
-	<div class="top_l"><a href="javascript:history.go(-1);"><img src="http://face.yzrszp.com:8080/sh_identity/images/home_f.png" alt=""/></a></div>
+	<div class="top_l"><a href="javascript:history.go(-1);"><img src="http://111.229.177.211:8080/sh_identity/images/home_f.png" alt=""/></a></div>
 	<div class="top_c">实名认证</div>
 <!--	<div class="top_r">退出不拍了</div>-->
 </div>
