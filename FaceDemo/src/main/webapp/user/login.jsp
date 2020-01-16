@@ -81,7 +81,7 @@ window.alert = function(name){
   </head>
   <body>
 <div class="top">
-	<div class="top_l"><a href="javascript:history.go(-1);"><img src="http://111.229.177.211:8080/sh_identity/images/home_f.png" alt=""/></a></div>
+	<div class="top_l"><a href="javascript:history.go(-1);"><img src="images/home_f.png" alt=""/></a></div>
 	<div class="top_c">实名认证</div>
 <!--	<div class="top_r">退出不拍了</div>-->
 </div>
@@ -103,7 +103,7 @@ window.alert = function(name){
 	    <div class="sminput_sfz02"><input name="mobile" id="mobile" type="text"></div>
 	</div> -->
 	<div class="tiaok">
-	     <img src="http://face.yzrszp.com:8080/sh_identity/images/ico1.png" alt=""/>同意
+	     <img src="images/ico1.png" alt=""/>同意
   	     <a href = "JavaScript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">《我已认真阅读并同意全部协议》</a>
 	     <div id="light" class="white_content">
 	         <p>ceshi</p>
