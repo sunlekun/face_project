@@ -87,7 +87,7 @@ public class TxFaceService {
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setHttpProfile(httpProfile);            
         
-        FaceidClient client = new FaceidClient(cred, sys.getAction(), clientProfile);
+        FaceidClient client = new FaceidClient(cred, sys.getRegion(), clientProfile);
         
        	//请求参数
         DetectAuthReqBean reqBean = new DetectAuthReqBean();
@@ -208,7 +208,7 @@ public class TxFaceService {
 	        reqBean.setIdCard("340826198806280833");
 	        reqBean.setName("孙乐焜");
 	        reqBean.setRuleId("1");
-	        String img = Base64Utils.imageToBase64Str("E://1//slk.jpg").replace("\r\n", "");
+	        String img = Base64Utils.imageToBase64Str("E://1//123.png").replace("\r\n", "");
 //	        System.out.println(img);
 //	        Base64Utils.base64ToFile(img,"E://","111000000000.jpg");
 	        reqBean.setImageBase64(img);

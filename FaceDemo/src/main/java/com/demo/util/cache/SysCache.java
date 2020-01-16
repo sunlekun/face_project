@@ -16,7 +16,7 @@ public class SysCache {
 		}
 		try {
 			// // 调用dubbo服务获取数据
-			SysConfigService sysConfigService = (SysConfigService) ApplicationContextUtil.getBean(SysConfig.class);
+			SysConfigService sysConfigService = (SysConfigService) ApplicationContextUtil.getBean(SysConfigService.class);
 
 			SysConfig sys = sysConfigService.findSysConfig();
 			map=sys;

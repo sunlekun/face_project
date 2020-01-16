@@ -99,6 +99,7 @@ public class FaceDetectAuthController {
 				return map;
 			}
 		} catch (Exception e) {
+			log.error(e);
 			map.put("status", "error");
 			map.put("msg", "系统错误");
 			return map; 
