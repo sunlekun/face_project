@@ -1,7 +1,5 @@
 package com.demo.core;
 
-import java.io.File;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -14,20 +12,19 @@ import com.demo.bean.DetectAuthReqBean;
 import com.demo.bean.DetectAuthRespBean;
 import com.demo.bean.GetDetectInfoReq;
 import com.demo.model.DetectAuth;
-import com.demo.model.TempUser;
+import com.demo.model.SysConfig;
 import com.demo.model.User;
 import com.demo.model.VideoIdent;
 import com.demo.service.DetectAuthService;
 import com.demo.service.VideoIdentService;
 import com.demo.util.Base64Utils;
 import com.demo.util.DateFormatUtil;
+import com.demo.util.cache.SysCache;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.faceid.v20180301.FaceidClient;
@@ -50,32 +47,7 @@ public class TxFaceService {
 	
 	@Autowired
 	private VideoIdentService videoIdentService;
-	/**
-	 * 密钥ID
-	 */
-	@Value("#{sysConfig.SecretId}")
-    public String secretId;
-	/**
-	 * 密钥值
-	 */
-	@Value("#{sysConfig.SecretKey}")
-	public String secretKey;
-	/**
-	 * 请求地址
-	 */
-	@Value("#{sysConfig.faceUrl}")
-    public String url;
-	/**
-	 * 地区
-	 */
-	@Value("#{sysConfig.region}")
-    public String region;
 	
-	/**
-	 * 业务编号
-	 */
-	@Value("#{sysConfig.ruleId}")
-    public String ruleId;
 	
 	/**
 	 * 版本号
@@ -108,20 +80,21 @@ public class TxFaceService {
 	
 	public DetectAuthRespBean faceProcess(User user) throws Exception{
 		DetectAuthRespBean respBean = new DetectAuthRespBean();
-		Credential cred = new Credential(secretId, secretKey);
+		SysConfig sys = SysCache.getSysConfig();
+		Credential cred = new Credential(sys.getSecretId(), sys.getSecretKey());
 		HttpProfile httpProfile = new HttpProfile();
-        httpProfile.setEndpoint(url);
+        httpProfile.setEndpoint(sys.getFaceUrl());
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setHttpProfile(httpProfile);            
         
-        FaceidClient client = new FaceidClient(cred, region, clientProfile);
+        FaceidClient client = new FaceidClient(cred, sys.getAction(), clientProfile);
         
        	//请求参数
         DetectAuthReqBean reqBean = new DetectAuthReqBean();
-        reqBean.setAction(action);
-        reqBean.setVersion(version);
-        reqBean.setRegion(region);
-        reqBean.setRuleId(ruleId);
+        reqBean.setAction(sys.getAction());
+        reqBean.setVersion(sys.getVersion());
+        reqBean.setRegion(sys.getRegion());
+        reqBean.setRuleId(sys.getRuleId());
         reqBean.setImageBase64(Base64Utils.getImageStr(imgPuth+user.getImg_url()).replace("\r\n", ""));
         reqBean.setName(user.getUser_name());
         reqBean.setIdCard(user.getUser_idcard());
@@ -150,22 +123,22 @@ public class TxFaceService {
 	public String notifyProcess(String BizToken){
 		String rs="";
 		   try{
-
-			   Credential cred = new Credential(secretId, secretKey);
+			   SysConfig sys = SysCache.getSysConfig();
+			   Credential cred = new Credential(sys.getSecretId(), sys.getSecretKey());
 	            
 	            HttpProfile httpProfile = new HttpProfile();
-	            httpProfile.setEndpoint(url);
+	            httpProfile.setEndpoint(sys.getFaceUrl());
 
 	            ClientProfile clientProfile = new ClientProfile();
 	            clientProfile.setHttpProfile(httpProfile);            
 	            
-	            FaceidClient client = new FaceidClient(cred, region, clientProfile);
+	            FaceidClient client = new FaceidClient(cred, sys.getRegion(), clientProfile);
 	        	//请求参数
 		        GetDetectInfoReq reqBean = new GetDetectInfoReq();
 		        reqBean.setAction("GetDetectInfo");
 		        reqBean.setVersion(version);
-		        reqBean.setRegion(region);
-		        reqBean.setRuleId(ruleId);
+		        reqBean.setRegion(sys.getRegion());
+		        reqBean.setRuleId(sys.getRuleId());
 		        reqBean.setBizToken(BizToken);
 		        ObjectMapper mapper = new ObjectMapper();
 		        String mapJakcson = mapper.writeValueAsString(reqBean);
