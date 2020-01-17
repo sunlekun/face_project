@@ -1,7 +1,8 @@
-<%@ page language="java" pageEncoding="utf-8" %>
+﻿<%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%
+ request.setCharacterEncoding("utf-8");
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
@@ -65,7 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   $(document).ready(function () { 
     $('#table').bootstrapTable({
                         
-                        url : "user/userList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}", 
+                        url : "user/userList?isHasVideo=${isHasVideo}&user_township="+encodeURI('${user_township}')+"&startTime=${startTime}&endTime=${endTime}&dataType="+encodeURI('${dataType}'), 
 						dataType : "json", 
 						contentType : "application/x-www-form-urlencoded;charset=utf-8", // 如果是post必须定义
 						method : 'get',
@@ -202,8 +203,9 @@ function infoFormatter( value, row, index){
      } 
      
 function Search(){
-     document.getElementById("form1").action="user/toUserList?type=${type}"; 
-     document.getElementById("form1").submit();
+     document.getElementById("form1").method="post" ;
+     document.getElementById("form1").action="user/toUserList"; 
+     document.getElementById("form1").submit(); 
  }
 		 //批量删除  
    function deleteDiaryList() {  
@@ -236,8 +238,8 @@ function Search(){
 </script>
  
 </head>
-<body class="mainbody">
-<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"  id="form1">
+<body class="mainbody"> 
+<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township="+encodeURI('${user_township}')+&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
 
 

@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  $(document).ready(function () { 
     $('#table').bootstrapTable({
                         
-                        url : "identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}",  
+                        url : "identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township="+encodeURI('${user_township}')+"&year=${year}&dataType=" +encodeURI('${dataType}'),  
 						dataType : "json", 
 						contentType : "application/x-www-form-urlencoded;charset=utf-8", // 如果是post必须定义
 						method : 'get',

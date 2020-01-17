@@ -76,7 +76,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/userList")	
 	public void userList(Integer pageSize,Integer pageNumber,String key,HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
-		 
+		// request.setCharacterEncoding("utf-8"); 
 		if(pageSize==null)
 			pageSize=10;
 		if(pageNumber==null)
@@ -97,9 +97,11 @@ public class UserController {
 			map.put("xzb", null);
 		else //非系统用户只能按照自己的管理权限筛选
 			map.put("xzb", manager.getXzb());
-		new String(request.getParameter("user_township").getBytes("iso8859-1"),"utf-8");
-		 System.out.println("获取乡镇办："+new String(request.getParameter("user_township").getBytes("iso8859-1"),"utf-8"));
-		 log.info("获取乡镇办："+new String(request.getParameter("user_township").getBytes("iso8859-1"),"utf-8"));
+		
+		/* System.out.println("获取乡镇办："+ request.getParameter("user_township"));
+		 System.out.println("获取乡镇办："+new String(request.getParameter("user_township").getBytes("ISO-8859-1"),"UTF-8"));
+		 System.out.println("获取乡镇办："+new String(request.getParameter("user_township").getBytes("ISO-8859-1"),"ISO-8859-1"));
+		 log.info("获取乡镇办："+new String(request.getParameter("user_township").getBytes("ISO-8859-1"),"gb2312"));*/
 		map.put("user_township", request.getParameter("user_township"));
 		  		
 		map.put("isHasVideo", request.getParameter("isHasVideo"));
