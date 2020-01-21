@@ -149,7 +149,7 @@ public class TxFaceService {
 	            
 	            List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(Integer.valueOf(userId),DateFormatUtil.getCurrentDT().substring(0,4));
 	            if(list.size()>0){
-	            	return rs;
+	            	return String.valueOf(list.get(0).getVideo_status());
 	            }
 	            JsonParser jp = new JsonParser();
 	    		//将json字符串转化成json对象
@@ -176,7 +176,7 @@ public class TxFaceService {
 	            }else{
 	            	video_status=3;
 	            }
-	            rs=status;
+	            rs=String.valueOf(video_status);
 	            videoIdent.setAdd_time(new Date());
 	            videoIdent.setVideo_status(video_status);
 	            videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0,4));
