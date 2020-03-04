@@ -225,7 +225,7 @@ function __doPostBack(eventTarget, eventArgument) {
   </dl>
   <dl>
     <dt>用户名</dt>
-    <dd><input name="user_name" type="text" value="system" id="user_name" class="input normal" datatype="/^[a-zA-Z0-9\-\_]{2,50}$/" sucmsg=" "  /> <span class="Validform_checktip" id="msg">*字母、下划线，不可修改</span></dd>
+    <dd><input name="user_name" type="text" value="" id="user_name" class="input normal" datatype="/^[a-zA-Z0-9\-\_]{2,50}$/" sucmsg=" "  /> <span class="Validform_checktip" id="msg">*字母、下划线，不可修改</span></dd>
   </dl> 
   <dl>
     <dt>登录密码</dt>
