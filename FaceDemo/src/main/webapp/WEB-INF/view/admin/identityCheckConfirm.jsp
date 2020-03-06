@@ -109,7 +109,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <a href="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>
   <a href="manager/center"><i class="iconfont icon-home"></i><span>首页</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
-  <a href="identityCheck/identityCheckList?type=${type}"><span>身份认证审核列表</span></a>
+  <a href="identityCheck/toIdentityCheckList?type=${type}"><span>身份认证审核列表</span></a>
   <i class="arrow iconfont icon-arrow-right"></i>
   <span>抽查审核</span>
 </div>
