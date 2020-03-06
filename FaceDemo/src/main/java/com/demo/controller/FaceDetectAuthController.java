@@ -79,7 +79,12 @@ public class FaceDetectAuthController {
 //				modelAndView.addObject("error", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
 //				return modelAndView;
 				map.put("status", "error");
-				map.put("msg", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经审核过，详情请咨询当地乡镇有关部门");
+				if(list.get(0).getVideo_statuss()=="2"){
+					map.put("msg", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经认证成功，无需再次认证");
+				}else{
+					map.put("msg", DateFormatUtil.getCurrentDT().substring(0,4)+"年身份信息已经认证过，认证失败！详情请咨询当地乡镇有关部门");
+				}
+				
 				return map;
 			}
 			//验证在7200秒内是或否调用核身前置接口
