@@ -14,7 +14,7 @@
 		select m.* from users m where m.is_delete=0 
 		
 		 <if test="key!=null  and key!=''">   
-          and (m.user_name like '%${key}%' or m.user_idcard like '%${key}%' )
+          and (m.user_name like '%${key}%' or m.user_idcard like '%${key}%' or m.user_village  like '%${key}%')
         </if> 
         
 		order by m.add_time  desc
@@ -59,7 +59,7 @@
 		</if>
 		
 		<if test="key!=null  and key!=''">  
-          and ( m.user_name  like '%${key}%' or  m.data_type  like '%${key}%'  or m.user_township  like '%${key}%' or m.user_idcard like '%${key}%' )
+          and ( m.user_name  like '%${key}%' or  m.data_type  like '%${key}%'  or m.user_township  like '%${key}%' or m.user_idcard like '%${key}%' or m.user_village  like '%${key}%' )
         </if> 
 		 
 		order by m.add_time  desc

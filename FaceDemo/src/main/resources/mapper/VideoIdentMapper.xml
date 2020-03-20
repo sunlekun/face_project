@@ -100,7 +100,7 @@
 		</if>
 		
 		<if test="key!=null  and key!=''">   
-          and (u.user_name like '%${key}%' or u.user_idcard like '%${key}%' )
+          and (u.user_name like '%${key}%' or u.user_idcard like '%${key}%' or u.user_village like '%${key}%' )
         </if> 
         
          <if test="data_type!=null  and data_type!=''">   
