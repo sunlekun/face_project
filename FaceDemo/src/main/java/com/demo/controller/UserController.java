@@ -262,6 +262,11 @@ public class UserController {
 	        new File(idCardImgUploadSavePath+oldFileName).renameTo(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName));
 	        user.setImg_url("/upload/" +user.getUser_idcard()+fileExtName);
      
+	        if(!"城乡居民养老保险".equals(user.getData_type()))   
+	        {  
+	          String user_company=request.getParameter("user_company");
+	       	  user.setUser_township(user_company==null?"":user_company);
+	        }
 	 
 		userService.insertUser(user);
 

@@ -31,6 +31,7 @@ import net.sf.json.JSONObject;
 
 
 
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
  
+
 
 
 
@@ -234,6 +236,13 @@ public class TempUserAuditController {
 		TempUser old= tempUserService.findTempUserById(tempUser.getId()) ;  
 		if(old.getStatus()!=tempUser.getStatus())
 			tempUser.setAudit_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
+		
+		 if(!"城乡居民养老保险".equals(tempUser.getData_type()))   
+	        {  
+	          String user_company=request.getParameter("user_company");
+	          tempUser.setUser_township(user_company==null?"":user_company);
+	        }
+		 
 		tempUserService.updateTempUser(tempUser);
 
 		modelAndView.addObject("dataType", request.getParameter("dataType"));   

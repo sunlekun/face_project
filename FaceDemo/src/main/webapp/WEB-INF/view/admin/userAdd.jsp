@@ -163,6 +163,9 @@ function changes(obj){
          $("#user_township").removeAttr("datatype");  
          $("#div_village").hide();  
          $("#user_village").removeAttr("datatype");  
+         
+         $("#div_company").show();  
+         $("#user_company").attr("datatype","*");
       }
      
    }  
@@ -269,6 +272,12 @@ function __doPostBack(eventTarget, eventArgument) {
   <dl id="div_village">
     <dt>村(社区)名称</dt>
     <dd><input name="user_village" type="text"  id="user_village" class="input normal" datatype="*" nullmsg="请输入村(社区)名称" errormsg="请输入村(社区)名称" /> <span class="Validform_checktip">*</span></dd>
+  </dl>
+  
+  
+  <dl id="div_company" style="display:none;">
+    <dt>所属单位</dt>
+    <dd><input name="user_company" type="text"  id="user_company" class="input normal"  nullmsg="请输入所属单位" errormsg="请输入所属单位" /> <span class="Validform_checktip">*</span></dd>
   </dl>
   
   <dl>

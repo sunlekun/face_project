@@ -210,6 +210,11 @@ public class TempUserController {
 		}
 	 		
 		tempUser.setStatus(1);
+		if(!"城乡居民养老保险".equals(tempUser.getData_type()))   
+	        {  
+	          String user_company=request.getParameter("user_company");
+	          tempUser.setUser_township(user_company==null?"":user_company);
+	        }
 		tempUser.setStatus_reason(null);
 		tempUser.setAudit_time(null);
 		tempUserService.updateTempUser(tempUser);
@@ -283,6 +288,13 @@ public class TempUserController {
      
 	          */
 	 	tempUser.setStatus(1);
+	 	
+	     if(!"城乡居民养老保险".equals(tempUser.getData_type()))   
+	        {  
+	          String user_company=request.getParameter("user_company");
+	          tempUser.setUser_township(user_company==null?"":user_company);
+	        }
+	     
 		tempUserService.insertTempUser(tempUser);
 		String s=request.getParameter("dataType");
 		System.out.println(request.getParameter("dataType"));

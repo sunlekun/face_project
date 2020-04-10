@@ -163,11 +163,11 @@ function __doPostBack(eventTarget, eventArgument) {
   
   <c:if test="${tempUser.data_type=='城乡居民养老保险'}"> 
   <dl>
-    <dt>所属组别</dt>
+    <dt>所属乡镇办</dt>
     <dd>
       <div class="rule-single-select">
-        <select name="ddlGroupId" id="ddlGroupId" datatype="*" ignore="ignore" errormsg="请选择组别" sucmsg=" " disabled="false">
-			<option value="">请选择组别...</option>
+        <select name="ddlGroupId" id="ddlGroupId" datatype="*" ignore="ignore" errormsg="请选择乡镇办" sucmsg=" " disabled="false">
+			<option value="">请选择乡镇办...</option>
 			<c:forEach items="${xzbs }" var="xzb"> 
 		    <option value="${xzb.title }" ${xzb.title==tempUser.user_township?"selected='selected'":'' }>${xzb.title }</option>
 	        </c:forEach>
@@ -175,6 +175,7 @@ function __doPostBack(eventTarget, eventArgument) {
       </div>
     </dd>
   </dl>
+
   
   <dl>
     <dt>村(社区)名称</dt>
@@ -182,7 +183,14 @@ function __doPostBack(eventTarget, eventArgument) {
   </dl>
   </c:if>
   
- 
+   
+  
+  <c:if test="${tempUser.data_type!='城乡居民养老保险'}">  
+  <dl id="div_company" >
+    <dt>所属单位</dt>
+    <dd><input name="user_company" type="text"  id="user_company"value="${ tempUser.user_township}" readonly id="txtVillage" class="input normal" /></dd>
+  </dl>
+  </c:if>
   
   <dl>
     <dt>用户姓名</dt>
