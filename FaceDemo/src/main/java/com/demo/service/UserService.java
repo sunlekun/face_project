@@ -6,14 +6,14 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.demo.model.User;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.Page;
 
 public interface UserService {
 	 
 	public List<User> findAllUser();
 	public List<User> findAllUserByKey(@Param("key") String key);
 //	public List<User> findAllUserByMultiCondition( HashMap<String ,String > map);
-	public PageInfo<User> findAllUserByMultiCondition( HashMap<String ,String > map, Integer pageNumber, Integer pageSize);
+	public Page<User> findAllUserByMultiCondition( HashMap<String ,String > map, Integer pageNumber, Integer pageSize);
 	public User findUserById(int id);
 	public List<User> findUserByUserIdcard(String user_idcard);
 	

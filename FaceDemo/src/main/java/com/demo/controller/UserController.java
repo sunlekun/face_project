@@ -36,6 +36,7 @@ import com.demo.service.UserService;
 import com.demo.service.VideoIdentService;
 import com.demo.service.XzbService;
 import com.demo.util.LoadProperties; 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -128,10 +129,10 @@ public class UserController {
 		
 		map.put("startTime", startTime);  
 		map.put("endTime", endTime);  
-		PageInfo<User> pageInfo=  userService.findAllUserByMultiCondition(map,pageNumber, pageSize); 
+		Page<User> pageInfo=  userService.findAllUserByMultiCondition(map,pageNumber, pageSize); 
  		 
 		
-		String jsons = JSON.toJSONString(pageInfo.getList());
+		String jsons = JSON.toJSONString(pageInfo.getResult());
 		 
 		JSONObject object = new JSONObject();
 		object.put("total", pageInfo.getTotal()); 

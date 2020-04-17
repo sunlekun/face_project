@@ -1,8 +1,5 @@
 package com.demo.service.impl;
  
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.demo.dao.VideoIdentDao; 
 import com.demo.model.VideoIdent;
 import com.demo.service.VideoIdentService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 /**
  * @Author Yang
  * @Date 创建时间：2017-12-01
@@ -82,10 +79,10 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		}
 
 		@Override
-		public PageInfo<VideoIdent> findVideoListByMultiCondition(Map map,
+		public Page<VideoIdent> findVideoListByMultiCondition(Map map,
 				Integer pageSize, Integer pageNumber) {
 			PageHelper.startPage(pageNumber, pageSize);
-			return (PageInfo<VideoIdent>)videoIdentDao.findVideoListByMultiCondition(map);
+			return (Page<VideoIdent>)videoIdentDao.findVideoListByMultiCondition(map);
 		}
 		
 	}

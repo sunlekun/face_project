@@ -32,6 +32,7 @@ import net.sf.json.JSONObject;
 
 
 
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -44,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
  
+
 
 
 
@@ -66,6 +68,7 @@ import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
 import com.demo.util.ExportExcelUtils;
 import com.demo.util.LoadProperties;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -109,7 +112,7 @@ public class TempUserAuditController {
 			map.put("user_township", manager.getXzb());
 			map.put("status", request.getParameter("status"));
 			map.put("dataType", request.getParameter("dataType"));
-			PageInfo<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
+			Page<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
 			modelAndView.addObject("page", page); 
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/tempUserAuditListImg"); 
@@ -149,9 +152,9 @@ public class TempUserAuditController {
 		map.put("user_township", manager.getXzb());
 		map.put("status", request.getParameter("status"));
 		map.put("dataType", request.getParameter("dataType"));
-		PageInfo<TempUser> pageInfo=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
+		Page<TempUser> pageInfo=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
  		 
-		String jsons = JSON.toJSONString(pageInfo.getList());
+		String jsons = JSON.toJSONString(pageInfo.getResult());
 		 
 		JSONObject object = new JSONObject();
 		object.put("total", pageInfo.getTotal()); 

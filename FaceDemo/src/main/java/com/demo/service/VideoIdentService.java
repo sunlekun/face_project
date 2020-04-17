@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.demo.model.VideoIdent;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
  
@@ -25,7 +26,7 @@ public interface VideoIdentService {
 	public List<VideoIdent> findVideoListByUserId( Integer user_id);
 	void insertVL(VideoIdent videoIdent);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
-	public PageInfo<VideoIdent> findVideoListByMultiCondition(Map map,Integer pageSize,Integer pageNumber);
+	public Page<VideoIdent> findVideoListByMultiCondition(Map map,Integer pageSize,Integer pageNumber);
 	public void deleteVideoIdentBatch(String[] ids);
 	VideoIdent findVideoListByVideoIdentId(Integer id);
 	public void updateById(Integer id, String auditors_reason,

@@ -34,6 +34,7 @@ import com.demo.service.VideoIdentService;
 import com.demo.service.XzbService;
 import com.demo.util.ExcelUtils;
 import com.demo.util.LoadProperties;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -81,8 +82,8 @@ public class IdentityCheckController {
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
 		
-		PageInfo<VideoIdent> pageInfo = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
-		String jsons = JSON.toJSONString(pageInfo.getList());
+		Page<VideoIdent> pageInfo = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
+		String jsons = JSON.toJSONString(pageInfo.getResult());
 		 
 		JSONObject object = new JSONObject();
 		object.put("total", pageInfo.getTotal()); 
@@ -134,7 +135,7 @@ public class IdentityCheckController {
 			map.put("video_status", request.getParameter("video_status"));
 			map.put("dataType", request.getParameter("dataType"));
 			
-			PageInfo<VideoIdent> page = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
+			Page<VideoIdent> page = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
 			modelAndView.addObject("page", page); 
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/identityCheckListImg"); 
