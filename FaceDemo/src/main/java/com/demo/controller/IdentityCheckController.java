@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
-import com.demo.model.RandomCheck;
-import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
@@ -63,8 +60,6 @@ public class IdentityCheckController {
 			pageSize=10;
 		if(pageNumber==null)
 			pageNumber =1;
-		PageHelper.startPage(pageNumber, pageSize);
-		
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
 		 map.put("key",key);
@@ -86,10 +81,7 @@ public class IdentityCheckController {
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
 		
-		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
-		 
-		 
-		PageInfo<VideoIdent> pageInfo = new PageInfo<>(identityChecks);
+		PageInfo<VideoIdent> pageInfo = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
 		String jsons = JSON.toJSONString(pageInfo.getList());
 		 
 		JSONObject object = new JSONObject();
@@ -142,8 +134,7 @@ public class IdentityCheckController {
 			map.put("video_status", request.getParameter("video_status"));
 			map.put("dataType", request.getParameter("dataType"));
 			
-			List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
-			PageInfo<VideoIdent> page = new PageInfo<>(identityChecks);
+			PageInfo<VideoIdent> page = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
 			modelAndView.addObject("page", page); 
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/identityCheckListImg"); 

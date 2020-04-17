@@ -9,19 +9,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
- 
-
-
-
-
-
-
-
-
 
 import com.demo.dao.VideoIdentDao; 
 import com.demo.model.VideoIdent;
 import com.demo.service.VideoIdentService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 /**
  * @Author Yang
  * @Date 创建时间：2017-12-01
@@ -68,6 +61,8 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 			return videoIdentDao.findVideoListByMultiCondition(map);
 		}
 
+		
+		
 		@Override
 		public void deleteVideoIdentBatch(String[] ids) {
 			videoIdentDao.deleteVideoIdentBatch(ids);
@@ -84,6 +79,13 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 				String txt_remarks, Integer video_status,String auditors_txt,String txt_img) {
 			videoIdentDao.updateById(id,auditors_reason,txt_remarks,video_status, auditors_txt, txt_img);
 			
+		}
+
+		@Override
+		public PageInfo<VideoIdent> findVideoListByMultiCondition(Map map,
+				Integer pageSize, Integer pageNumber) {
+			PageHelper.startPage(pageNumber, pageSize);
+			return (PageInfo<VideoIdent>)videoIdentDao.findVideoListByMultiCondition(map);
 		}
 		
 	}
