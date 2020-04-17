@@ -99,7 +99,6 @@ public class TempUserAuditController {
 				pageSize=10;
 			if(pageNumber==null)
 				pageNumber =1;
-			PageHelper.startPage(pageNumber, pageSize);
 			Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 			HashMap<String ,String > map=new HashMap<String ,String >();
 			map.put("key", key);
@@ -110,8 +109,7 @@ public class TempUserAuditController {
 			map.put("user_township", manager.getXzb());
 			map.put("status", request.getParameter("status"));
 			map.put("dataType", request.getParameter("dataType"));
-			List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
-			PageInfo<TempUser> page = new PageInfo<>(tempUsers);
+			PageInfo<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
 			modelAndView.addObject("page", page); 
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/tempUserAuditListImg"); 
@@ -151,9 +149,8 @@ public class TempUserAuditController {
 		map.put("user_township", manager.getXzb());
 		map.put("status", request.getParameter("status"));
 		map.put("dataType", request.getParameter("dataType"));
-		List<TempUser> tempUsers=  tempUserService.findAllTempUserByMultiCondition(map); 
+		PageInfo<TempUser> pageInfo=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
  		 
-		PageInfo<TempUser> pageInfo = new PageInfo<>(tempUsers);
 		String jsons = JSON.toJSONString(pageInfo.getList());
 		 
 		JSONObject object = new JSONObject();

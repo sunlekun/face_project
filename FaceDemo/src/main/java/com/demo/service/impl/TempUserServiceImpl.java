@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier; 
  
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.demo.dao.TempUserDao;
 import com.demo.model.TempUser;
 import com.demo.service.TempUserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service 
 public class TempUserServiceImpl implements TempUserService {
@@ -28,6 +33,11 @@ public class TempUserServiceImpl implements TempUserService {
 	public List<TempUser> findAllTempUserByKey(String key){
 		return tempUserDao.findAllTempUserByKey(key);
 	}
+	public PageInfo<TempUser> findAllTempUserByMultiCondition(HashMap<String ,String > map, Integer pageNumber, Integer pageSize){
+		PageHelper.startPage(pageNumber, pageSize);
+		return (PageInfo<TempUser>)tempUserDao.findAllTempUserByMultiCondition(map);
+	}
+	
 	public List<TempUser> findAllTempUserByMultiCondition(HashMap<String ,String > map){
 		return tempUserDao.findAllTempUserByMultiCondition(map);
 	}
