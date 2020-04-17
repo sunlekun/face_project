@@ -128,10 +128,9 @@ public class UserController {
 		
 		map.put("startTime", startTime);  
 		map.put("endTime", endTime);  
-		List<User> users=  userService.findAllUserByMultiCondition(map); 
+		PageInfo<User> pageInfo=  userService.findAllUserByMultiCondition(map,pageNumber, pageSize); 
  		 
 		
-		PageInfo<User> pageInfo = new PageInfo<>(users);
 		String jsons = JSON.toJSONString(pageInfo.getList());
 		 
 		JSONObject object = new JSONObject();

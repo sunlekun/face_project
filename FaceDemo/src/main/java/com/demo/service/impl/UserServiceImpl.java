@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier; 
  
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.demo.dao.UserDao;
 import com.demo.model.User;
 import com.demo.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service 
 public class UserServiceImpl implements UserService {
@@ -55,5 +60,10 @@ public class UserServiceImpl implements UserService {
 	}
 	public void deleteUserBatch(String[] ids){
 		userDao.deleteUserBatch(ids);
+	}
+	
+	public PageInfo<User> findAllUserByMultiCondition(HashMap<String ,String > map, Integer pageNumber, Integer pageSize){
+		PageHelper.startPage(pageNumber, pageSize);
+		return (PageInfo<User>)userDao.findAllUserByMultiCondition(map);
 	}
 }
