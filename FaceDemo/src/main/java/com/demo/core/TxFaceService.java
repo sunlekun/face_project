@@ -102,7 +102,6 @@ public class TxFaceService {
 		reqBean.setRedirectUrl(redirectUrl);
 		ObjectMapper mapper = new ObjectMapper();
 		String mapJakcson = mapper.writeValueAsString(reqBean);
-		log.info(mapJakcson);
 		DetectAuthRequest req = DetectAuthRequest.fromJsonString(mapJakcson,
 				DetectAuthRequest.class);
 
