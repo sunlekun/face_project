@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="systemCacheReloadJob" class="com.demo.job.NotifySynchroJob" />
+	<task:annotation-driven />
+	<!-- 定时任务 -->
+	<task:scheduled-tasks>
+		<!-- 每月1日的早上1点触发 -->
+ 	    <task:scheduled ref="systemCacheReloadJob" method="process" cron="0/5 * * * * ? "  />
+	</task:scheduled-tasks>
+	
+</beans>

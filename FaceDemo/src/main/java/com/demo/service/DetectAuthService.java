@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.demo.model.DetectAuth;
@@ -16,4 +17,6 @@ public interface DetectAuthService {
 	void insertDA(DetectAuth detectAuth);
 
 	String findUserId(String bizToken);
+
+	List<DetectAuth> findDetectAuthByTime(Date beforeTime, Date endTime);
 }

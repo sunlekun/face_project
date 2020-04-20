@@ -47,6 +47,10 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		public List<VideoIdent> findVideoListByUserId(Integer user_id){
 			return videoIdentDao.findVideoListByUserId(user_id);
 		}
+		
+		public List<VideoIdent> findVideoByUserId(Integer user_id){
+			return videoIdentDao.findVideoByUserId(user_id);
+		}
 		@Override
 		public void insertVL(VideoIdent videoIdent) {
 			videoIdentDao.insertVideoIdent(videoIdent);

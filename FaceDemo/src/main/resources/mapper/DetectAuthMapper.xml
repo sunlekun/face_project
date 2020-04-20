@@ -18,4 +18,8 @@
 	   select id from users where 
 	   user_idcard = (select user_idcard from detectAuth where bizToken=#{bizToken}) and is_delete='0'
     </select> 
+    
+    <select id="findDetectAuthByTime" resultType="DetectAuth"> 
+	    select *  from  detectAuth  where  create_time<![CDATA[ >= ]]>#{beforeTime} and create_time <![CDATA[ < ]]>#{endTime}
+    </select> 
 </mapper>

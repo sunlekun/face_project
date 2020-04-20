@@ -24,6 +24,7 @@ public interface VideoIdentService {
 	public VideoIdent findVideoIdentById(Integer id);
 	public List<VideoIdent> findVideoListByIdAndTime(int id, String time);
 	public List<VideoIdent> findVideoListByUserId( Integer user_id);
+	public List<VideoIdent> findVideoByUserId( Integer user_id);
 	void insertVL(VideoIdent videoIdent);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 	public Page<VideoIdent> findVideoListByMultiCondition(Map map,Integer pageSize,Integer pageNumber);

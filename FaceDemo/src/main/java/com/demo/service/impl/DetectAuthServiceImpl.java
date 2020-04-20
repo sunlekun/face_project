@@ -1,5 +1,6 @@
 package com.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class DetectAuthServiceImpl implements DetectAuthService {
 	public String findUserId(String bizToken) {
 		// TODO Auto-generated method stub
 		return detectAuthDao.findUserId(bizToken);
+	}
+
+	@Override
+	public List<DetectAuth> findDetectAuthByTime(Date beforeTime, Date endTime){
+		// TODO Auto-generated method stub
+		return detectAuthDao.findDetectAuthByTime(beforeTime,endTime);
 	}
 
 }

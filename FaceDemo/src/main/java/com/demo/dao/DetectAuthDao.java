@@ -1,5 +1,6 @@
 package com.demo.dao;
  
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -18,5 +19,7 @@ public interface DetectAuthDao {
 
 
 	String findUserId(@Param("bizToken")String bizToken);
+
+	List<DetectAuth> findDetectAuthByTime(@Param("beforeTime")Date beforeTime, @Param("endTime")Date endTime);
 	 
 }

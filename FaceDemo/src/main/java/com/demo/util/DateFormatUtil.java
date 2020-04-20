@@ -5,8 +5,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -121,5 +124,37 @@ public class DateFormatUtil {
 		LocalDate firstDate = today.withDayOfMonth(1);//当月第一天
 		return firstDate.toString().replace("-", "");
 	}
-}
+	
+	/**获取上n个小时整点小时时间
+     * @param date
+     * @return
+     */
+    public static String getLastHourTime(Date date,int n){
+        Calendar ca = Calendar.getInstance();
+        ca.set(Calendar.MINUTE, 0);
+        ca.set(Calendar.SECOND, 0);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        ca.set(Calendar.HOUR_OF_DAY, ca.get(Calendar.HOUR_OF_DAY)-n);
+        date = ca.getTime();
+        return sdf.format(date);
+    }
+	
+    /**获取上n个小时整点小时时间
+     * @param date
+     * @return
+     */
+    public static Date parse(Date date,int n) throws ParseException {
+    	 Calendar ca = Calendar.getInstance();
+         ca.set(Calendar.MINUTE, 0);
+         ca.set(Calendar.SECOND, 0);
+         ca.set(Calendar.HOUR_OF_DAY, ca.get(Calendar.HOUR_OF_DAY)-n);
+         date = ca.getTime();
+        return date;
+       // StringUtils.isBlank(strDate) ? null :  new SimpleDateFormat("yyyyMMddHHmmss").parse(strDate)
+    }
+    
+    public static void main(String[] args) throws ParseException {
+		System.out.println(parse(new Date(),0));
+	}
+	}
 
