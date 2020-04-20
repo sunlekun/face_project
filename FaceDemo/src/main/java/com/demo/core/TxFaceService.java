@@ -102,7 +102,6 @@ public class TxFaceService {
 		reqBean.setRedirectUrl(redirectUrl);
 		ObjectMapper mapper = new ObjectMapper();
 		String mapJakcson = mapper.writeValueAsString(reqBean);
-		log.info(mapJakcson);
 		DetectAuthRequest req = DetectAuthRequest.fromJsonString(mapJakcson,
 				DetectAuthRequest.class);
 
@@ -194,7 +193,13 @@ public class TxFaceService {
 			videoIdent.setAdd_time(new Date());
 			videoIdent.setVideo_status(video_status);
 			videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0, 4));
-			videoIdentService.insertVL(videoIdent);
+			List<VideoIdent> listVideoIdent = videoIdentService.findVideoListByIdAndTime(
+					Integer.valueOf(userId), DateFormatUtil.getCurrentDT()
+							.substring(0, 4));
+			if(listVideoIdent.size()==0){
+				videoIdentService.insertVL(videoIdent);
+			}
+			
 
 		} catch (Exception e) {
 			log.error(e);
