@@ -28,6 +28,7 @@ public interface VideoIdentDao {
 	public void updateById(@Param("id")Integer id,@Param("auditors_reason") String auditors_reason,@Param("txt_remarks") String txt_remarks,
 			@Param("video_status")Integer video_status,@Param("auditors_txt") String auditors_txt,@Param("txt_img") String txt_img);
 	public List<VideoIdent> findVideoByUserId(@Param("user_id") Integer user_id);
+	public void delrepeat();
 }
 
  

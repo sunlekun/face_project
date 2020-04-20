@@ -159,4 +159,44 @@
 		txt_remarks=#{txt_remarks},auditors_reason=#{auditors_reason},video_status=#{video_status},auditors_txt=#{auditors_txt},txt_img=#{txt_img}
 		where id=#{id}
 	</update>
+	
+	
+	<delete id="delrepeat" parameterType="java.lang.String">
+        DELETE
+				FROM
+					video_ident
+				WHERE
+					user_id IN (
+						SELECT
+							t.user_id
+						FROM
+							(
+								SELECT
+									user_id
+								FROM
+									video_ident
+								GROUP BY
+									user_id
+								HAVING
+									count(1) > 1
+							) t
+					)
+				AND id NOT IN (
+					SELECT
+						a.id
+					FROM
+						(
+							SELECT
+								max(id) AS id
+							FROM
+								video_ident
+							WHERE
+								is_delete = '0'
+							GROUP BY
+								user_id
+							HAVING
+								count(1) > 1
+						) a
+				)
+    </delete>
 </mapper>

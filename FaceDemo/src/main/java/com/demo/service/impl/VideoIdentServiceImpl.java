@@ -88,5 +88,10 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 			PageHelper.startPage(pageNumber, pageSize);
 			return (Page<VideoIdent>)videoIdentDao.findVideoListByMultiCondition(map);
 		}
+
+		@Override
+		public void delrepeat() {
+			videoIdentDao.delrepeat();
+		}
 		
 	}

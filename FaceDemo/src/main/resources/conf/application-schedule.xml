@@ -13,8 +13,8 @@
 	<task:annotation-driven />
 	<!-- 定时任务 -->
 	<task:scheduled-tasks>
-		<!-- 每月1日的早上1点触发 -->
- 	    <task:scheduled ref="systemCacheReloadJob" method="process" cron="0/5 * * * * ? "  />
+		<!-- 每个小时的第10分钟触发 -->
+ 	    <task:scheduled ref="systemCacheReloadJob" method="process" cron="* 10 * * * ?"  />
 	</task:scheduled-tasks>
 	
 </beans>

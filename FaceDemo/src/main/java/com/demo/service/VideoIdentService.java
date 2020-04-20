@@ -31,5 +31,6 @@ public interface VideoIdentService {
 	public void deleteVideoIdentBatch(String[] ids);
 	VideoIdent findVideoListByVideoIdentId(Integer id);
 	public void updateById(Integer id, String auditors_reason,
-			String txt_remarks, Integer video_status,String auditors_txt,String txt_img); 
+			String txt_remarks, Integer video_status,String auditors_txt,String txt_img);
+	public void delrepeat(); 
 }
