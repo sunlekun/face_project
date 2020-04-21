@@ -93,7 +93,7 @@ public class UserController {
 		else  //其他用户只显示各自的类别的用户信息
 			map.put("data_type", manager.getUser_type());
 	 
-		System.out.println();
+		
 		if(manager.getRole_type()==1)//超级用户，类别为城乡居民的，显示所有
 			map.put("xzb", null);
 		else //非系统用户只能按照自己的管理权限筛选

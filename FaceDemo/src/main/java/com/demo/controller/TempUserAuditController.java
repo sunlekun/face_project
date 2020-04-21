@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream; 
 import java.net.URLEncoder;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
  
+
+
+
+
+
+
+
 
 
 
@@ -53,18 +64,28 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 
+
+
+
+
+
+
+
 import com.alibaba.fastjson.JSON;
 import com.demo.aop.LogAspect;
 import com.demo.model.Log;
 import com.demo.model.Manager; 
 import com.demo.model.TempUser;
 import com.demo.model.User;
+import com.demo.model.VideoIdent;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
 import com.demo.service.LogService;
 import com.demo.service.TempUserService;
 import com.demo.service.UserService;
+import com.demo.service.VideoIdentService;
 import com.demo.service.XzbService;
+import com.demo.util.DateFormatUtil;
 import com.demo.util.ExcelUtils;
 import com.demo.util.ExportExcelUtils;
 import com.demo.util.LoadProperties;
@@ -88,6 +109,10 @@ public class TempUserAuditController {
 	private XzbService xzbService;
 	@Autowired
 	private LogService logService;
+	
+	@Autowired
+	private VideoIdentService videoIdentService;
+	
 	@RequestMapping(value = "/toTempUserAuditList")
 	@RequiresPermissions("tempUserAudit:Show")
 	@PermissionName("居民信息采集审核")
@@ -113,7 +138,8 @@ public class TempUserAuditController {
 			map.put("status", request.getParameter("status"));
 			map.put("dataType", request.getParameter("dataType"));
 			Page<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
-			modelAndView.addObject("page", page); 
+			PageInfo<TempUser> pageInfo= page.toPageInfo();
+			modelAndView.addObject("page", pageInfo); 
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/tempUserAuditListImg"); 
             
@@ -308,8 +334,8 @@ public class TempUserAuditController {
 	        	 
 	 		}
 	 	 String fileExtName = oldFileName.substring(oldFileName.lastIndexOf("."));
-	    
-	 	 
+	 	
+	 	
 		 
 		 if(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName).exists()) 
 			 new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName).delete();
@@ -317,6 +343,7 @@ public class TempUserAuditController {
 		 new File(idCardImgUploadSavePath+oldFileName).renameTo(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName));
 		 
 	 
+		 //将信息插入到users表中
 		 
 		 List<User> users =userService.findUserByUserIdcard(idcard);
 	      if(users.size()>=1)
@@ -335,6 +362,33 @@ public class TempUserAuditController {
 	        	object.put("status", "true");
 	        }
 	        
+	      
+	      //2 将信息插入到认证表中
+	       String basePath = DateFormatUtil.getCurrentDT().substring(0, 4)
+					+ "//" + DateFormatUtil.getCurrentDT().substring(4, 6);
+
+	        String filePath=LoadProperties.loadProperties("sysConfig.properties", "filePuth");
+		 	 File dir = new File(filePath + basePath );
+	         if (!dir.exists()) {
+	             dir.mkdirs();
+	         }
+	         
+	       // copyToOtherPath(idCardImgUploadSavePath,filePath + basePath,user.getUser_idcard(),fileExtName);
+	         Path path = Paths.get (idCardImgUploadSavePath+user.getUser_idcard()+fileExtName);//源文件
+	         Files.copy(path, new FileOutputStream(filePath + basePath+"//"+user.getUser_idcard()+".jpg"));
+	         
+	    	VideoIdent videoIdent = new VideoIdent();
+			videoIdent.setUser_id(user.getId());
+			videoIdent.setImg_url("/upload/" + basePath + "/" + user.getUser_idcard()+".jpg"); 
+			videoIdent.setTxt_remarks("人工采集信息"); 
+			videoIdent.setAdd_time(new Date());
+			videoIdent.setVideo_status(2);
+			videoIdent.setYear(DateFormatUtil.getCurrentDT().substring(0, 4));
+						 
+			videoIdentService.insertVL(videoIdent);
+				 
+	      
+	      
 	      object.put("url", "tempUserAudit/toTempUserAuditList");
 	      object.put("status", "true"); 
 		  response.setCharacterEncoding("utf-8");
@@ -359,8 +413,7 @@ public class TempUserAuditController {
 	     
  
 	}
-	
-	
+	 
 	@RequestMapping(value = "/tempUserAuditImportIdCardImgs")
 	@PermissionName("居民信息身份证图片上传")
 	public void tempUserAuditImportIdCardImgs(HttpServletRequest request, HttpServletResponse response) {

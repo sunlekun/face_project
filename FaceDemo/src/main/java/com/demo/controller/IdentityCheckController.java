@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,16 +225,25 @@ public class IdentityCheckController {
 		
 		//筛选条件
 		map.put("user_township", request.getParameter("user_township")); 
-		map.put("year", request.getParameter("year")); 
+		if(request.getParameter("year")==null || "".equals(request.getParameter("year")) )
+		{
+			map.put("year",Calendar.getInstance().get(Calendar.YEAR)); 
+		}
+		else
+			map.put("year", request.getParameter("year")); 
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
-		
-		
-		List<VideoIdent> identityChecks = videoIdentService.findVideoListByMultiCondition(map);
-//		String jsons = JSON.toJSONString(identityChecks);
-		
+		List<VideoIdent> identityChecks=new ArrayList<VideoIdent>();
+		String[] excelHeader = {};
+		if("2".equals(request.getParameter("flag")))
+			identityChecks = videoIdentService.findNoVideoListByMultiCondition(map);		
+		else
+			identityChecks = videoIdentService.findVideoListByMultiCondition(map);
+ 
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-		String fileName="视频认证审核人员"+df.format(System.currentTimeMillis());
+		String fileName= "视频认证审核人员名单"+df.format(System.currentTimeMillis());
+		if("2".equals(request.getParameter("flag")))
+			fileName= "未参与认证人员名单"+df.format(System.currentTimeMillis());
 	     
 		try {
 			 // 设置请求
@@ -239,11 +251,15 @@ public class IdentityCheckController {
 			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));*/
 			
 			response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
-	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(fileName + ".xls", "UTF-8"));
+	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(map.get("year")+"年"+fileName + ".xls", "UTF-8"));
 			
-			String[] excelHeader = {"姓名","身份证号码","类型","乡镇办","村名","手机号","是否审核通过"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
-			HSSFWorkbook wb=ExcelUtils.export2( fileName, excelHeader, identityChecks);//调用封装好的导出方法，具体方法在下面
-			 
+			String[] excelHeader1 = {"姓名","身份证号码","类型","乡镇办","村名","手机号","是否审核通过","备注"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+			String[] excelHeader2 = {"姓名","身份证号码","类型","乡镇办","村名","手机号"};//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+			HSSFWorkbook wb;
+			if("2".equals(request.getParameter("flag"))) 
+				wb=ExcelUtils.export2( fileName, excelHeader2, identityChecks);//调用封装好的导出方法，具体方法在下面
+			else
+				wb=ExcelUtils.export2( fileName, excelHeader1, identityChecks);//调用封装好的导出方法，具体方法在下面
 			OutputStream outputStream = response.getOutputStream();// 打开流
 			wb.write(outputStream);// HSSFWorkbook写入流
 			wb.close();// HSSFWorkbook关闭

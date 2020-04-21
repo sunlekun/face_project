@@ -74,8 +74,10 @@ public class TempUserController {
 			map.put("status", request.getParameter("status"));
 			map.put("dataType", request.getParameter("dataType")); 
 			
-			Page<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize); 
-			modelAndView.addObject("page", page); 
+			Page<TempUser> page=  tempUserService.findAllTempUserByMultiCondition(map,pageNumber,pageSize);
+			PageInfo<TempUser> pageInfo= page.toPageInfo();
+			modelAndView.addObject("page", pageInfo); 
+			
 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/tempUserListImg"); 
             

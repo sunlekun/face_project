@@ -271,10 +271,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </shiro:lacksPermission>
             
             <shiro:hasPermission name="tempUserAudit:Show">
-          	 	 <a href="tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+	            <c:if test="${ tempUser.status==2}">
+	          	 	 <a href="tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+	            </c:if>
+	            <c:if test="${ tempUser.status!=2}">
+	          	 	 <a href="javascript:alert('审核通过之后才能导入照片');" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+	          	 </c:if>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUserAudit:Show">
-                <a href="javascript:;" title="导入照片"><i class="iconfont icon-pic"></i></a> 
+                <a href="javascript:alert('审核通过之后才能导入照片');" title="导入照片"><i class="iconfont icon-pic"></i></a> 
             </shiro:lacksPermission>
             
             <shiro:hasPermission name="tempUserAudit:View">

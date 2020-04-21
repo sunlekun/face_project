@@ -236,7 +236,9 @@ public static <T> HSSFWorkbook export2(String fileName, String[] excelHeader,  C
 					else
 						 value="未通过";
 				    break;
-				 
+				case 7:
+					 value=t.getTxt_remarks();
+				    break;
 				}
 				dataCell.setCellValue(value);
 			}

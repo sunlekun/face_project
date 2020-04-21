@@ -147,7 +147,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <form method="post" action="tempUserAudit/tempUserAuditImportIdCardImg" id="form1" enctype="multipart/form-data">
   <input type="hidden" name="user_township" id="user_township" value="${tempUser.user_township}" />
   <input type="hidden" name="data_type" id="data_type" value="${tempUser.data_type}" />   
- 
+  <input type="hidden" name="id" id="id" value="${tempUser.id }" />
 <!--导航栏-->
 <div class="location">
   <a href="tempUserAudit/toTempUserAuditList?status=${status}&dataType=${dataType}&type=${type}" class="back"><i class="iconfont icon-up"></i><span>返回列表页</span></a>

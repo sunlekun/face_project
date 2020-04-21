@@ -24,10 +24,11 @@
 	 
 	 
 	 <select id="findAllUserByMultiCondition" parameterType="java.util.HashMap"  resultType="User">
-		select m.* ,v.add_time as add_time  from users m left join video_ident v on m.id=v.user_id  where m.is_delete=0  
+		select m.* ,v.add_time as add_time  from users m left join video_ident v on m.id=v.user_id  where m.is_delete=0 
 		
 		 <if test="isHasVideo==1">   
              and v.add_time is not null 
+             and v.is_delete=0   
         </if>
         
         <if test="isHasVideo==2">   

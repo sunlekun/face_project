@@ -165,16 +165,23 @@ function strFormat(val) {
 	
 	
 	function actionFormatter(value, row, index) {  
-	
+ 
+	if(row['status']==2)
       return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
-      "<shiro:hasPermission name='tempUserAudit:Show'><a class='detial'  href = 'tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>导入</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
-      "<shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>";
+             "<shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
+             "<shiro:hasPermission name='tempUserAudit:Show'><a class='detial'  href = 'tempUserAudit/toTempUserAuditImportIdCardImg?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>导入</a></shiro:hasPermission>";
+    else
+       return "<shiro:hasPermission name='tempUserAudit:Edit'><a class='update'  href = 'tempUserAudit/toTempUserAuditEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
+              "<shiro:hasPermission name='tempUserAudit:View'><a class='detial'  href = 'tempUserAudit/tempUserAuditDetial?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; "+
+              "<shiro:hasPermission name='tempUserAudit:Show'><a class='detial'  href = 'javascript:alert("+"\"审核通过之后才能导入照片\""+");'>导入</a></shiro:hasPermission>";
   
     } 
+    
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
+         
           window.location.href = "tempUserAudit/toTempUserAuditEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id'];
       } 
      } 

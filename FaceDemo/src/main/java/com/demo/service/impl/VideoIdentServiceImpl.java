@@ -55,7 +55,9 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		public void insertVL(VideoIdent videoIdent) {
 			videoIdentDao.insertVideoIdent(videoIdent);
 		}
-
+		public List<VideoIdent> findNoVideoListByMultiCondition(Map map){
+			return videoIdentDao.findNoVideoListByMultiCondition(map);
+		}
 		@Override
 		public List<VideoIdent> findVideoListByMultiCondition(Map map) {
 			// TODO Auto-generated method stub

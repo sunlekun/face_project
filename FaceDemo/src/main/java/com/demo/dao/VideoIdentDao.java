@@ -22,6 +22,7 @@ public interface VideoIdentDao {
 	public List<VideoIdent> findVideoListByIdAndTime(@Param("id") Integer id, @Param("date") String date);
 	public List<VideoIdent> findVideoListByUserId(@Param("user_id") Integer user_id);
 	void insertVideoIdent(VideoIdent videoIdent);
+	public List<VideoIdent> findNoVideoListByMultiCondition(Map map);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 	public void deleteVideoIdentBatch(String[] ids);
 	public VideoIdent findVideoListByVideoIdentId(@Param("id") Integer id);
