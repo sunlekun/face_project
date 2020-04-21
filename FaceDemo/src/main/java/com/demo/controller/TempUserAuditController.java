@@ -375,10 +375,12 @@ public class TempUserAuditController {
 	         
 	       // copyToOtherPath(idCardImgUploadSavePath,filePath + basePath,user.getUser_idcard(),fileExtName);
 	         Path path = Paths.get (idCardImgUploadSavePath+user.getUser_idcard()+fileExtName);//源文件
+	         File file = new File(filePath + basePath+"//"+user.getUser_idcard()+".jpg");
+	         if(!file.exists())
+	        	 file.deleteOnExit();
 	         Files.copy(path, new FileOutputStream(filePath + basePath+"//"+user.getUser_idcard()+".jpg"));
 	         
-	    	VideoIdent videoIdent = new VideoIdent();
-			videoIdent.setUser_id(user.getId());
+	    	VideoIdent videoIdent = new VideoIdent(); 
 			videoIdent.setImg_url("/upload/" + basePath + "/" + user.getUser_idcard()+".jpg"); 
 			videoIdent.setTxt_remarks("人工采集信息"); 
 			videoIdent.setAdd_time(new Date());
