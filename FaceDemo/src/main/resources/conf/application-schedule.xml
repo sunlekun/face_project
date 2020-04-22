@@ -14,7 +14,7 @@
 	<!-- 定时任务 -->
 	<task:scheduled-tasks>
 		<!-- 每个小时的第10分钟触发 -->
- 	    <task:scheduled ref="systemCacheReloadJob" method="process" cron="* 10,30 * * * ?"  />
+ 	    <task:scheduled ref="systemCacheReloadJob" method="process" cron="0 10,30 * * * ?"  />
 	</task:scheduled-tasks>
 	
 </beans>
