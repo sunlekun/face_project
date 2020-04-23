@@ -10,6 +10,7 @@ import com.github.pagehelper.Page;
 
 public interface UserService {
 	 
+	public long findAllUserCount();
 	public List<User> findAllUser();
 	public List<User> findAllUserByKey(@Param("key") String key);
 //	public List<User> findAllUserByMultiCondition( HashMap<String ,String > map);

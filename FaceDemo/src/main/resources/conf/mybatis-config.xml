@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias alias="Log" type="com.demo.model.Log" />
 		<typeAlias alias="User" type="com.demo.model.User" />
 		<typeAlias alias="SysConfig" type="com.demo.model.SysConfig" />
+		<typeAlias alias="DataExportTaskInfo" type="com.demo.model.DataExportTaskInfo" />
 	</typeAliases>
 	
 	<!-- 配置分页插件 PageHelper -->  

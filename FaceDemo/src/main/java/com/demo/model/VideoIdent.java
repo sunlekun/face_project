@@ -269,6 +269,12 @@ public class VideoIdent {
 	public void setUser_mobile(String user_mobile) {
 		this.user_mobile = user_mobile;
 	}
+
+	@Override
+	public String toString() {
+		return  user_name + ","+ user_idcard + "," + user_township
+				+ "," + user_village + ","+ user_mobile + ","+mobile;
+	}
 	
 
 }

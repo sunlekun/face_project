@@ -10,6 +10,10 @@
 		select m.* from users m where m.is_delete=0 order by m.add_time  desc
 	 </select>
 	 
+	 <select id="findAllUserCount" resultType="int">
+		select count(*) from users m where m.is_delete=0 
+	 </select>
+	 
 	  <select id="findAllUserByKey" resultType="User">
 		select m.* from users m where m.is_delete=0 
 		

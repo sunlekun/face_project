@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.HistoryDataExportDao">
+  
+	 
+	 <select id="selectByPk" resultType="DataExportTaskInfo">
+	     select m.* from data_export_task_info  m   where m.id=#{0} and m.is_delete=0 
+	 </select>
+	 
+	  <select id="getDataExportTaskInfoByStatus" resultType="DataExportTaskInfo">
+	     select m.* from data_export_task_info  m   where m.id=#{0} and m.is_delete=0 
+	    <if test="status != null and status != ''">
+		and status= #{status}
+		</if>
+	 </select>
+	 
+	 <update id="updateByPk" parameterType="User">
+		update data_export_task_info  
+		<set>  
+         
+       </set> 
+       where id=#{id}
+	</update>
+	
+	  
+	<insert id="insertDataExportTaskInfo" parameterType="DataExportTaskInfo">
+		insert into data_export_task_info (user_name, user_idcard, user_township,user_village,data_type,mobile,img_url,add_time,update_time) 
+		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{img_url},#{add_time},#{update_time})
+	</insert>
+	
+	  <!-- <delete id="getDataExportTaskInfoByStatus" parameterType="String">
+        update users set is_delete=1  where id  in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete> -->
+	 
+</mapper>

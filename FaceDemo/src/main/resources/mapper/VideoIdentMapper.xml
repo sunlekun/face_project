@@ -127,13 +127,14 @@
     
     <select id="findNoVideoListByMultiCondition" parameterType="java.util.HashMap"
 		resultType="videoIdent">
+		
+		select * from (
 		select u.user_name as user_name ,u.user_idcard as
 		user_idcard,u.user_village as user_village,u.user_township as
 		user_township,u.img_url as user_img,u.data_type as data_type,
 		u.mobile as mobile from users u 
-		LEFT JOIN  video_ident r  on u.id=r.user_id
-
-		where  u.is_delete=0 and  r.id is null
+		
+		where u.is_delete=0
 				
 		<if test="user_township != null and  user_township !=''">
 			and u.user_township= #{user_township}
@@ -158,9 +159,16 @@
          <if test="user_township!=null  and user_township!=''">   
           and u.user_township=#{user_township}
         </if> 
+         ) rs 
          
-         order by u.add_time   desc
+		LEFT JOIN  video_ident r  on rs.id=r.user_id
 
+		where  r.is_delete=0 and  r.id is null
+		 
+		 <if test="limtFrom!=null  and limtFrom!=''">   
+          limit  #{limtFrom},#{endFrom}
+        </if>
+         
 	</select>
 
 

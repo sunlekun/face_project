@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
   
 
+
+
 import org.apache.log4j.Logger; 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
  
  
+
+
 import com.alibaba.fastjson.JSON;  
 import com.demo.model.Log;
+import com.demo.model.User;
 import com.demo.realm.PermissionName;
 import com.demo.service.LogService; 
+import com.github.pagehelper.Page;
  
 
 /**
@@ -47,8 +53,11 @@ public class LogController {
  
  
 	@RequestMapping(value = "/logList")	
-	public void logList(HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
-		
+	public void logList(Integer pageSize,Integer pageNumber,HttpServletRequest request,HttpServletResponse response) throws IOException, ParseException {
+		if(pageSize==null)
+			pageSize=10;
+		if(pageNumber==null)
+			pageNumber =1;
 		
 		String startTime1=request.getParameter("startTime")==null?"":request.getParameter("startTime");
 		String endTime1=request.getParameter("endTime")==null?"":request.getParameter("endTime");
@@ -68,14 +77,13 @@ public class LogController {
             
 		 
 		 
-		List<Log> logs = logService.findLogByTime(startTime, endTime);
+		Page<Log> pageInfo= logService.findLogByTime(startTime, endTime,pageSize,pageNumber);
 		 
-		String jsons = JSON.toJSONString(logs);
-
-		JSONObject object = new JSONObject();
-
-		object.put("status", "true");
-		object.put("jsons", jsons);
+		String jsons = JSON.toJSONString(pageInfo.getResult()); 
+		
+		JSONObject object = new JSONObject(); 
+		object.put("total", pageInfo.getTotal()); 
+		object.put("rows",jsons );   
 		response.setCharacterEncoding("utf-8");
 		response.getWriter().write(object.toString());
 			

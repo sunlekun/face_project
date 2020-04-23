@@ -27,8 +27,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" charset="utf-8" src="js/admin/laymain.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/admin/common.js"></script>
 
-  
-
 <script type="text/javascript">
     $(function () {
         //初始化表单验证
@@ -54,11 +52,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}); 
 	 
-     $(function () {
+
+ /*     $(function () {
         //初始化上传控件
         $(".upload-img").InitUploader({ sendurl: "tempUser/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
         $(".upload-album").InitUploader({
         	btntext: "批量上传",  
+        	water: true, 
+        	thumbnail: true, 
+        	filesize: "1024000", 
+        	sendurl: "tempUser/upload",
+        	swf: "js/admin/scripts/webuploader/uploader.swf",
+        	filetypes: "jpg,jpge,png,gif" 
+        	});
+        //创建上传附件
+        $(".attach-btn").click(function () {
+            showAttachDialog();
+        });
+    }); */
+    
+     $(function () {
+        //初始化上传控件
+        $(".upload-img").InitUploader({ sendurl: "tempUser/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
+        $(".upload-album").InitUploader({
+        	btntext: "批量上传", 
+        	multiple: true, 
         	water: true, 
         	thumbnail: true, 
         	filesize: "1024000", 

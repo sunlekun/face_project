@@ -262,13 +262,14 @@ public class TempUserAuditController {
 		TempUser old= tempUserService.findTempUserById(tempUser.getId()) ;  
 		if(old.getStatus()!=tempUser.getStatus())
 			tempUser.setAudit_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
-		
+		else
+			tempUser.setAudit_time(old.getAudit_time());
 		 if(!"城乡居民养老保险".equals(tempUser.getData_type()))   
 	        {  
 	          String user_company=request.getParameter("user_company");
 	          tempUser.setUser_township(user_company==null?"":user_company);
 	        }
-		 
+		
 		tempUserService.updateTempUser(tempUser);
 
 		modelAndView.addObject("dataType", request.getParameter("dataType"));   
@@ -380,7 +381,12 @@ public class TempUserAuditController {
 	        	 file.deleteOnExit();
 	         Files.copy(path, new FileOutputStream(filePath + basePath+"//"+user.getUser_idcard()+".jpg"));
 	         
-	    	VideoIdent videoIdent = new VideoIdent(); 
+	    	VideoIdent videoIdent = new VideoIdent();
+	    	users =userService.findUserByUserIdcard(idcard);
+
+	    	if(users.size()>=1) //身份信息已经存在用户表中存在的人员
+	    		videoIdent.setUser_id(users.get(0).getId());
+	    	 
 			videoIdent.setImg_url("/upload/" + basePath + "/" + user.getUser_idcard()+".jpg"); 
 			videoIdent.setTxt_remarks("人工采集信息"); 
 			videoIdent.setAdd_time(new Date());

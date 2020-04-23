@@ -13,7 +13,7 @@ import com.demo.model.Log;
 @Transactional(propagation=Propagation.REQUIRES_NEW,readOnly=false,isolation=Isolation.DEFAULT)
 public interface LogDao {
 	public List<Log>  findAllLog(); 
-	public List<Log>  findLogByTime(@Param("startTime") String startTime,@Param("endTime") String endTime);  
+	public List<Log>  findLogByTime(@Param("startTime") String startTime,@Param("endTime") String endTime,@Param("pageSize") Integer pageSize,@Param("pageNumber") Integer pageNumber);  
 	public int  insertLog(Log log); 
 	 
 }

@@ -60,4 +60,8 @@ public class UserServiceImpl implements UserService {
 		PageHelper.startPage(pageNumber, pageSize);
 		return (Page<User>)userDao.findAllUserByMultiCondition(map);
 	}
+	@Override
+	public long findAllUserCount() { 
+		return userDao.findAllUserCount();
+	}
 }

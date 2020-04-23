@@ -23,4 +23,5 @@ public interface UserDao {
 	public void updateUser(User user);
 	public void updateUserName(User user);
 	public void deleteUserBatch(String[] ids);
+	public long findAllUserCount();
 }
