@@ -74,7 +74,7 @@
 	 
 	 
 	<select id="findUserByUserIdcard" resultType="User">
-		select * from users  where  user_idcard=#{0} and   is_delete=0;
+		select * from users  where  user_idcard=#{0} and   is_delete=0
 	 </select>
 	 <select id="findUserById" resultType="User">
 	     select m.* from users m   where m.id=#{0} and m.is_delete=0 
