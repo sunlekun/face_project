@@ -38,39 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      $(function () {
        $(".mainbody").Validform({
       
-		 beforeSubmit : function(curform) {
-		 
-		var user_idcard = $("#user_idcard").val(); 
-		if(user_idcard!='')//验证是否为空
-		    {  
-		     $.ajax(
-		            {
-		                url:"tempUser/isExistUserIdcard",
-		                data:{user_idcard:user_idcard},
-		                async: false,
-		                type: "POST",
-		                dataType:"json",
-		                success: function(data)
-		                    {   
-		                  
-		                        if(data.status=='true')
-		                        {
-		                            $("#msg").html("用户身份信息可使用");
-		                            $("#msg").attr("class","Validform_checktip Validform_right");
-		                            $("#flag").val("1"); 
-		                        }
-		                        else
-		                        {   
-		                            $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
-		                            $("#msg").attr("class","Validform_checktip Validform_wrong");
-		                            $("#flag").val("0"); 
-		                        }
-		                    }
-		            });
-		      
-		    }  
-				
-				
+		 beforeSubmit : function(curform) { 
           if($("#flag").val()=='0') 
            {
                   alert("用户身份信息已采集,请勿重复采集!");   
@@ -96,6 +64,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}); 
 	 
+	  $(document).ready(function(){    
+   $("#user_idcard").blur(function(){  
+
+    var user_idcard = $("#user_idcard").val(); 
+ 
+     if(user_idcard!='')//验证是否为空
+    {      
+            
+             $.ajax(
+		            {
+		                url:"tempUser/isExistUserIdcard",
+		                data:{user_idcard:user_idcard},
+		                async: false,
+		                type: "POST",
+		                dataType:"json",
+		                success: function(data)
+		                    {   
+		                  
+		                        if(data.status=='true')
+		                        {
+		                            $("#msg").html("用户身份信息可使用");
+		                            $("#msg").attr("class","Validform_checktip Validform_right");
+		                            $("#flag").val("1"); 
+		                        }
+		                        else
+		                        {   
+		                            $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
+		                            $("#msg").attr("class","Validform_checktip Validform_wrong");
+		                            $("#flag").val("0"); 
+		                        }
+		                    }
+		            });
+      
+    }
+  });
+ 
+    });
      $(function () {
         //初始化上传控件
         $(".upload-img").InitUploader({ sendurl: "tempUser/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });

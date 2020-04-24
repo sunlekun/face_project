@@ -128,8 +128,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <shiro:hasPermission name="identityCheck:Delete">
             <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
         </shiro:hasPermission>
-          <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
-        </ul>
+         <%--  <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"><i class="iconfont icon-exl"></i><span>一键导出</span></a></li>
+         --%>
+         </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
           
