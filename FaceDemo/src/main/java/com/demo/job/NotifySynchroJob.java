@@ -53,7 +53,7 @@ public class NotifySynchroJob {
 				
 			 }
 		 }
-		 log.info("删除重复数据任务开始"+new Date());
-		 videoIdentService.delrepeat();
+//		 log.info("删除重复数据任务开始"+new Date());
+//		 videoIdentService.delrepeat();
 	 }
 }
