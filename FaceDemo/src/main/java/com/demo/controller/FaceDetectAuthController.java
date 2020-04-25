@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.demo.service.TempUserService;
 import com.demo.service.UserService;
 import com.demo.service.VideoIdentService;
 import com.demo.util.DateFormatUtil;
+import com.demo.util.LoadProperties;
 
 /**
  * @author lekun.sun
@@ -73,6 +75,17 @@ public class FaceDetectAuthController {
 				map.put("msg", "用户身份信息未采集,请先去所属乡镇部门采集身份信息!");
 				return map;
 			}
+			 
+			//判断对比图片是否存在			
+			String imgPuth=LoadProperties.loadProperties("sysConfig.properties", "imgPuth");
+			String img_url=users.get(0).getImg_url();
+			File  img=new File(imgPuth+img_url);
+			if(!img.exists()){	
+				map.put("status", "error");
+				map.put("msg", "用户照片信息未采集,请先去所属乡镇部门采集照片信息!");
+				return map;
+			}
+			
 			//验证是否人脸核身过
 			List<VideoIdent> list = videoIdentService.findVideoListByIdAndTime(users.get(0).getId(),DateFormatUtil.getCurrentDT().substring(0,4));
 			if(list!=null&&list.size()>0){
