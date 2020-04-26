@@ -273,7 +273,10 @@ public class UserController {
 	 		}
 	 	//	String fileExtName = oldFileName.substring(oldFileName.lastIndexOf("."));
 	 		String fileExtName = ".jpg";
-	        new File(idCardImgUploadSavePath+oldFileName).renameTo(new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName));
+	 		File dest=new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName);
+	 		if(dest.exists())
+	 			dest.delete();
+	        new File(idCardImgUploadSavePath+oldFileName).renameTo(dest);
 	        user.setImg_url("/upload/" +user.getUser_idcard()+fileExtName);
      
 	        if(!"城乡居民养老保险".equals(user.getData_type()))   
