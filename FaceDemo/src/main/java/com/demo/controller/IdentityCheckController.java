@@ -248,7 +248,7 @@ public class IdentityCheckController {
 		try{
         response.reset(); 
 		response.setContentType("application/csv;charset=GBK"); 
-		response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(fileName)+ ".csv"); 
+		response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(fileName+ ".csv","utf-8")); 
 		response.setCharacterEncoding("GBK");
 		PrintWriter out = response.getWriter();
 		
