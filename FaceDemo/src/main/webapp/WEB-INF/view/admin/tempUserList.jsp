@@ -81,9 +81,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      
                  }); 
                      
+                 /* $("#key").val('${key}'); */
                  
-                      $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href ="tempUser/tempUserDetial?status=${status}&dataType=${dataType}&type=${type}&id="+$element.id;          
+                 $('#table').on('dbl-click-row.bs.table',function(row, $element) {
+                       window.location.href ="tempUser/tempUserDetial?status=${status}&dataType="+encodeURI('${dataType}')+"&type=${type}&id="+$element.id;          
                      
                    });
               
@@ -137,19 +138,19 @@ return fmt;
 
 function infoFormatter( value, row, index){ 
  
- var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
+ var s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'tempUser/toTempUserEdit?status=${status}&dataType="+encodeURI('${dataType}')+"&type=${type}&id="+row['id']+"'>"+row['user_name']+"</a></shiro:hasPermission>"+
  
 		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
   
-  var a='居民信息采集审核已通过，不能修改！';
+  /* var a='居民信息采集审核已通过，不能修改！';
   if(row['status']==2)
   s="<shiro:hasPermission name='tempUser:Edit'><a class='detial'  href = 'javascript:alert(&apos;"+a+"&apos;);' >"+row['user_name']+"</a></shiro:hasPermission>"+
  
-		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>";
+		"<shiro:lacksPermission name='tempUser:Edit'>"+row['user_name']+"</shiro:lacksPermission>"; */
  return s;
 }
 
-function strFormat(val) { 
+/* function strFormat(val) { 
          if (val == 3) 
          return "审核未通过";
         else  if (val == 2)  
@@ -157,7 +158,7 @@ function strFormat(val) {
         else 
            return "待审核";
          
-	}
+	} */
 	
     function timeFormat(val) {
     if (val != null) {
@@ -169,24 +170,26 @@ function strFormat(val) {
 	
 	
 	function actionFormatter(value, row, index) {  
-	var a='居民信息采集审核已通过，不能修改！';
+	/* var a='居民信息采集审核已通过，不能修改！';
 	if(row['status']==2) 
        return "<shiro:hasPermission name='tempUser:Edit'><a   href = 'javascript:alert(&apos;"+a+"&apos;);' >修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
-    else
-     return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?status=${status}&dataType=${dataType}&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+    else */
+     return "<shiro:hasPermission name='tempUser:Edit'><a class='update'  href = 'tempUser/toTempUserEdit?status=${status}&dataType="+encodeURI('${dataType}')+"&type=${type}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;"+
+            "<shiro:hasPermission name='tempUser:View'><a class='detial'  href = 'tempUser/tempUserDetial?status=${status}&dataType="+encodeURI('${dataType}')+"&type=${type}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type}&id="+row['id'];
+          window.location.href = "tempUser/toTempUserEdit?status=${status}&dataType="+encodeURI('${dataType}')+"&type=${type}&id="+row['id'];
       } 
      } 
      
-function Search(){
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}"; 
+function goURL(url){  
+     document.getElementById("form1").action=url; 
      document.getElementById("form1").submit();
  }
+  
 		 //批量删除  
    function deleteDiaryList() {  
     //获取所有被选中的记录  
@@ -208,7 +211,7 @@ function Search(){
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete?status=${status}&dataType=${dataType}&type=${type}"; 
+        from.action="tempUser/tempUserDelete"; 
         from.submit();
        }  
      
@@ -219,9 +222,9 @@ function Search(){
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList?status=${status}&dataType=${dataType}&type=${type}"  id="form1">
+<form method="post"  action="tempUser/toTempUserList"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
-
+  <input type="hidden" name="type" id="type" value="${type }" />
 
 <!--导航栏-->
 <div class="location">
@@ -240,17 +243,25 @@ function Search(){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?status=${status}&dataType=${dataType}&type=${type}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
+               <li><a class="add"  onclick="goURL('tempUser/toTempUserAdd')" href="javascript:void(0)"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
           <shiro:hasPermission name="tempUser:Delete">
-          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i></i><span class="iconfont icon-delete">删除</span></a></li>  
-          </shiro:hasPermission>
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+          </shiro:hasPermission> 
           
+          <shiro:hasPermission name="tempUser:Show">
+	        <li><a id="btnDownExcel" onclick="goURL('tempUser/downExcel')" href="javascript:void(0)"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
+	        <!--
+	        <li><a id="btnDownLoadFiles" href="tempUser/downImgs?status=${status}&dataType=${dataType}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	        <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
+	         -->
+	      </shiro:hasPermission>
+	      
         </ul>
         
          <shiro:hasPermission name="tempUser:Show">
 	          <div class="menu-list">
-	          <div class="rule-single-select">
+	          <%-- <div class="rule-single-select">
 	            <select name="status" onchange="Search()" id="status">
 		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
 		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
@@ -258,10 +269,10 @@ function Search(){
 		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
 	       		 </select>
 	      	  </div>
-	      	  
+	      	   --%>
 	      	  
 	      	   <div class="rule-single-select">
-	            <select name="dataType" onchange="Search()"  id="dataType">
+	            <select name="dataType" onchange="goURL('tempUser/toTempUserList')"  id="dataType">
 	                  <option   value="">所有数据类别</option> 
 		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
 		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
@@ -310,13 +321,15 @@ function Search(){
             <th data-sortable="true" data-field="user_name" data-align="center"
                 data-filter-control="input"  data-formatter="infoFormatter">姓名
             </th>
-            <th data-sortable="true"  data-field="status" data-align="center"
-                data-filter-control="input" data-formatter="strFormat">审核状态
-            </th>
-             
-             <th data-sortable="true"  data-field="audit_time" data-align="center"
-                data-filter-control="input" data-formatter="timeFormat">审核时间
-            </th>
+           
+            
+            <th data-sortable="true" data-field="user_idcard" data-align="center"
+                data-filter-control="input" >身份证号
+            </th>  
+            
+            <th data-sortable="true" data-field="data_type" data-align="center"
+                data-filter-control="input" >类型
+            </th>  
             
             <th data-sortable="true"  data-field="add_time" data-align="center"
                 data-filter-control="input" data-formatter="timeFormat">采集时间

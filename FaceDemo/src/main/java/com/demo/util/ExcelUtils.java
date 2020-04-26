@@ -358,14 +358,14 @@ public static <T> HSSFWorkbook export(String fileName, String[] excelHeader,  Co
 			case 5:
 				 value=t.getMobile();
 			    break;
-			case 6:
+			/*case 6:
 				if(t.getStatus()==1)
 				 value="待审核";
 				else if(t.getStatus()==2)
 					 value="通过";
 				else
 					 value="未通过";
-			    break;
+			    break;*/
 			 
 			}
 			dataCell.setCellValue(value);

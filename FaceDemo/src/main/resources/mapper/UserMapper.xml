@@ -88,6 +88,16 @@
        </set> 
        where id=#{id}
 	</update>
+	 
+	 
+	 <update id="updateUserByTempUser" parameterType="TempUser">
+		update users  
+	  <set>  
+         user_name=#{user_name}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
+         mobile=#{mobile},update_time=now()
+       </set> 
+       where user_idcard=#{user_idcard}
+	</update>
 	
 	 <update id="updateUserName" parameterType="User">
 		update users  
@@ -102,11 +112,25 @@
 		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{img_url},#{add_time},#{update_time})
 	</insert>
 	
+	
+	<insert id="insertUserByTempUser" parameterType="TempUser">
+		insert into users (user_name, user_idcard, user_township,user_village,data_type,mobile,img_url,add_time) 
+		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, concat('/upload/',#{user_idcard},'.jpg'),now())
+	</insert>
+	
 	  <delete id="deleteUserBatch" parameterType="int">
         update users set is_delete=1  where id  in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+    
+    <insert id="insertUserBatch" parameterType="List" useGeneratedKeys="true" keyProperty="id">
+		insert into users (user_name, user_idcard, user_township,user_village,data_type,mobile,img_url,add_time,update_time) values
+		 <foreach collection="list" item="item" index="index"     separator="," >  
+	   ( #{item.user_name},#{item.user_idcard},#{item.user_township},#{item.user_village},#{item.data_type}, #{item.mobile}, #{item.img_url},#{item.add_time},#{item.update_time})
+		  </foreach> 
+	</insert>
+ 
 	 
 </mapper>

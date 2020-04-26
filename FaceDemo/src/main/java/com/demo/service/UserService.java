@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.demo.model.TempUser;
 import com.demo.model.User;
 import com.github.pagehelper.Page;
 
@@ -20,7 +21,10 @@ public interface UserService {
 	
 	 
 	public void insertUser(User user);
+	public void insertUserByTempUser(TempUser tempUser);
+	public int insertUserBatch(List<User> users);
 	public void updateUser(User user);
+	public void updateUserByTempUser(TempUser tempUser);
 	public void updateUserName(User user);
 	public void deleteUserBatch(String[] ids);
 }

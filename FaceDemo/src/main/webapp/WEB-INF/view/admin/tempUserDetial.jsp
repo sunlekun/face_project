@@ -234,9 +234,23 @@ function __doPostBack(eventTarget, eventArgument) {
   </dl>
   <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
   
+    <dl>
+    <dt>单人照片</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="status">
+        
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="0" ${tempUser.img_urlIndex==0?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_0">第一张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="1" ${tempUser.img_urlIndex==1?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_1">第二张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="2" ${tempUser.img_urlIndex==2?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_2">第三张</label>
+        
+        </span>
+      </div>
+      <span class="Validform_checktip">请选择上传的三张照片中被采集人的正面照片要求白色背景*</span>
+    </dd>
+  </dl>
    
-   
-  <div id="div_Is_status">
+  <%-- <div id="div_Is_status">
   <dl>
     <dt>审核状态</dt>
     <dd>
@@ -257,7 +271,7 @@ function __doPostBack(eventTarget, eventArgument) {
     <dt></dt>
     <dd><input type="submit" name="btnStatus" value="审核提交" id="btnStatus" class="btn green" /></dd>
   </dl> -->
-  </div>
+  </div> --%>
    
    
   </c:if>

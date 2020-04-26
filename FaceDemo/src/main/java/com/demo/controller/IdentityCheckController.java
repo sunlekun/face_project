@@ -3,6 +3,7 @@ package com.demo.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.model.Manager;
+import com.demo.model.TempUser;
 import com.demo.model.VideoIdent;
 import com.demo.model.Xzb;
 import com.demo.realm.PermissionName;
@@ -139,8 +141,10 @@ public class IdentityCheckController {
 			map.put("dataType", request.getParameter("dataType"));
 			
 			Page<VideoIdent> page = videoIdentService.findVideoListByMultiCondition(map, pageSize, pageNumber);
-			modelAndView.addObject("page", page); 
-			modelAndView.addObject("key", key); 
+			PageInfo<VideoIdent> pageInfo= page.toPageInfo();
+			modelAndView.addObject("page", pageInfo); 
+			
+ 			modelAndView.addObject("key", key); 
             modelAndView.setViewName("admin/identityCheckListImg"); 
             
 		}
@@ -206,12 +210,7 @@ public class IdentityCheckController {
 	public  void downExcel(HttpServletRequest request, HttpServletResponse response){ 
 		Manager	manager = SecurityUtils.getSubject().getPrincipals().oneByType(Manager.class);
 		HashMap<String ,Object > map=new HashMap<String ,Object >();
-		
-		map.put("video_status", request.getParameter("video_status"));
-//		map.put("status", request.getParameter("status"));
-	//	map.put("data_type", manager.getUser_type());
-		
-		
+		 
 		if(manager.getRole_type()==1)//超级用户显示所有的采集信息
 		     map.put("data_type",null);
 		else  //其他用户只显示各自的类别的采集信息
@@ -233,22 +232,51 @@ public class IdentityCheckController {
 			map.put("year", request.getParameter("year")); 
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
+		map.put("key", request.getParameter("key"));
 		List<VideoIdent> identityChecks=new ArrayList<VideoIdent>();
-		String[] excelHeader = {};
+		
 		if("2".equals(request.getParameter("flag")))
-			identityChecks = videoIdentService.findNoVideoListByMultiCondition(map);		
+			identityChecks = videoIdentService.exportNoVideoListByMultiCondition(map);		
 		else
-			identityChecks = videoIdentService.findVideoListByMultiCondition(map);
+			identityChecks = videoIdentService.exportVideoListByMultiCondition(map);
  
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
 		String fileName= "视频认证审核人员名单"+df.format(System.currentTimeMillis());
 		if("2".equals(request.getParameter("flag")))
 			fileName= "未参与认证人员名单"+df.format(System.currentTimeMillis());
 	     
-		try {
+		try{
+        response.reset(); 
+		response.setContentType("application/csv;charset=GBK"); 
+		response.setHeader("Content-Disposition","attachment;filename=" + URLEncoder.encode(fileName)+ ".csv"); 
+		response.setCharacterEncoding("GBK");
+		PrintWriter out = response.getWriter();
+		
+		String header=""; 
+		 
+		//if("2".equals(request.getParameter("flag"))) 
+			header = "姓名,身份证号码,类型,乡镇办,村名,手机号,是否审核通过,备注";//此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+		/*else
+			header = "姓名,身份证号码,类型,乡镇办,村名,手机号";*///此处为标题，excel首行的title，按照此格式即可，格式无需改动，但是可以增加或者减少项目。
+		
+       out.println(header);
+		
+		for (int i = 0; i < identityChecks.size(); i++) {  
+			String str =identityChecks.get(i).toString().replace("null", "") ;  
+			out.println(str); 
+	   }
+	
+	out.flush();
+	
+	out.close();
+		}
+		catch (Exception e) {
+			   e.printStackTrace();
+		}
+		/*try {
 			 // 设置请求
-			/*response.setContentType("application/application/vnd.ms-excel");
-			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));*/
+			response.setContentType("application/application/vnd.ms-excel");
+			response.setHeader("Content-disposition", "attachment;filename="+URLEncoder.encode(fileName + ".xlsx", "UTF-8"));
 			
 			response.setContentType("application/octet-stream");// response.setContentType("application/octet-stream");
 	        response.setHeader("Content-Disposition", "attachment;filename=" +URLEncoder.encode(map.get("year")+"年"+fileName + ".xls", "UTF-8"));
@@ -267,7 +295,7 @@ public class IdentityCheckController {
 			outputStream.close();// 关闭流	 
 			 } catch (Exception e) {
 			   e.printStackTrace();
-			}
+			}*/
 		
 		 //return response ;
 	}

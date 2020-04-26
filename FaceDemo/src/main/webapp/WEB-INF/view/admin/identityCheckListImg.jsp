@@ -44,20 +44,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </script>
  
 <script type="text/javascript"> 
+function goURL(url,paras){   
+     var pageSize= $("#pageSize").val();
+     document.getElementById("form1").action=url+"?pageSize="+pageSize+"&"+paras; 
+     document.getElementById("form1").submit();
+ }
+ 
  function Search(){
 
 	 var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
     function toPage(pageNumber){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?pageNumber="+pageNumber+"&pageSize="+pageSize;
      document.getElementById("form1").submit();
  }
   function setPageSize(){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -91,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="identityCheck/identityCheckDelete?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"; 
+        from.action="identityCheck/identityCheckDelete"; 
         from.submit();
        }  
      
@@ -103,10 +109,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 </head>
 <body class="mainbody">
-<form method="post"  action="identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"  id="form1">
-  <input type="hidden" name="ids" id="ids" value="" />
-
-
+<form method="post"  action="identityCheck/toIdentityCheckList"  id="form1">
+  <input type="hidden" name="ids" id="ids" value="" /> 
+  <input type="hidden" name="type" id="type" value="${type }" />
 <!--导航栏-->
 <div class="location">
   <a href="javascript:history.back(-1);" class="back"><i class="iconfont icon-up"></i><span>返回上一页</span></a>
@@ -135,7 +140,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <div class="menu-list">
           
              <div class="rule-single-select">
-	            <select name="year" onchange="Search()" id="year">
+	            <select name="year" onchange="goURL('identityCheck/toIdentityCheckList','')" id="year">
 		           <option value="">请选择认证年限</option>
 		           <c:forEach var="item" items="${years}">
 	                 <option  ${item==year?"selected='selected'":'' }   value="${item}">${item}</option>
@@ -146,7 +151,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         
         	  <div class="rule-single-select">
-         		   <select name="video_status" onchange="Search()" id="video_status">
+         		   <select name="video_status" onchange="goURL('identityCheck/toIdentityCheckList','')" id="video_status">
 			           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
 			           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
 		               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
@@ -158,7 +163,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       		  
       		   
 	         <div class="rule-single-select">
-	            <select name="user_township" onchange="Search()"  id="user_township">
+	            <select name="user_township" onchange="goURL('identityCheck/toIdentityCheckList','')"  id="user_township">
 	               <option   value="">所有乡镇办</option>
 		           <c:forEach items="${xzbs }" var="xzb"> 
 		              <option value="${xzb.title }"  ${user_township==xzb.title?"selected='selected'":'' }>${xzb.title }</option>
@@ -169,7 +174,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        
 	        
 	         <div class="rule-single-select">
-	            <select name="dataType" onchange="Search()"  id="dataType">
+	            <select name="dataType" onchange="goURL('identityCheck/toIdentityCheckList','')"  id="dataType">
 	                  <option   value="">所有数据类别</option> 
 		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
 		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
@@ -213,13 +218,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <input type="hidden" name="hidId" id="hidId" value="${ videoIdent.id}" />
             <input type="hidden" name="hidIdCard" id="hidIdCard" value="${ videoIdent.user_idcard}" />
           </div>
-          <div class="pic"><img src="css/admin/skin/default/loadimg.gif" data-original="${videoIdent.img_url}?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
+          <div class="pic">
+          <a  onclick="goURL('identityCheck/identityCheckConfirm','id=${ videoIdent.id}')" >
+            <img src="css/admin/skin/default/loadimg.gif" width="200" data-original="/video_identity${videoIdent.img_url}?w=228&h=165&mode=crop" style="display: inline;"/>
+           </a>
+          </div><i class="absbg"></i>
           <h1>
 	          <span>
-	          <shiro:hasPermission name="identityCheck:Edit">
-	             	  <a href="identityCheck/toTempUserAuditEdit?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id=${ videoIdent.id}" >${ videoIdent.user_name}</a>
+	            <shiro:hasPermission name="identityCheck:Audit">
+	              <a  onclick="goURL('identityCheck/identityCheckConfirm','id=${ videoIdent.id}')" >${ videoIdent.user_name}</a> 
+	            
 	            </shiro:hasPermission>
-	            <shiro:lacksPermission name="identityCheck:Edit">
+	            <shiro:lacksPermission name="identityCheck:Audit">
 	           		  ${ videoIdent.user_name}
 	            </shiro:lacksPermission>
 	          
@@ -247,7 +257,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <p class="time"> <fmt:formatDate  value="${ videoIdent.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/> </p>
             
             <shiro:hasPermission name="identityCheck:Audit">
-             	  <a href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id=${ videoIdent.id}" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
+             	  <a  onclick="goURL('identityCheck/identityCheckConfirm','id=${ videoIdent.id}')" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="identityCheck:Audit">
            		<a href="javascript:;" title="编辑资料"><i class="iconfont icon-pencil"></i></a>
@@ -255,7 +265,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             
           
             <shiro:hasPermission name="identityCheck:View">
-          	 	 <a href="identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id=${ videoIdent.id}" title="详情"><i class="iconfont icon-eye"></i></a> 
+          	 	 <a  onclick="goURL('identityCheck/identityCheckDetial','id=${ videoIdent.id}')" title="详情"><i class="iconfont icon-eye"></i></a> 
             </shiro:hasPermission>
             <shiro:lacksPermission name="identityCheck:View">
                 <a href="javascript:;" title="详情"><i class="iconfont icon-eye"></i></a> 

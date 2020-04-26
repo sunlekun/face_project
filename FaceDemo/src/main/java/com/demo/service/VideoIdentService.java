@@ -26,7 +26,8 @@ public interface VideoIdentService {
 	public List<VideoIdent> findVideoListByUserId( Integer user_id);
 	public List<VideoIdent> findVideoByUserId( Integer user_id);
 	void insertVL(VideoIdent videoIdent);
-	public List<VideoIdent> findNoVideoListByMultiCondition(Map map);
+	public List<VideoIdent> exportNoVideoListByMultiCondition(Map map);
+	public List<VideoIdent> exportVideoListByMultiCondition(Map map);
 	public List<VideoIdent> findVideoListByMultiCondition(Map map);
 	public Page<VideoIdent> findVideoListByMultiCondition(Map map,Integer pageSize,Integer pageNumber);
 	public void deleteVideoIdentBatch(String[] ids);

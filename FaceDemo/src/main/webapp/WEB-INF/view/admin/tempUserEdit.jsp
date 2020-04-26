@@ -38,8 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      $(function () {
        $(".mainbody").Validform({
       
-		 beforeSubmit : function(curform) {
-		 
+		 beforeSubmit : function(curform) { 
            
           if($("#img_ul li").length!=3) 
               {
@@ -94,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
     }
     //删除附件节点
-    function delAttachNode(obj) {
+    function delAttachNode(obj) { 
         $(obj).parent().remove();
     }
     function openWin(url, name, iWidth, iHeight) {
@@ -141,7 +140,12 @@ function changes(obj){
      }
      
     })
-
+ function clearImgIndex(){
+ 
+  $('input:radio[name="img_urlIndex"]').removeAttr('checked');  
+ 
+ }
+ 
 </script>
 </head>
 <body class="mainbody">
@@ -266,7 +270,7 @@ function __doPostBack(eventTarget, eventArgument) {
   
  <dl>
     <dt>图片相册</dt>
-    <dd>
+    <dd  id="div1" >
   
       <div class="upload-box upload-album"></div>
       <input name="hidFocusPhoto" type="hidden" id="hidFocusPhoto" class="focus-photo">
@@ -276,12 +280,12 @@ function __doPostBack(eventTarget, eventArgument) {
             <c:forEach items="${tempUser.original_path.split(';')}" var="path" >
             <li>
               <input type="hidden" name="hid_photo_name" value="4211|${path}|${path}" />
-              <div class="img-box" onclick="setFocusImg(this);">
+              <div class="img-box" onclick="setFocusImg(this);" >
                 <img src="${path}" bigsrc="${path}" />
               </div>
               
               <a href="javascript:;" onclick="javascript:openWin('${path}','','700','600');">预览</a>
-              <a href="javascript:;" onclick="delImg(this);">删除</a>
+              <a href="javascript:;" onclick="delImg(this);clearImgIndex();">删除</a>
             </li>
            </c:forEach>
             
@@ -290,8 +294,25 @@ function __doPostBack(eventTarget, eventArgument) {
      
        </dd>
   </dl>
- <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
 
+   <dl>
+    <dt>单人照片</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="status">
+        
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="0" ${tempUser.img_urlIndex==0?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_0">第一张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="1" ${tempUser.img_urlIndex==1?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_1">第二张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="2" ${tempUser.img_urlIndex==2?"checked='checked'":'' }  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_2">第三张</label>
+        
+        </span>
+      </div>
+      <span class="Validform_checktip">请选择上传的三张照片中被采集人的正面照片要求白色背景*</span>
+    </dd>
+  </dl>
+  
+   <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
+  
   </c:if>
    <c:if test="${empty tempUser}">
     未查询到相关信息！

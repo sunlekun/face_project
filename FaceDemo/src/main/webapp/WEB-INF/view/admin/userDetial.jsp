@@ -169,7 +169,15 @@ return fmt;
 
 
 <!--/列表-->
+<!--工具栏-->
+ <br>
+  <div class="btn-wrap">
+   <!--  <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn" /> -->
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);" />
+  </div>
  
+<!--/工具栏-->
+
 </form>
 </body>
 </html>

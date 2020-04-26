@@ -38,7 +38,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      $(function () {
        $(".mainbody").Validform({
       
-		 beforeSubmit : function(curform) { 
+		 beforeSubmit : function(curform) {  
+		   var user_idcard = $("#user_idcard").val(); 
+ 
+     if(user_idcard!='')//验证是否为空
+    {      
+            
+             $.ajax(
+		            {
+		                url:"tempUser/isExistUserIdcard",
+		                data:{user_idcard:user_idcard},
+		                async: false,
+		                type: "POST",
+		                dataType:"json",
+		                success: function(data)
+		                    {   
+		                        if(data.status=='true')
+		                        {
+		                            $("#msg").html("用户身份信息可使用");
+		                            $("#msg").attr("class","Validform_checktip Validform_right");
+		                            $("#flag").val("1"); 
+		                        }
+		                        else
+		                        {   
+		                            $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
+		                            $("#msg").attr("class","Validform_checktip Validform_wrong");
+		                            $("#flag").val("0"); 
+		                        }
+		                    }
+		            });
+      
+    }
+		 
           if($("#flag").val()=='0') 
            {
                   alert("用户身份信息已采集,请勿重复采集!");   
@@ -50,9 +81,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   return false;
            }  
           
-           
+        
           if($("#img_ul li").length!=3) 
-              {
+          {
                   alert("用户身份信息采集,必须上传三张照片!\n1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。");   
                   return false;
                }  
@@ -81,7 +112,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                dataType:"json",
 		                success: function(data)
 		                    {   
-		                  
 		                        if(data.status=='true')
 		                        {
 		                            $("#msg").html("用户身份信息可使用");
@@ -239,6 +269,16 @@ function __doPostBack(eventTarget, eventArgument) {
 <div class="tab-content" >
   
    <dl>
+    <dt>身份证号</dt>
+    <dd><input name="user_idcard" type="text"  id="user_idcard" maxlength='18' class="input normal" datatype='idcard'  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
+  </dl>
+  
+   <dl>
+    <dt>用户姓名</dt>
+    <dd><input name="user_name" type="text"  id="user_name" class="input normal" datatype='zh2-4'  nullmsg='请输入真实姓名' errormsg='姓名为中文' sucmsg=' '/> <span class="Validform_checktip">*请输入真实姓名</span></dd>
+   </dl>
+ 
+   <dl>
     <dt>所属类型</dt>
     <dd>
       <div class="rule-single-select">
@@ -280,15 +320,8 @@ function __doPostBack(eventTarget, eventArgument) {
     <dd><input name="user_company" type="text"  id="user_company" class="input normal"  nullmsg="请输入所属单位" errormsg="请输入所属单位" /> <span class="Validform_checktip">*</span></dd>
   </dl>
   
-  <dl>
-    <dt>用户姓名</dt>
-    <dd><input name="user_name" type="text"  id="user_name" class="input normal" datatype='zh2-4'  nullmsg='请输入真实姓名' errormsg='姓名为中文' sucmsg=' '/> <span class="Validform_checktip">*请输入真实姓名</span></dd>
- </dl>
- 
- <dl>
-    <dt>身份证号</dt>
-    <dd><input name="user_idcard" type="text"  id="user_idcard" maxlength='18' class="input normal" datatype='idcard'  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
- </dl>
+
+
   
    
   <dl>
@@ -310,9 +343,21 @@ function __doPostBack(eventTarget, eventArgument) {
       </div>
     </dd>
   </dl>
- <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
-
   
+   <dl>
+    <dt>单人照片</dt>
+    <dd>
+      <div class="rule-multi-radio">
+        <span id="status">
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="0"  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_0">第一张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="1"  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_1">第二张</label>
+        <input id="img_urlIndex" type="radio" name="img_urlIndex" value="2"  nullmsg="请输入选择单人照片" errormsg="请输入选择单人照片" datatype="*"/><label for="rblIsStatus_2">第三张</label>
+        </span>
+      </div>
+      <span class="Validform_checktip">请选择上传的三张照片中被采集人的正面照片要求白色背景*</span>
+    </dd>
+  </dl>
+   <dl><b><font color="red"> *友情提醒：1、请上传被采集人正面照片要求白色背景。2、上传被采集人身份证照片。3、上传采集人和被采集人合照。</font></b></dl>
   
 </div>
 <!--/内容-->

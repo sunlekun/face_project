@@ -40,35 +40,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
  
 <script type="text/javascript"> 
-	 
-  <%--    $.ajax({
-            type: 'post', 
-            url: "<%=path%>/identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}", 
-            async: true,
-            type: 'post',
-            dataType: 'text',
-            success: function (data, status) {
-                
-                var strs = $.parseJSON($.trim(data));
-                var tabledata=strs.jsons;
-               
-                    $('#table').bootstrapTable({
-                        data: tabledata
-                    });
-                    $('#table').bootstrapTable('load', tabledata);
-                     
-                    $('#table').on('dbl-click-row.bs.table',function(row, $element) {     
-                      window.location.href = "identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id="+$element.id;                  
-                     
-                   });
-                   
-		}
-       }) --%>
-
+var formParams="type="+encodeURI('${type}')+"&video_status="+encodeURI('${video_status}')+"&user_township="+encodeURI('${user_township}')+
+           "&year="+encodeURI('${year}')+"&dataType="+encodeURI('${dataType}');
  $(document).ready(function () { 
     $('#table').bootstrapTable({
                         
-                        url : "identityCheck/identityCheckList?type=${type}&video_status=${video_status}&user_township="+encodeURI('${user_township}')+"&year=${year}&dataType=" +encodeURI('${dataType}'),  
+                        url : "identityCheck/identityCheckList?"+formParams,  
 						dataType : "json", 
 						contentType : "application/x-www-form-urlencoded;charset=utf-8", // 如果是post必须定义
 						method : 'get',
@@ -88,7 +65,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      
                  
                       $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href ="identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id="+$element.id;                         
+                      /*  var paras="type=${type}&video_status="+encodeURI('${video_status}')+"&user_township="+encodeURI('${user_township}')+"&year="+encodeURI('${year}')+"&dataType=" +encodeURI('${dataType}');
+                       window.location.href ="identityCheck/identityCheckDetial?id="+$element.id+'&'+paras;     */    
+                      
+                       window.location.href ="identityCheck/identityCheckDetial?"+formParams+"&id="+$element.id;        
                      
                    });
               
@@ -173,12 +153,12 @@ function infoFormatter( value, row, index){
     te="乡镇办："+row['user_township']+'-'+row['user_village'];
   else 
     te="所属单位："+row['user_township'];
-    
+   
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
 		   '<shiro:hasPermission name="identityCheck:Audit">'+
-		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id='+row['id']+'">'+
+		      '<a class="user-avatar" href="identityCheck/identityCheckConfirm?'+formParams+'&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/video_identity'+row['img_url']+'" />'+
 		       '</a>' +
 		  '</shiro:hasPermission>'+
@@ -203,14 +183,19 @@ function infoFormatter( value, row, index){
 	function actionFormatter(value, row, index) { 
 <%--   return "<a class='update'  href = '<%=path%>/identityCheck/toRandomCheckEdit?id="+value+"'>修改</a><br>" ; --%>
 <%--      return "<shiro:hasPermission name='randomCheck:Confirm'><a class='update'   href = '<%=path%>/identityCheck/toRandomCheckConfirm?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>抽查审核</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp;<shiro:hasPermission name='randomCheck:View'><a class='detial'  href = '<%=path%>/identityCheck/randomCheckDetial?status=${status}&video_status=${video_status}&id="+row['id']+"&video_id="+row['video_id']+"'>详情</a></shiro:hasPermission>";  --%>
-return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&id="+row['id']+"'>详情</a>";
+   return "<a class='detial'  href = 'identityCheck/identityCheckDetial?"+formParams+"&id="+row['id']+"'>详情</a>";
+    
     } 
     
- 
-      function Search(){ 
-     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}"; 
+    function goURL(url ,paras){   
+     document.getElementById("form1").action=url+"?s=1"+"&"+paras; 
      document.getElementById("form1").submit();  
      }
+ 
+   /*  function Search(){ 
+     document.getElementById("form1").action="identityCheck/toIdentityCheckList?type=${type}"; 
+     document.getElementById("form1").submit();  
+     } */
     
 		 //批量删除  
    function deleteDiaryList() {  
@@ -243,9 +228,9 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
 </script>
 </head>
 <body class="mainbody">
-<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}"  id="form1">
+<form method="post"  action="<%=path%>/identityCheck/toIdentityCheckList"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
-   
+  <input type="hidden" name="flag" id="ids" value="${type}" />
 
 <!--导航栏-->
 <div class="location">
@@ -271,14 +256,14 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
         <shiro:hasPermission name="identityCheck:Delete">
             <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
         </shiro:hasPermission>
-          <%-- <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&flag=1"><i class="iconfont icon-exl"></i><span>认证信息导出</span></a></li>
-          <li><a id="btnDownExcel" href="identityCheck/downExcel?type=${type}&video_status=${video_status}&user_township=${user_township}&year=${year}&dataType=${dataType}&flag=2"><i class="iconfont icon-exl"></i><span>未证名单导出</span></a></li>
-         --%></ul>
+          <li><a id="btnDownExcel" onclick="goURL('identityCheck/downExcel','flag=1')"><i class="iconfont icon-exl"></i><span>认证信息导出</span></a></li>
+          <li><a id="btnDownExcel" onclick="goURL('identityCheck/downExcel','flag=2')"><i class="iconfont icon-exl"></i><span>未证名单导出</span></a></li>
+        </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
           
              <div class="rule-single-select">
-	            <select name="year" onchange="Search()" id="year">
+	            <select name="year" onchange="goURL('identityCheck/toIdentityCheckList','')" id="year">
 		           <option value="">请选择认证年限</option>
 		           <c:forEach var="item" items="${years}">
 	                 <option  ${item==year?"selected='selected'":'' }   value="${item}">${item}</option>
@@ -289,7 +274,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
         
         
         	  <div class="rule-single-select">
-         		   <select name="video_status" onchange="Search()" id="video_status">
+         		   <select name="video_status" onchange="goURL('identityCheck/toIdentityCheckList','')" id="video_status">
 			           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
 			           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
 		               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
@@ -301,7 +286,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
       		  
       		   
 	         <div class="rule-single-select">
-	            <select name="user_township" onchange="Search()"  id="user_township">
+	            <select name="user_township" onchange="goURL('identityCheck/toIdentityCheckList','')"  id="user_township">
 	               <option   value="">所有乡镇办</option>
 		           <c:forEach items="${xzbs }" var="xzb"> 
 		              <option value="${xzb.title }"  ${user_township==xzb.title?"selected='selected'":'' }>${xzb.title }</option>
@@ -312,7 +297,7 @@ return "<a class='detial'  href = '<%=path%>/identityCheck/identityCheckDetial?t
 	        
 	        
 	         <div class="rule-single-select">
-	            <select name="dataType" onchange="Search()"  id="dataType">
+	            <select name="dataType" onchange="goURL('identityCheck/toIdentityCheckList','')"  id="dataType">
 	                  <option   value="">所有数据类别</option> 
 		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
 		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>

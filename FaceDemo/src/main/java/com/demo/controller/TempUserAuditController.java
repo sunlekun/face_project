@@ -259,11 +259,7 @@ public class TempUserAuditController {
 			}
 		}
 	 		
-		TempUser old= tempUserService.findTempUserById(tempUser.getId()) ;  
-		if(old.getStatus()!=tempUser.getStatus())
-			tempUser.setAudit_time(new Timestamp(new Date(System.currentTimeMillis()).getTime()));
-		else
-			tempUser.setAudit_time(old.getAudit_time());
+		
 		 if(!"城乡居民养老保险".equals(tempUser.getData_type()))   
 	        {  
 	          String user_company=request.getParameter("user_company");
@@ -377,8 +373,8 @@ public class TempUserAuditController {
 	       // copyToOtherPath(idCardImgUploadSavePath,filePath + basePath,user.getUser_idcard(),fileExtName);
 	         Path path = Paths.get (idCardImgUploadSavePath+user.getUser_idcard()+fileExtName);//源文件
 	         File file = new File(filePath + basePath+"//"+user.getUser_idcard()+".jpg");
-	         if(!file.exists())
-	        	 file.deleteOnExit();
+	         if(file.exists())
+	        	 file.delete();
 	         Files.copy(path, new FileOutputStream(filePath + basePath+"//"+user.getUser_idcard()+".jpg"));
 	         
 	    	VideoIdent videoIdent = new VideoIdent();

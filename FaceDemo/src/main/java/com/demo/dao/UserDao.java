@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.demo.model.TempUser;
 import com.demo.model.User;
 @Transactional(propagation=Propagation.REQUIRES_NEW,readOnly=false,isolation=Isolation.DEFAULT)
 public interface UserDao { 
@@ -20,6 +21,9 @@ public interface UserDao {
 	
 	
 	public void insertUser(User user);
+	public void insertUserByTempUser(TempUser tempUser);
+	public int insertUserBatch(List<User> users);
+	public void updateUserByTempUser(TempUser tempUser);
 	public void updateUser(User user);
 	public void updateUserName(User user);
 	public void deleteUserBatch(String[] ids);

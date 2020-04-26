@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.demo.dao.UserDao;
+import com.demo.model.TempUser;
 import com.demo.model.User;
 import com.demo.service.UserService;
 import com.github.pagehelper.Page;
@@ -45,12 +46,17 @@ public class UserServiceImpl implements UserService {
 	{
 		userDao.insertUser(user);
 	}
+	
+	
 	@Override
 	public void updateUser(User user){
 		userDao.updateUser(user);
 	}
 	public void updateUserName(User user){
 		userDao.updateUserName(user);
+	}
+	public void updateUserByTempUser(TempUser tempUser){
+		userDao.updateUserByTempUser(tempUser);
 	}
 	public void deleteUserBatch(String[] ids){
 		userDao.deleteUserBatch(ids);
@@ -63,5 +69,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public long findAllUserCount() { 
 		return userDao.findAllUserCount();
+	}
+	@Override
+	public int insertUserBatch(List<User> users) {
+		return userDao.insertUserBatch(users);
+	}
+	@Override
+	public void insertUserByTempUser(TempUser tempUser) {
+		  userDao.insertUserByTempUser(tempUser);
+		
 	}
 }

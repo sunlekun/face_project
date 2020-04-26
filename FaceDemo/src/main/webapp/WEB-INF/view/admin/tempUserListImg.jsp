@@ -44,20 +44,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </script>
  
 <script type="text/javascript"> 
- function Search(){
-
-	 var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
+function goURL(url){  
+	
+     var pageSize= $("#pageSize").val();
+     document.getElementById("form1").action=url+"?pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
-    function toPage(pageNumber){
+  function toPage(pageNumber){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageNumber="+pageNumber+"&pageSize="+pageSize;
+     document.getElementById("form1").action="tempUser/toTempUserList?pageNumber="+pageNumber+"&pageSize="+pageSize;
      document.getElementById("form1").submit();
  }
   function setPageSize(){
     var pageSize= $("#pageSize").val();
-     document.getElementById("form1").action="tempUser/toTempUserList?type=${type}&pageSize="+pageSize; 
+     document.getElementById("form1").action="tempUser/toTempUserList?pageSize="+pageSize; 
      document.getElementById("form1").submit();
  }
 		 //批量删除  
@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       document.getElementById("ids").value=ids;
       var from=  document.getElementById("form1");
       if(from!=null){
-        from.action="tempUser/tempUserDelete?status=${status}&dataType=${dataType}"; 
+        from.action="tempUser/tempUserDelete"; 
         from.submit();
        }  
      
@@ -92,9 +92,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 </head>
 <body class="mainbody">
-<form method="post"  action="tempUser/toTempUserList?type=${type}"  id="form1">
+<form method="post"  action="tempUser/toTempUserList"  id="form1">
   <input type="hidden" name="ids" id="ids" value="" />
-
+  <input type="hidden" name="type" id="type" value="${type }" />
 
 <!--导航栏-->
 <div class="location">
@@ -112,33 +112,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div class="box-wrap">
       <a class="menu-btn"><i class="iconfont icon-more"></i></a>
       <div class="l-list">
-        <ul class="icon-list">
-          
-          
-          <li><a href="javascript:;" onclick="checkAll(this);"><i class="iconfont icon-check"></i><span>全选</span></a></li>
-          
-           <shiro:hasPermission name="tempUser:Add">
-               <li><a class="add" href="tempUser/toTempUserAdd?status=${status}&dataType=${dataType}&type=${type}"><i iconfont icon-close></i><span>新增</span></a></li>
+          <ul class="icon-list">
+          <shiro:hasPermission name="tempUser:Add">
+               <li><a class="add"  onclick="goURL('tempUser/toTempUserAdd')" href="javascript:void(0)"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
+          <shiro:hasPermission name="tempUser:Delete">
+          	 <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
+          </shiro:hasPermission> 
           
-         
-          
+          <shiro:hasPermission name="tempUser:Show">
+	        <li><a id="btnDownExcel" onclick="goURL('tempUser/downExcel')" href="javascript:void(0)"><i class="iconfont icon-exl"></i><span>Excel数据下载</span></a></li>
+	        <!--
+	        <li><a id="btnDownLoadFiles" href="tempUser/downImgs?status=${status}&dataType=${dataType}&type=${type}"><i class="iconfont icon-folder-empty"></i><span>图片打包下载</span></a></li>
+	        <li><a id="btnUploadImg"  href="javascript:void(0)"   onclick="files.click()"><i class="iconfont icon-file"></i><span>图片导入</span></a></li>
+	         -->
+	      </shiro:hasPermission>
+	      
         </ul>
         
         
          <shiro:hasPermission name="tempUser:Show">
 	          <div class="menu-list">
-	          <div class="rule-single-select">
+	          <%-- <div class="rule-single-select">
 	            <select name="status" onchange="Search()" id="status">
 		           <option  ${status==null?"selected='selected'":'' } value="">审核状态</option>
 		           <option  ${status==1?"selected='selected'":'' }  value="1">待审核</option>
 	               <option  ${status==2?"selected='selected'":'' }  value="2">审核通过</option>
 		           <option  ${status==3?"selected='selected'":'' }  value="3">审核未通过</option>
-	        </select>
-	        </div>
-	        
-	          <div class="rule-single-select">
-	            <select name="dataType" onchange="Search()"  id="dataType">
+	       		 </select>
+	      	  </div>
+	      	   --%>
+	      	  
+	      	   <div class="rule-single-select">
+	            <select name="dataType" onchange="goURL('tempUser/toTempUserList')"  id="dataType">
 	                  <option   value="">所有数据类别</option> 
 		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
 		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
@@ -147,11 +153,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	       		</div>
 	        </div>
         
-        </shiro:hasPermission>
+      </shiro:hasPermission>
+      
       </div>
       <div class="r-list">
         <input name="key" type="text" id="key" class="keyword" value="${key}" />
-        <a id="lbtnSearch" class="btn-search" onclick="Search()"><i class="iconfont icon-search"></i></a>
+        <a id="lbtnSearch" class="btn-search" onclick="goURL('tempUser/toTempUserList')"><i class="iconfont icon-search"></i></a>
         <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="tempUser/toTempUserList?type=Img"><i class="iconfont icon-list-img"></i></a>
         <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="tempUser/toTempUserList?type=Word"><i class="iconfont icon-list-txt"></i></a>
       </div>
@@ -180,72 +187,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <input type="hidden" name="hidId" id="hidId" value="${ tempUser.id}" />
           </div>
           <div class="pic"><img src="css/admin/skin/default/loadimg.gif" data-original="${fn:split(tempUser.original_path, ';')}[0]?w=228&h=165&mode=crop" /></div><i class="absbg"></i>
-          <h1><span>
-          
-          <c:if test="${ tempUser.status==2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="javascript:alert('居民信息采集审核已通过，不能修改！');" >${ tempUser.user_name}</a>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		  ${ tempUser.user_name}
-            </shiro:lacksPermission>
-            
-           </c:if>
-            
-           <c:if test="${ tempUser.status!=2}">
+          <h1><span> 
             <shiro:hasPermission name="tempUser:Edit">
              	  <a href="tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" >${ tempUser.user_name}</a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		  ${ tempUser.user_name}
             </shiro:lacksPermission>
-            
-            </c:if>
-          
+             
           
           </span></h1>
           <div class="remark">
             ${ tempUser.user_idcard}
           </div>
-          <div class="tools">
-	          <c:if test="${ tempUser.status==1}">
-	                                         待审核
-	          </c:if>
-	          <c:if test="${ tempUser.status==2}">
-	               <font color="#45b97c">审核通过</font>
-	          </c:if>
-	           <c:if test="${ tempUser.status==3}">
-	                <font color="red">审核未通过</font>
-	          </c:if>
-             
-          </div>
+         <div class="tools">
+          </div> 
           <div class="foot">
             <p class="time"><fmt:formatDate value="${ tempUser.add_time}"  pattern="yyyy-MM-dd:HH:mm:ss"/></p>
-            <c:if test="${ tempUser.status==2}">
-            <shiro:hasPermission name="tempUser:Edit">
-             	  <a href="javascript:alert('居民信息采集审核已通过，不能修改！');"  title="编辑"><i class="iconfont icon-pencil"></i></a>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Edit">
-           		 <i class="iconfont icon-pencil"></i>
-            </shiro:lacksPermission>
-            </c:if>
-            
-             <c:if test="${ tempUser.status!=2}">
+         
             <shiro:hasPermission name="tempUser:Edit">
              	  <a href="tempUser/toTempUserEdit?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="编辑"><i class="iconfont icon-pencil"></i></a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="tempUser:Edit">
            		 <i class="iconfont icon-pencil"></i>
-            </shiro:lacksPermission>
-            </c:if>
-     <%--        
-            <shiro:hasPermission name="tempUser:Add">
-          	 	 <a href="tempUser/toTempUserAdd?status=${status}&type=${type }" title="导入"><i class="iconfont icon-pic"></i></a> 
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="tempUser:Add">
-               <i class="iconfont icon-pic"></i>
-            </shiro:lacksPermission>
-             --%>
+            </shiro:lacksPermission> 
             
             <shiro:hasPermission name="tempUser:View">
           	 	 <a href="tempUser/tempUserDetial?status=${status}&dataType=${dataType}&type=${type }&id=${ tempUser.id}" title="详情"><i class="iconfont icon-copy"></i></a> 

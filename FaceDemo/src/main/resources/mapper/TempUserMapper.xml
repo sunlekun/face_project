@@ -8,7 +8,7 @@
 	 
     <select id="findAllTempUser" resultType="TempUser">
 		select m.* from temp_users m where m.is_delete=0 order by m.add_time  desc
-	 </select>
+	</select>
 	 
 	  <select id="findAllTempUserByKey" resultType="TempUser">
 		select m.* from temp_users m where m.is_delete=0 
@@ -67,7 +67,9 @@
 		update temp_users  
 		<set>  
          user_name=#{user_name},user_idcard=#{user_idcard}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
-         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},audit_time=#{audit_time},is_delete=#{is_delete}
+         mobile=#{mobile},status=#{status},status_reason=#{status_reason},thumb_path=#{thumb_path},original_path=#{original_path},audit_time=#{audit_time},
+         img_urlIndex=#{img_urlIndex},opt_name=#{opt_name}
+         ,is_delete=#{is_delete}
        </set> 
        where id=#{id}
 	</update>
@@ -75,8 +77,8 @@
 	 
 
 	<insert id="insertTempUser" parameterType="TempUser">
-		insert into temp_users (user_name, user_idcard, user_township,user_village,data_type,mobile,status,status_reason,thumb_path,original_path,add_time,audit_time) 
-		        values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{status}, #{status_reason},#{thumb_path},#{original_path},#{add_time},#{audit_time})
+		insert into temp_users (user_name, user_idcard, user_township,user_village,data_type,mobile,status,status_reason,thumb_path,original_path,add_time,audit_time,img_urlIndex,opt_name) 
+		values(#{user_name},#{user_idcard},#{user_township},#{user_village},#{data_type}, #{mobile}, #{status}, #{status_reason},#{thumb_path},#{original_path},#{add_time},#{audit_time},#{img_urlIndex},#{opt_name})
 	</insert>
 	
 	  <delete id="deleteTempUserBatch" parameterType="int">

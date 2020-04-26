@@ -89,7 +89,7 @@
 		user_idcard,u.user_village as user_village,u.user_township as
 		user_township,u.img_url as user_img,u.data_type as data_type,
 		u.mobile as mobile from video_ident r
-		LEFT JOIN users u on u.id=r.user_id
+		inner JOIN users u on u.id=r.user_id
 
 		where r.is_delete=0 and u.is_delete=0
 		<if test="video_status != null and  video_status !=''">
@@ -98,7 +98,7 @@
 		<if test="user_township != null and  user_township !=''">
 			and u.user_township= #{user_township}
 		</if>
-		
+		  
 		<if test="key!=null  and key!=''">   
           and (u.user_name like '%${key}%' or u.user_idcard like '%${key}%' or u.user_village like '%${key}%' )
         </if> 
@@ -115,9 +115,6 @@
           and u.user_township=#{xzb}
         </if> 
         
-         <if test="user_township!=null  and user_township!=''">   
-          and u.user_township=#{user_township}
-        </if> 
          <if test="year!=null  and year!=''">   
           and r.year=#{year}
         </if> 
@@ -125,20 +122,19 @@
 
 	</select>
     
-    <select id="findNoVideoListByMultiCondition" parameterType="java.util.HashMap"
+    <select id="exportNoVideoListByMultiCondition" parameterType="java.util.HashMap"
 		resultType="videoIdent">
 		
-		select * from (
-		select u.user_name as user_name ,u.user_idcard as
+		 
+		select   u.user_name as user_name ,u.user_idcard as
 		user_idcard,u.user_village as user_village,u.user_township as
 		user_township,u.img_url as user_img,u.data_type as data_type,
 		u.mobile as mobile from users u 
+		LEFT JOIN   
+		( select * from 	video_ident vr where  vr.is_delete=0    )r 
+		 on u.id=r.user_id
 		
-		where u.is_delete=0
-				
-		<if test="user_township != null and  user_township !=''">
-			and u.user_township= #{user_township}
-		</if>
+		where u.is_delete=0 and  r.id is null
 		
 		<if test="key!=null  and key!=''">   
           and (u.user_name like '%${key}%' or u.user_idcard like '%${key}%' or u.user_village like '%${key}%' )
@@ -158,20 +154,53 @@
         
          <if test="user_township!=null  and user_township!=''">   
           and u.user_township=#{user_township}
-        </if> 
-         ) rs 
-         
-		LEFT JOIN  video_ident r  on rs.id=r.user_id
-
-		where  r.is_delete=0 and  r.id is null
+        </if>  
 		 
+       
 		 <if test="limtFrom!=null  and limtFrom!=''">   
           limit  #{limtFrom},#{endFrom}
         </if>
-         
+           order by r.add_time   desc
 	</select>
 
+<select id="exportVideoListByMultiCondition" parameterType="java.util.HashMap"
+		resultType="videoIdent">
+		select r.video_status ,u.user_name as user_name ,u.user_idcard as
+		user_idcard,u.user_village as user_village,u.user_township as
+		user_township,u.img_url as user_img,u.data_type as data_type,
+		u.mobile as mobile from video_ident r
+		inner JOIN users u on u.id=r.user_id
 
+		where r.is_delete=0 and u.is_delete=0
+		<if test="video_status != null and  video_status !=''">
+			and r.video_status= #{video_status}
+		</if>
+		<if test="user_township != null and  user_township !=''">
+			and u.user_township= #{user_township}
+		</if>
+		  
+		<if test="key!=null  and key!=''">   
+          and (u.user_name like '%${key}%' or u.user_idcard like '%${key}%' or u.user_village like '%${key}%' )
+        </if> 
+        
+         <if test="data_type!=null  and data_type!=''">   
+          and u.data_type=#{data_type}
+        </if> 
+        
+        <if test="dataType!=null  and dataType!=''">   
+          and u.data_type=#{dataType}
+        </if>
+        
+        <if test="xzb!=null  and xzb!=''">   
+          and u.user_township=#{xzb}
+        </if> 
+        
+         <if test="year!=null  and year!=''">   
+          and r.year=#{year}
+        </if> 
+         order by r.add_time   desc
+
+	</select>
 
 	<select id="findVideoListByUserId" resultType="videoIdent">
 		select r.* ,u.user_name as user_name from video_ident r LEFT JOIN users u on

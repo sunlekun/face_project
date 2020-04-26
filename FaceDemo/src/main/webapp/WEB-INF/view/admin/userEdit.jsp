@@ -143,5 +143,3 @@ function __doPostBack(eventTarget, eventArgument) {
 </form>
 </body>
 </html>
-
-</html>

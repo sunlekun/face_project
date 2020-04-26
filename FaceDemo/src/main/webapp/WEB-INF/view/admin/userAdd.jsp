@@ -96,6 +96,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 	}); 
 	 
+	  $(document).ready(function(){    
+   $("#user_idcard").blur(function(){  
+
+    var user_idcard = $("#user_idcard").val(); 
+ 
+     if(user_idcard!='')//验证是否为空
+    {      
+            
+             $.ajax(
+		            {
+		                url:"user/isExistUserIdcard",
+		                data:{user_idcard:user_idcard},
+		                async: false,
+		                type: "POST",
+		                dataType:"json",
+		                success: function(data)
+		                    {   
+		                        if(data.status=='true')
+		                        {
+		                            $("#msg").html("用户身份信息可使用");
+		                            $("#msg").attr("class","Validform_checktip Validform_right");
+		                            $("#flag").val("1"); 
+		                        }
+		                        else
+		                        {   
+		                            $("#msg").html("用户身份信息已采集,请勿重复采集!");                            
+		                            $("#msg").attr("class","Validform_checktip Validform_wrong");
+		                            $("#flag").val("0"); 
+		                        }
+		                    }
+		            });
+      
+    }
+  });
+ 
+    });
      $(function () {
         //初始化上传控件
         $(".upload-img").InitUploader({ sendurl: "user/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
@@ -238,6 +274,17 @@ function __doPostBack(eventTarget, eventArgument) {
 <div class="tab-content" >
   
    <dl>
+    <dt>身份证号</dt>
+    <dd><input name="user_idcard" type="text"  id="user_idcard" maxlength='18' class="input normal" datatype='idcard'  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
+ </dl>
+ 
+   <dl>
+    <dt>用户姓名</dt>
+    <dd><input name="user_name" type="text"  id="user_name" class="input normal" datatype='zh2-4'  nullmsg='请输入真实姓名' errormsg='姓名为中文' sucmsg=' '/> <span class="Validform_checktip">*请输入真实姓名</span></dd>
+ </dl>
+ 
+
+   <dl>
     <dt>所属类型</dt>
     <dd>
       <div class="rule-single-select">
@@ -280,15 +327,7 @@ function __doPostBack(eventTarget, eventArgument) {
     <dd><input name="user_company" type="text"  id="user_company" class="input normal"  nullmsg="请输入所属单位" errormsg="请输入所属单位" /> <span class="Validform_checktip">*</span></dd>
   </dl>
   
-  <dl>
-    <dt>用户姓名</dt>
-    <dd><input name="user_name" type="text"  id="user_name" class="input normal" datatype='zh2-4'  nullmsg='请输入真实姓名' errormsg='姓名为中文' sucmsg=' '/> <span class="Validform_checktip">*请输入真实姓名</span></dd>
- </dl>
  
- <dl>
-    <dt>身份证号</dt>
-    <dd><input name="user_idcard" type="text"  id="user_idcard" maxlength='18' class="input normal" datatype='idcard'  nullmsg='请输入身份证' errormsg='身份证格式错误' ajaxurl='' sucmsg=' '/> <span class="Validform_checktip"  id="msg">*请认真核对,输入后不可修改</span></dd>
- </dl>
   
    
   <dl>

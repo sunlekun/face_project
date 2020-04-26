@@ -12,14 +12,20 @@ public class TempUser {
 	private String data_type;
 	private String mobile;
 	
-	private int status;
-	private String status_reason;
 	
+	 
 	private String thumb_path;//信息采集图片上传路径
 	private String original_path;
 	
+	private int img_urlIndex;//身份证图片索引：在三张图片中的位置
+ 	private String opt_name;//采集信息的账号
 	private Timestamp add_time;
+	
+	
+	private int status;
+	private String status_reason;
 	private Timestamp audit_time;
+	
 	private int is_delete;
 	public int getId() {
 		return id;
@@ -113,6 +119,23 @@ public class TempUser {
 	}
 	public void setIs_delete(int is_delete) {
 		this.is_delete = is_delete;
+	}
+	public int getImg_urlIndex() {
+		return img_urlIndex;
+	}
+	public void setImg_urlIndex(int img_urlIndex) {
+		this.img_urlIndex = img_urlIndex;
+	}
+	public String getOpt_name() {
+		return opt_name;
+	}
+	public void setOpt_name(String opt_name) {
+		this.opt_name = opt_name;
+	}
+	
+	@Override
+	public String toString() {
+		return  user_name + ","+ user_idcard + "\t,"+ data_type+ ","+user_township+ "," +user_village+","+ mobile+"\t";
 	}
 	
 

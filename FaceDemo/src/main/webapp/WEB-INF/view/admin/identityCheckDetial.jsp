@@ -224,13 +224,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <dl>
     <dt>视频截图：</dt>
     <dd>
-      <a href="/video_identity${videoIdent.img_url}" rel="lightbox"><img width="220" src="/video_identity${videoIdent.img_url}" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
+      <a href="/video_identity${videoIdent.img_url}" rel="lightbox">
+    	  <img width="220" src="/video_identity${videoIdent.img_url}" onerror="this.src='css/admin/skin/default/loadimg.gif'" />
+      </a>
     </dd>
   </dl>
   <dl>
     <dt>原始图片：</dt>
     <dd>
-      <a href="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" rel="lightbox"><img src="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" /></a>
+      <a href="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" rel="lightbox">
+      	<img width="220" src="/img_identity${videoIdent.user_img}?w=220&h=165&mode=max" onerror="this.src='css/admin/skin/default/loadimg.gif'" />
+      </a>
     </dd>
   </dl>
   <dl>

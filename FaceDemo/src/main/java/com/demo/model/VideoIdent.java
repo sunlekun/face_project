@@ -272,8 +272,9 @@ public class VideoIdent {
 
 	@Override
 	public String toString() {
-		return  user_name + ","+ user_idcard + "," + user_township
-				+ "," + user_village + ","+ user_mobile + ","+mobile;
+		//"姓名,身份证号码,类型,乡镇办,村名,手机号,是否审核通过,备注"
+		return  user_name + ","+ user_idcard + "\t," +data_type+ ","+user_township
+				+ "," + user_village + ","+ mobile+","+getVideo_statuss()+","+txt_remarks;
 	}
 	
 

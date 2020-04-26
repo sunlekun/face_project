@@ -63,10 +63,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
        })
  */
+ var formParams="isHasVideo="+encodeURI('${isHasVideo}')+"&user_township="+encodeURI('${user_township}')+"&startTime="+encodeURI('${startTime}')+
+           "&endTime="+encodeURI('${endTime}')+"&dataType="+encodeURI('${dataType}');
   $(document).ready(function () { 
     $('#table').bootstrapTable({
                         
-                        url : "user/userList?isHasVideo=${isHasVideo}&user_township="+encodeURI('${user_township}')+"&startTime=${startTime}&endTime=${endTime}&dataType="+encodeURI('${dataType}'), 
+                       // url : "user/userList?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}", 
+					    url : "user/userList?"+formParams ,
 						dataType : "json", 
 						contentType : "application/x-www-form-urlencoded;charset=utf-8", // 如果是post必须定义
 						method : 'get',
@@ -86,8 +89,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      
                  
                       $('#table').on('dbl-click-row.bs.table',function(row, $element) {
-                       window.location.href = "user/userDetial?id="+$element.id;                  
-                     
+                      // window.location.href = "user/userDetial?id="+$element.id;  
+                     // alert(pa);
+                      window.location.href = "user/userDetial?"+formParams+"&id="+$element.id;                  
+                      //goURL('user/toUserEdit','id='+$element.id);
                    });
               
          }  );    
@@ -151,22 +156,17 @@ function infoFormatter( value, row, index){
   if(row['data_type']=="城乡居民养老保险")
     te="乡镇办："+row['user_township']+'-'+row['user_village'];
   else 
-    te="所属单位："+row['user_township'];
- 
-   
+    te="所属单位："+row['user_township']; 
+    
    var s=  
    '<div>'+
 	   '<div  style="float: left;">'+
-		   '<shiro:hasPermission name="user:Edit">'+
-		      '<a class="user-avatar" href="user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id='+row['id']+'">'+
+		   ''+
+		      '<a class="user-avatar" href="user/toUserEdit?'+formParams+'&id='+row['id']+'">'+
 		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
 		       '</a>' +
-		  '</shiro:hasPermission>'+
-		  '<shiro:lacksPermission name="user:Edit">'+
-		      '<a class="user-avatar" href="#" onclick="return false">'+
-		          '<img width="64" height="64" src="/img_identity'+row['img_url']+'" />'+
-		       '</a>' +
-		  '</shiro:lacksPermission>'+
+		  ''+
+		  ''+
 	   '</div>'+
        '<div class="user-box" style="float: left;">'+ 
           '<h4><b style="font-size:16px;" title="姓名：'+row['user_name']+'">'+row['user_name']+'</b></h4>'+
@@ -174,6 +174,7 @@ function infoFormatter( value, row, index){
           '<span>'+ te+ ' </span>'+
         ' </div>'+
      ' </div>'; 
+
   
    
  return s;
@@ -192,19 +193,21 @@ function infoFormatter( value, row, index){
 	
 	function actionFormatter(value, row, index) {  
 	 
-     return "<shiro:hasPermission name='user:Edit'><a class='update'  href = 'user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id']+"'>修改</a></shiro:hasPermission>&nbsp;&nbsp;&nbsp;&nbsp; <shiro:hasPermission name='user:View'><a class='detial'  href = 'user/userDetial?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id']+"'>详情</a></shiro:hasPermission>" ;
+     return "<a class='update'  href = 'user/toUserEdit?"+formParams+"&id="+row['id']+"'>修改</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+           " <a class='detial'  href = 'user/userDetial?"+formParams+"&id="+row['id']+"'>详情</a>" ;
     } 
     //表格  - 操作 - 事件
     window.actionEvents = {
      'click .update': function(e, value, row, index) {   
           //修改操作
-          window.location.href = "user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id'];
+        //  window.location.href = "user/toUserEdit?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}&id="+row['id'];
+     goURL('user/toUserEdit','id='+row['id']);
       } 
      } 
      
-function Search(){
+function goURL(url,paras){ 
      document.getElementById("form1").method="post" ;
-     document.getElementById("form1").action="user/toUserList"; 
+     document.getElementById("form1").action=url+"?s=1"+"&"+paras; 
      document.getElementById("form1").submit(); 
  }
 		 //批量删除  
@@ -239,7 +242,7 @@ function Search(){
  
 </head>
 <body class="mainbody"> 
-<form method="post"  action="user/toUserList?isHasVideo=${isHasVideo}&user_township="+encodeURI('${user_township}')+&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"  id="form1">
+<form method="post" action="user/toUserList"  id="form1" >
   <input type="hidden" name="ids" id="ids" value="" />
 
 
@@ -260,7 +263,7 @@ function Search(){
       <div class="l-list">
         <ul class="icon-list">
           <shiro:hasPermission name="user:Add">
-               <li><a class="add" href="user/toUserAdd?isHasVideo=${isHasVideo}&user_township=${user_township}&startTime=${startTime}&endTime=${endTime}&dataType=${dataType}"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
+               <li><a class="add" onclick="goURL('user/toUserAdd','')"><i class="iconfont icon-close"></i><span>新增</span></a></li> 
           </shiro:hasPermission>
           <shiro:hasPermission name="user:Delete"> 
           	 <li><a onclick="deleteDiaryList();" id="btnDelete" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li>
@@ -280,8 +283,8 @@ function Search(){
 	         
 	        
 	         
-	          <div class="rule-single-select">
-	            <select name="isHasVideo" onchange="Search()" id="isHasVideo">
+	          <div class="rule-single-select"> 
+	            <select name="isHasVideo" onchange="goURL('user/toUserList','')" id="isHasVideo">
 					<option   value="">是否上传视频</option>
 					<option value="1"  ${isHasVideo==1?"selected='selected'":'' }>已上传</option>
 					<option value="2"  ${isHasVideo==2?"selected='selected'":'' }>未上传</option>
@@ -292,7 +295,7 @@ function Search(){
           
           
 	         <div class="rule-single-select">
-	            <select name="user_township" onchange="Search()"  id="user_township">
+	            <select name="user_township" onchange="goURL('user/toUserList','')"  id="user_township">
 	               <option   value="">所有乡镇办</option>
 		           <c:forEach items="${xzbs }" var="xzb"> 
 		              <option value="${xzb.title }"  ${user_township==xzb.title?"selected='selected'":'' }>${xzb.title }</option>
@@ -302,7 +305,7 @@ function Search(){
 	        </div>
 	        
 	         <div class="rule-single-select">
-	            <select name="dataType" onchange="Search()"  id="dataType">
+	            <select name="dataType" onchange="goURL('user/toUserList','')"  id="dataType">
 	                  <option   value="">所有数据类别</option> 
 		              <option value="机关事业养老保险"  ${dataType=='机关事业养老保险'?"selected='selected'":'' }>机关事业养老保险</option>
 		              <option value="企业职工养老保险"  ${dataType=='企业职工养老保险'?"selected='selected'":'' }>企业职工养老保险</option>
@@ -317,7 +320,7 @@ function Search(){
 	          <input name="endTime" type="text" id="endTime" value="${endTime}"  class="input rule-date-input"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  />
 	        </div>
 	        <ul class="icon-list">
-	           <li><a class="add" onclick="Search()"><i class="iconfont icon-search"></i><span></span></a></li>
+	           <li><a class="add" onclick="goURL('user/toUserList','')"><i class="iconfont icon-search"></i><span></span></a></li>
 	           
 	        </ul>
 	        
@@ -380,6 +383,92 @@ function Search(){
 
 <!--/列表-->
  
-</form>
+   <!--/内容底部-->
+<!-- <div class="page-footer">
+  <div class="btn-wrap" >
+  <table>
+  <tr><td>
+    <input type="file" name="file_Import" id="file_Import" class="input normal upload-path" onchange="change(this) " />
+    </td>
+  
+    <td>
+    <input type="button" name="btnImport" value="导入数据库" id="btnImport" class="btn"  style="margin-left:10px;" onclick="Import()"/>
+    </td>
+    <td><span style="color:red">excel文件中表头只能是姓名,身份证号,乡镇办,村社区,数据类别,电话</span></td>
+    </tr>
+    
+    </table>
+  </div>
+</div>
+</br>  -->
+ 
+</from>
 </body>
+<script>
+  
+     function change(input) {
+         var files = input.files;
+        
+        for (var i = 0; i < files.length; i++) {//预览新添加的图片
+            var file = files[i];
+            var POSTFIXS = new Set(['xls', 'xlsx']); 
+            var fileExt=(/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name.toLowerCase()) : ''; 
+            
+             if(!POSTFIXS.has(''+fileExt)){
+               alert("文件格式错误!(支持'xls', 'xlsx'格式)");
+               continue;
+             }
+            }
+            }
+    function Import(){
+       var files = document.getElementById("file_Import").files;
+    
+         if(files.length==0)
+         {
+               alert("请选择要导入的文件!(支持'xls', 'xlsx'格式)");
+               return;
+         }
+         
+        for (var i = 0; i < files.length; i++) {//预览新添加的图片
+            var file = files[i];
+            var POSTFIXS = new Set(['xls', 'xlsx']); 
+            var fileExt=(/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name.toLowerCase()) : ''; 
+            
+             if(!POSTFIXS.has(''+fileExt)){
+               alert("文件格式错误!(支持'xls', 'xlsx'格式)");
+               continue;
+             }
+             else
+             {   
+              document.getElementById("form1").enctype="multipart/form-data";
+              document.getElementById("form1").action="user/importExcel"; 
+              document.getElementById("form1").submit(); 
+                <%-- var formData = new FormData($('#form1')[0]);//序列化表单，
+                $.ajax({
+                type: 'post',
+                url: "user/importExcel",
+                data: formData ,
+                processData: false,
+                contentType: false,
+                /*async: false,
+                 dataType: "json", */
+                success: function (data, status) {
+                alert(123);
+                    if (data.status == 'false') {
+                        alert(data.msg);
+                        return;
+                    }
+                    else {
+                       alert(data.msg);
+                       window.location.href = '<%=path%>/'+data.url;
+                   }                
+                    
+                   
+		}
+       }) --%>
+             }
+            }
+     
+ }
+ </script>
 </html>
