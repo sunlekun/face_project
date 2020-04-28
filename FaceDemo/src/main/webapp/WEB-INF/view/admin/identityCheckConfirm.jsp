@@ -33,6 +33,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link rel="stylesheet" type="text/css" href="js/admin/dist/plyr.css" rel="stylesheet" />
 
  <script type="text/javascript">
+  $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        
+    });
     $(function () {
         //初始化上传控件
         $(".upload-img").InitUploader({ sendurl: "identityCheck/upload", swf: "js/admin/scripts/webuploader/uploader.swf" });
@@ -198,12 +203,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <dd>
       <div class="rule-multi-radio">
         <span id="video_status">
-	        <input id="rblIsStatus_0"  type="radio" name="video_status" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  /><label for="rblIsStatus_0">视频认证审核通过</label>
-	        <input id="rblIsStatus_1"  type="radio" name="video_status" value="4" ${videoIdent.video_status==4?"checked='checked'":'' } /><label for="rblIsStatus_1">拉入黑名单</label>
+            
+	        <input id="rblIsStatus_0"  type="radio" name="video_status" value="2" ${videoIdent.video_status==2?"checked='checked'":'' }  datatype="*" errormsg="请选择审核状态！"  nullmsg="请输入审核状态！" sucmsg=" "/><label for="rblIsStatus_0">视频认证审核通过</label>
+	        <input id="rblIsStatus_1"  type="radio" name="video_status" value="3" ${videoIdent.video_status==3?"checked='checked'":'' }  datatype="*" errormsg="请选择审核状态！"  nullmsg="请输入审核状态！" sucmsg=" "/><label for="rblIsStatus_1">视频认证未通过</label>
+	        <input id="rblIsStatus_2"  type="radio" name="video_status" value="4" ${videoIdent.video_status==4?"checked='checked'":'' }  datatype="*" errormsg="请选择审核状态！"  nullmsg="请输入审核状态！" sucmsg=" "/><label for="rblIsStatus_2">拉入黑名单</label>
         </span>
       </div>
+       <span class="Validform_checktip">请选择审核状态*</span>
     </dd>
   </dl>
+  
    <dl>
     <dt>未通过原因：</dt>
 	    <dd><textarea name="auditors_reason" rows="2" cols="20" id="auditors_reason"  class="input">${videoIdent.auditors_reason}</textarea></dd>

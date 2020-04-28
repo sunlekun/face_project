@@ -276,8 +276,8 @@ function infoFormatter( value, row, index){
         	  <div class="rule-single-select">
          		   <select name="video_status" onchange="goURL('identityCheck/toIdentityCheckList','')" id="video_status">
 			           <option  ${video_status==null?"selected='selected'":'' } value="">审核状态</option>
-<%-- 			           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
- --%>		               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
+			           <option  ${video_status==1?"selected='selected'":'' }  value="1">待验证</option>
+		               <option  ${video_status==2?"selected='selected'":'' }  value="2">审核通过</option>
 			           <option  ${video_status==3?"selected='selected'":'' }  value="3">匹配失败</option>
 		               <option  ${video_status==4?"selected='selected'":'' }  value="4">黑名单</option>
 		    	    </select>
