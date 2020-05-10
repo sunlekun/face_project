@@ -241,9 +241,9 @@ public class IdentityCheckController {
 			identityChecks = videoIdentService.exportVideoListByMultiCondition(map);
  
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-		String fileName= "视频认证审核人员名单"+df.format(System.currentTimeMillis());
+		String fileName= map.get("year")+"视频认证审核人员名单"+df.format(System.currentTimeMillis());
 		if("2".equals(request.getParameter("flag")))
-			fileName= "未参与认证人员名单"+df.format(System.currentTimeMillis());
+			fileName= map.get("year")+"未参与认证人员名单"+df.format(System.currentTimeMillis());
 	     
 		try{
         response.reset(); 

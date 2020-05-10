@@ -4,7 +4,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.dao.VideoIdentDao">
 	<select id="findVidoIdentYears" resultType="String">
-		select distinct(year) from video_ident where is_delete=0
+		select distinct(year) as year from video_ident where is_delete=0 order by  year desc
 	</select>
 
 
@@ -156,11 +156,14 @@
           and u.user_township=#{user_township}
         </if>  
 		 
-       
+        <if test="year!=null  and year!=''">   
+           having #{year}-if(length(user_idcard)=18,substring(user_idcard,7,4),if(length(user_idcard)=15,concat('19',substring(user_idcard,7,2)),null)) >60
+        </if>
 		 <if test="limtFrom!=null  and limtFrom!=''">   
           limit  #{limtFrom},#{endFrom}
         </if>
-           order by r.add_time   desc
+               
+          order by r.add_time   desc
 	</select>
 
 <select id="exportVideoListByMultiCondition" parameterType="java.util.HashMap"
