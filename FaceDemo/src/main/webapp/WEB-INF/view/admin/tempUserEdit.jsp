@@ -113,6 +113,9 @@ function changes(obj){
          $("#user_township").attr("datatype","*");
          $("#div_village").show();  
          $("#user_village").attr("datatype","*");
+         
+         $("#div_company").hide();  
+         $("#user_company").removeAttr("datatype");
      }
     else 
      { 

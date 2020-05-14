@@ -83,10 +83,10 @@
 	 <update id="updateUser" parameterType="User">
 		update users  
 		<set>  
-         user_name=#{user_name},user_idcard=#{user_idcard}, user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
-         mobile=#{mobile},img_url=#{img_url},add_time=#{add_time},update_time=#{update_time},is_delete=#{is_delete}
+         user_name=#{user_name} , user_township=#{user_township},user_village=#{user_village},data_type=#{data_type},
+         mobile=#{mobile} ,update_time=now() 
        </set> 
-       where id=#{id}
+       where  id=#{id} and user_idcard=#{user_idcard}  
 	</update>
 	 
 	 

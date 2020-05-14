@@ -195,7 +195,10 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		User user= userService.findUserById(id) ;   
-		modelAndView.addObject("user", user); 
+		modelAndView.addObject("user", user);
+		
+		List<Xzb> xzbs= xzbService.findAllXzb();
+		modelAndView.addObject("xzbs", xzbs);  
 		
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
@@ -211,9 +214,40 @@ public class UserController {
 	public ModelAndView userEdit(User user ,HttpServletRequest request,HttpServletResponse response) throws IOException {
 	
 		ModelAndView modelAndView = new ModelAndView();
-			 
-		 
-		userService.updateUserName(user);
+        String imgFlag=request.getParameter("imgFlag");
+		 if("1".equals(imgFlag)){
+			 String[]  hid_photo_names=request.getParameterValues("hid_photo_name");
+		    
+			 String idCardImgUploadSavePath = LoadProperties.loadProperties("common.properties", "idCardImgUploadSavePath");
+			
+			 String oldFileName="";
+		 		if(hid_photo_names!=null&&hid_photo_names.length==1)
+		 		{   
+		 			 
+		        	String[] name=hid_photo_names[0].split("\\|"); 
+		        	if(name!=null&&name.length>=2) 
+		        	{ 
+		        		String[] name1=name[1].split("\\/"); 
+		        		//System.out.println(name1[3]);
+		        		oldFileName=name1[3];
+		        	}
+		        	 
+		 		}
+		 	//	String fileExtName = oldFileName.substring(oldFileName.lastIndexOf("."));
+		 		String fileExtName = ".jpg";
+		 		File dest=new File(idCardImgUploadSavePath+user.getUser_idcard()+fileExtName);
+		 		if(dest.exists())
+		 			dest.delete();
+		        new File(idCardImgUploadSavePath+oldFileName).renameTo(dest);
+		        user.setImg_url("/upload/" +user.getUser_idcard()+fileExtName);
+		}
+	        if(!"城乡居民养老保险".equals(user.getData_type()))   
+	        {  
+	          String user_company=request.getParameter("user_company");
+	       	  user.setUser_township(user_company==null?"":user_company);
+	        }
+	        
+		userService.updateUser(user);
 
 		modelAndView.addObject("isHasVideo", request.getParameter("isHasVideo"));   
 		modelAndView.addObject("user_township", request.getParameter("user_township1"));  
