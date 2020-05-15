@@ -257,7 +257,7 @@ function infoFormatter( value, row, index){
             <li><a onclick="deleteDiaryList();" id="btnDelete" class="del" href="javascript:void(0)"><i class="iconfont icon-delete"></i><span>删除</span></a></li> 
         </shiro:hasPermission>
           <li><a id="btnDownExcel" onclick="goURL('identityCheck/downExcel','flag=1')"><i class="iconfont icon-exl"></i><span>认证信息导出</span></a></li>
-          <li><a id="btnDownExcel" onclick="goURL('identityCheck/downExcel','flag=2')"><i class="iconfont icon-exl"></i><span>未证名单导出</span></a></li>
+          <li><a id="btnDownExcel" onclick="goURL('identityCheck/downExcel','flag=2')"><i class="iconfont icon-exl"></i><span>未认证名单导出</span></a></li>
         </ul>
          <shiro:hasPermission name="identityCheck:Show">
           <div class="menu-list">
