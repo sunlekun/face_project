@@ -44,7 +44,7 @@ public class NotifySynchroJob {
 			 for(DetectAuth detectAuth:list){
 				 List<User>  users=userService.findUserByUserIdcard(detectAuth.getUser_idcard());
 				 if(users.size()!=0){
-					List<VideoIdent> listV = videoIdentService.findVideoByUserId(users.get(0).getId());
+					List<VideoIdent> listV = videoIdentService.findVideoByUserIdAndIsdelete(users.get(0).getId());
 					if(listV.size()==0){
 						log.info((i++)+"主动查询认证结果:"+detectAuth.getUser_idcard());
 						txFaceService.notifyProcess(detectAuth.getBizToken());

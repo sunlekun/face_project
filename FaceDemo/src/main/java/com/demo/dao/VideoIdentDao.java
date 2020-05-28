@@ -31,6 +31,7 @@ public interface VideoIdentDao {
 			@Param("video_status")Integer video_status,@Param("auditors_txt") String auditors_txt,@Param("txt_img") String txt_img);
 	public List<VideoIdent> findVideoByUserId(@Param("user_id") Integer user_id);
 	public void delrepeat();
+	public List<VideoIdent> findVideoByUserIdAndIsdelete(@Param("user_id") Integer user_id);
 	
 }
 

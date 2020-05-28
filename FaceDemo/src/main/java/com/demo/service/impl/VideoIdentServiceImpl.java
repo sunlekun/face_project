@@ -99,5 +99,10 @@ public class VideoIdentServiceImpl implements VideoIdentService{
 		public void delrepeat() {
 			videoIdentDao.delrepeat();
 		}
+
+		@Override
+		public List<VideoIdent> findVideoByUserIdAndIsdelete(Integer user_id) {
+			return videoIdentDao.findVideoByUserIdAndIsdelete(user_id);
+		}
 		
 	}
