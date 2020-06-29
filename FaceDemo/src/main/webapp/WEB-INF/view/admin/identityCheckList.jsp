@@ -41,7 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 <script type="text/javascript"> 
 var formParams="type="+encodeURI('${type}')+"&video_status="+encodeURI('${video_status}')+"&user_township="+encodeURI('${user_township}')+
-           "&year="+encodeURI('${year}')+"&dataType="+encodeURI('${dataType}');
+           "&year="+encodeURI('${year}')+"&month="+encodeURI('${month}')+"&dataType="+encodeURI('${dataType}');
  $(document).ready(function () { 
     $('#table').bootstrapTable({
                         
@@ -267,6 +267,16 @@ function infoFormatter( value, row, index){
 		           <option value="">请选择认证年限</option>
 		           <c:forEach var="item" items="${years}">
 	                 <option  ${item==year?"selected='selected'":'' }   value="${item}">${item}</option>
+	              </c:forEach> 
+		          
+		        </select>
+	        </div>
+	        
+	         <div class="rule-single-select">
+	            <select name="month" onchange="goURL('identityCheck/toIdentityCheckList','')" id="month">
+		           <option value="">请选择认证月份</option>
+		           <c:forEach var="item" begin="1" end="12" >
+	                 <option  ${item==month?"selected='selected'":'' }   value="${item}">${item}</option>
 	              </c:forEach> 
 		          
 		        </select>

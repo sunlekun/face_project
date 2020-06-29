@@ -148,7 +148,16 @@ function goURL(url,paras){
 		          
 		        </select>
 	        </div>
-        
+        	
+        	<div class="rule-single-select">
+	            <select name="month" onchange="goURL('identityCheck/toIdentityCheckList','')" id="month">
+		           <option value="">请选择认证月份</option>
+		           <c:forEach var="item" begin="1" end="12" >
+	                 <option  ${item==month?"selected='selected'":'' }   value="${item}">${item}</option>
+	              </c:forEach> 
+		          
+		        </select>
+	        </div>
         
         	  <div class="rule-single-select">
          		   <select name="video_status" onchange="goURL('identityCheck/toIdentityCheckList','')" id="video_status">

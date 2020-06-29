@@ -115,8 +115,11 @@
           and u.user_township=#{xzb}
         </if> 
         
-         <if test="year!=null  and year!=''">   
+        <if test="year!=null  and year!=''">   
           and r.year=#{year}
+        </if> 
+        <if test="month!=null  and month!=''">   
+          and month(r.add_time)=#{month}
         </if> 
          order by r.add_time   desc
 
@@ -201,6 +204,11 @@
          <if test="year!=null  and year!=''">   
           and r.year=#{year}
         </if> 
+        
+         <if test="month!=null  and month!=''">   
+          and month(r.add_time)=#{month}
+        </if> 
+        
          order by r.add_time   desc
 
 	</select>

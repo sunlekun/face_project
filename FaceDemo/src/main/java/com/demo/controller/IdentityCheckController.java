@@ -84,6 +84,7 @@ public class IdentityCheckController {
 		//筛选条件
 		map.put("user_township", request.getParameter("user_township")); 
 		map.put("year", request.getParameter("year")); 
+		map.put("month", request.getParameter("month")); 
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
 		
@@ -137,6 +138,7 @@ public class IdentityCheckController {
 			//筛选条件
 			map.put("user_township", request.getParameter("user_township")); 
 			map.put("year", request.getParameter("year")); 
+			map.put("month", request.getParameter("month")); 
 			map.put("video_status", request.getParameter("video_status"));
 			map.put("dataType", request.getParameter("dataType"));
 			
@@ -158,6 +160,7 @@ public class IdentityCheckController {
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("month", request.getParameter("month"));  
 		modelAndView.addObject("type", type);   
 		modelAndView.addObject("dataType", request.getParameter("dataType"));
 	    return modelAndView;
@@ -198,7 +201,8 @@ public class IdentityCheckController {
 		
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
-		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("year", request.getParameter("year")); 
+		modelAndView.addObject("month", request.getParameter("month"));
 		modelAndView.addObject("type", request.getParameter("type"));  
 		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		modelAndView.setViewName("redirect:/identityCheck/toIdentityCheckList");
@@ -230,6 +234,7 @@ public class IdentityCheckController {
 		}
 		else
 			map.put("year", request.getParameter("year")); 
+		map.put("month", request.getParameter("month"));
 		map.put("video_status", request.getParameter("video_status"));
 		map.put("dataType", request.getParameter("dataType"));
 		map.put("key", request.getParameter("key"));
@@ -311,7 +316,8 @@ public class IdentityCheckController {
 		modelAndView.addObject("videoIdent", videoIdent); 
 		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
-		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("year", request.getParameter("year"));
+		modelAndView.addObject("month", request.getParameter("month"));
 		modelAndView.addObject("type", request.getParameter("type"));  
 		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		
@@ -338,6 +344,7 @@ public class IdentityCheckController {
 //		modelAndView.addObject("video_status", request.getParameter("video_status")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
 		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("month", request.getParameter("month"));
 		modelAndView.addObject("type", request.getParameter("type"));
 		modelAndView.addObject("userid", videoIdent.getId()); 
 		modelAndView.addObject("dataType", request.getParameter("dataType"));
@@ -385,7 +392,8 @@ public class IdentityCheckController {
 		
 		modelAndView.addObject("video_status", request.getParameter("video_status1")); 
 		modelAndView.addObject("user_township", request.getParameter("user_township"));  
-		modelAndView.addObject("year", request.getParameter("year"));  
+		modelAndView.addObject("year", request.getParameter("year"));
+		modelAndView.addObject("month", request.getParameter("month"));
 		modelAndView.addObject("type", request.getParameter("type"));
 		modelAndView.addObject("dataType", request.getParameter("dataType"));
 		modelAndView.setViewName("admin/identityCheckList"); 
