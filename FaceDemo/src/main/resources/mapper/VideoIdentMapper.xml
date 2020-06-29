@@ -222,6 +222,10 @@
 	<select id="findVideoByUserId" resultType="videoIdent">
 		select *  from video_ident where user_id=#{user_id}
 	</select>
+	
+	<select id="findVideoByUserIdAndIsdelete" resultType="videoIdent">
+		select *  from video_ident where user_id=#{user_id} and is_delete=0
+	</select>
 
 	<delete id="deleteVideoIdentBatch" parameterType="int">
 		update video_ident set is_delete=1 where id in

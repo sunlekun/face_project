@@ -34,5 +34,6 @@ public interface VideoIdentService {
 	VideoIdent findVideoListByVideoIdentId(Integer id);
 	public void updateById(Integer id, String auditors_reason,
 			String txt_remarks, Integer video_status,String auditors_txt,String txt_img);
-	public void delrepeat(); 
+	public void delrepeat();
+	public List<VideoIdent> findVideoByUserIdAndIsdelete(Integer id); 
 }
